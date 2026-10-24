@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#111111">
+
+    <title>BILBAO | 빌바오</title>
+
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>
+</head>
+
+<body>
+
+    <!-- 상단 메뉴 -->
+    <header class="header">
+        <a href="#home" class="header-logo">BILBAO.</a>
+
+        <button class="menu-toggle" aria-label="메뉴 열기" aria-expanded="false">
+            ☰
+        </button>
+
+        <nav class="navigation">
+            <a href="#story">STORY</a>
+            <a href="#character">CHARACTER</a>
+            <a href="#gallery">GALLERY</a>
+            <a href="#goods">GOODS</a>
+            <a href="#about">ABOUT</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- 메인 화면 -->
+        <section id="home" class="hero">
+
+            <div class="hero-background">
+
+                <!-- 부산 실루엣 -->
+                <div class="layer layer-sky"></div>
+                <div class="layer layer-city"></div>
+
+                <!-- 고철장 -->
+                <div class="layer layer-scrapyard"></div>
+
+                <!-- 붉은 013 기둥 -->
+                <div class="red-pillar">
+                    <span>013</span>
+                </div>
+
+                <!-- 전경 -->
+                <div class="layer layer-foreground"></div>
+
+                <!-- 먼지 효과 -->
+                <canvas id="dust-canvas"></canvas>
+
+            </div>
+
+            <div class="hero-content">
+                <p class="hero-subtitle">AN ORIGINAL STORY</p>
+
+                <h1>BILBAO</h1>
+                <p class="hero-korean">빌바오</p>
+
+                <p class="hero-description">
+                    잿빛 세계, 그 속에서 시작되는 이야기.
+                </p>
+
+                <a href="#story" class="hero-button">
+                    세계관 탐험하기 ↗
+                </a>
+            </div>
+
+            <a href="#story" class="scroll-indicator">
+                SCROLL TO EXPLORE ↓
+            </a>
+
+        </section>
+
+        <!-- 세계관 -->
+        <section id="story" class="content-section">
+            <div class="section-inner">
+                <p class="section-number">01 / THE WORLD</p>
+                <h2>STORY</h2>
+
+                <p class="section-description">
+                    폐허가 된 세계.<br>
+                    고철과 기억 사이에서 이야기가 시작된다.
+                </p>
+
+                <div class="feature-card">
+                    <p class="feature-label">COMING NEXT</p>
+                    <h3>프롤로그 체험 게임</h3>
+                    <p>
+                        이곳에서 달리며 빌바오의 프롤로그를 경험하게 됩니다.
+                    </p>
+                    <button disabled>준비 중</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 캐릭터 -->
+        <section id="character" class="content-section">
+            <div class="section-inner">
+                <p class="section-number">02 / PEOPLE</p>
+                <h2>CHARACTER</h2>
+
+                <p class="section-description">
+                    레볼리 · 바오 · 리베 · 케이지 · 유리
+                </p>
+
+                <p>캐릭터 일러스트와 소개가 추가될 예정입니다.</p>
+            </div>
+        </section>
+
+        <!-- 갤러리 -->
+        <section id="gallery" class="content-section">
+            <div class="section-inner">
+                <p class="section-number">03 / ARTWORK</p>
+                <h2>GALLERY</h2>
+
+                <p class="section-description">
+                    빌바오의 세계를 담은 일러스트
+                </p>
+            </div>
+        </section>
+
+        <!-- 굿즈 -->
+        <section id="goods" class="content-section">
+            <div class="section-inner">
+                <p class="section-number">04 / OFFICIAL GOODS</p>
+                <h2>GOODS</h2>
+
+                <p class="section-description">
+                    빌바오 공식 굿즈
+                </p>
+
+                <p>굿즈 선택 및 주문 신청 기능이 추가될 예정입니다.</p>
+            </div>
+        </section>
+
+        <!-- 작품 소개 -->
+        <section id="about" class="content-section">
+            <div class="section-inner">
+                <p class="section-number">05 / ABOUT</p>
+                <h2>ABOUT</h2>
+
+                <p class="section-description">
+                    BILBAO — ORIGINAL STORY
+                </p>
+
+                <p>작품 제작 의도 및 작가 소개</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 BILBAO. Created by HWAMI.</p>
+    </footer>
+
+</body>
+</html>
