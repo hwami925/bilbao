@@ -11,6 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
     ===================================== */
    
 const SHIPPING_FEE = 3000;
+   
+   /* 구글 스프레드시트 주문 접수 서버 */
+const ORDER_API_URL =
+    "https://script.google.com/macros/s/AKfycbzNTSdLCMtzub2A8IqjFzm3wZeNF-ysrsoyN42TkJHwZSw2_u4fXsVjyLHfr03fYNkR/exec";
+   
     const products = {
         postcard: {
             name: "일러스트 엽서",
