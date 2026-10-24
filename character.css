@@ -464,3 +464,59 @@
         animation: none;
     }
 }
+/* ========================================
+   PERSONNEL ARCHIVE — 3:2 LAYOUT
+======================================== */
+
+/* 타공판 명찰을 3개씩 배치 */
+.pegboard {
+    display: grid;
+    grid-template-columns: repeat(3, 185px);
+    justify-content: center;
+    align-content: center;
+    gap: 85px 55px;
+}
+
+/* 두 번째 줄 명찰을 중앙에 배치 */
+.hanging-card:nth-child(4) {
+    grid-column: 1 / 2;
+    justify-self: end;
+    margin-left: 100px;
+}
+
+.hanging-card:nth-child(5) {
+    grid-column: 3 / 4;
+    justify-self: start;
+    margin-left: -100px;
+}
+
+/* 모바일에서는 2열 배치 */
+@media (max-width: 768px) {
+    .pegboard {
+        grid-template-columns: repeat(2, minmax(0, 135px));
+        gap: 65px 20px;
+    }
+
+    .hanging-card:nth-child(4),
+    .hanging-card:nth-child(5) {
+        grid-column: auto;
+        justify-self: center;
+        margin-left: 0;
+    }
+
+    .hanging-card:nth-child(5) {
+        grid-column: 1 / -1;
+    }
+}
+
+/* 작은 모바일 화면 */
+@media (max-width: 360px) {
+    .pegboard {
+        grid-template-columns: repeat(2, minmax(0, 120px));
+        gap: 60px 12px;
+    }
+
+    .hanging-card {
+        width: 120px;
+    }
+}
