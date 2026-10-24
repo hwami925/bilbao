@@ -1,0 +1,499 @@
+/* =========================================
+   BILBAO OFFICIAL WEBSITE
+   STYLE.CSS
+========================================= */
+
+:root {
+    --bg: #101010;
+    --bg-light: #1c1c1c;
+    --text: #f2f2f2;
+    --muted: #a0a0a0;
+    --accent: #a83232;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Noto Sans KR", Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font-family: inherit;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    padding: 0 6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    background: rgba(10, 10, 10, 0.55);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.header-logo {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: 3px;
+}
+
+.navigation {
+    display: flex;
+    gap: 35px;
+}
+
+.navigation a {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #ccc;
+    transition: color 0.3s;
+}
+
+.navigation a:hover {
+    color: white;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+/* =========================================
+   HERO
+========================================= */
+
+.hero {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.hero-background {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: -1;
+    background: linear-gradient(
+        to bottom,
+        #555 0%,
+        #343434 45%,
+        #111 100%
+    );
+}
+
+.layer {
+    position: absolute;
+    inset: -3%;
+    will-change: transform;
+    pointer-events: none;
+}
+
+/* 하늘 */
+
+.layer-sky {
+    background:
+        radial-gradient(
+            ellipse at 55% 25%,
+            rgba(210,210,210,0.15),
+            transparent 55%
+        ),
+        linear-gradient(
+            to bottom,
+            #777 0%,
+            #444 55%,
+            #222 100%
+        );
+}
+
+/* 부산 도시 실루엣 */
+
+.layer-city {
+    top: auto;
+    height: 48%;
+    bottom: 15%;
+    opacity: 0.65;
+
+    background:
+        linear-gradient(#252525, #252525)
+            3% 80% / 8% 42% no-repeat,
+        linear-gradient(#252525, #252525)
+            15% 80% / 7% 65% no-repeat,
+        linear-gradient(#252525, #252525)
+            26% 80% / 9% 48% no-repeat,
+        linear-gradient(#252525, #252525)
+            40% 80% / 6% 75% no-repeat,
+        linear-gradient(#252525, #252525)
+            54% 80% / 9% 55% no-repeat,
+        linear-gradient(#252525, #252525)
+            68% 80% / 7% 85% no-repeat,
+        linear-gradient(#252525, #252525)
+            81% 80% / 10% 50% no-repeat,
+        linear-gradient(#252525, #252525)
+            94% 80% / 8% 70% no-repeat;
+}
+
+/* 고철장 */
+
+.layer-scrapyard {
+    top: auto;
+    height: 38%;
+    bottom: 0;
+
+    background:
+        radial-gradient(
+            ellipse at 15% 100%,
+            #191919 0 45%,
+            transparent 46%
+        ),
+        radial-gradient(
+            ellipse at 50% 110%,
+            #202020 0 55%,
+            transparent 56%
+        ),
+        radial-gradient(
+            ellipse at 85% 100%,
+            #151515 0 48%,
+            transparent 49%
+        );
+}
+
+/* 붉은 013 기둥 */
+
+.red-pillar {
+    position: absolute;
+    width: 58px;
+    height: 260px;
+    bottom: 12%;
+    left: 73%;
+    background: linear-gradient(
+        90deg,
+        #491717,
+        #9b2929 45%,
+        #5a1717
+    );
+    box-shadow: 0 0 25px rgba(140, 20, 20, 0.2);
+    transform-origin: bottom center;
+}
+
+.red-pillar span {
+    display: block;
+    text-align: center;
+    margin-top: 25px;
+    color: #dedede;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 3px;
+}
+
+/* 전경 */
+
+.layer-foreground {
+    top: auto;
+    height: 24%;
+    bottom: -8%;
+
+    background:
+        radial-gradient(
+            ellipse at 5% 100%,
+            #080808 0 60%,
+            transparent 61%
+        ),
+        radial-gradient(
+            ellipse at 95% 100%,
+            #070707 0 60%,
+            transparent 61%
+        );
+}
+
+/* 먼지 캔버스 */
+
+#dust-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* =========================================
+   HERO CONTENT
+========================================= */
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 100px 20px 60px;
+    animation: fadeUp 1.5s ease both;
+}
+
+.hero-subtitle {
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: #ddd;
+    margin-bottom: 20px;
+}
+
+.hero-content h1 {
+    font-size: clamp(70px, 13vw, 190px);
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    text-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.hero-korean {
+    font-size: 18px;
+    letter-spacing: 12px;
+    margin-top: 18px;
+}
+
+.hero-description {
+    font-size: 14px;
+    color: #ddd;
+    margin-top: 38px;
+    letter-spacing: 2px;
+}
+
+.hero-button {
+    display: inline-block;
+    margin-top: 35px;
+    padding: 15px 32px;
+    border: 1px solid rgba(255,255,255,0.6);
+    background: rgba(0,0,0,0.2);
+    font-size: 12px;
+    letter-spacing: 2px;
+    transition: 0.3s;
+}
+
+.hero-button:hover {
+    background: #eee;
+    color: #111;
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #aaa;
+    animation: float 2s ease-in-out infinite;
+    white-space: nowrap;
+}
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.content-section {
+    min-height: 85vh;
+    padding: 150px 8%;
+    border-top: 1px solid #292929;
+    background: #101010;
+}
+
+.content-section:nth-child(odd) {
+    background: #171717;
+}
+
+.section-inner {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.section-number {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #a1a1a1;
+    margin-bottom: 25px;
+}
+
+.content-section h2 {
+    font-size: clamp(45px, 7vw, 100px);
+    letter-spacing: 5px;
+    margin-bottom: 35px;
+}
+
+.section-description {
+    font-size: clamp(16px, 2vw, 23px);
+    line-height: 2;
+    color: #ddd;
+    margin-bottom: 50px;
+}
+
+.feature-card {
+    max-width: 550px;
+    padding: 40px;
+    background: #222;
+    border: 1px solid #444;
+}
+
+.feature-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #aaa;
+    margin-bottom: 20px;
+}
+
+.feature-card h3 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.feature-card p {
+    line-height: 1.8;
+    color: #ccc;
+}
+
+.feature-card button {
+    margin-top: 25px;
+    padding: 12px 30px;
+    background: #555;
+    border: none;
+    color: #ccc;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.footer {
+    padding: 35px;
+    text-align: center;
+    border-top: 1px solid #333;
+    color: #777;
+    font-size: 12px;
+}
+
+/* =========================================
+   ANIMATION
+========================================= */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(-50%, 0);
+    }
+    50% {
+        transform: translate(-50%, -8px);
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .header {
+        height: 65px;
+        padding: 0 5%;
+    }
+
+    .header-logo {
+        font-size: 20px;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .navigation {
+        display: none;
+        position: absolute;
+        top: 65px;
+        left: 0;
+        width: 100%;
+        padding: 30px;
+        background: rgba(10,10,10,0.97);
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .navigation.active {
+        display: flex;
+    }
+
+    .hero-content h1 {
+        font-size: clamp(48px, 15vw, 100px);
+    }
+
+    .hero-description {
+        font-size: 12px;
+        line-height: 1.8;
+    }
+
+    .red-pillar {
+        left: 80%;
+        height: 180px;
+        width: 40px;
+    }
+
+    .content-section {
+        padding: 110px 7%;
+        min-height: 65vh;
+    }
+
+    .feature-card {
+        padding: 25px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .hero-content,
+    .scroll-indicator {
+        animation: none;
+    }
+}
