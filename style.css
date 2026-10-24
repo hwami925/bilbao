@@ -881,3 +881,82 @@ button {
         transition: none;
     }
 }
+/* ========================================
+   CHARACTER PREVIEW — MAIN PAGE
+======================================== */
+
+/* 제목과 이동 버튼 */
+
+.character-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.character-profile-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    padding: 12px 20px;
+
+    color: #ddd;
+    border: 1px solid #777;
+    text-decoration: none;
+
+    font-size: 13px;
+    letter-spacing: 1px;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.character-profile-link:hover {
+    background: #ddd;
+    color: #111;
+    transform: translateX(5px);
+}
+
+.character-profile-link:focus-visible {
+    outline: 2px solid #d55;
+    outline-offset: 4px;
+}
+
+/* 명찰은 전시용 */
+
+.character-section .id-card {
+    cursor: default;
+    user-select: none;
+}
+
+/* 마우스를 올리면 움찔 */
+
+.character-section .id-card:hover {
+    transform: translateY(-6px) rotate(-2deg);
+}
+
+/* 모바일 */
+
+@media (max-width: 768px) {
+
+    .character-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .character-profile-link {
+        align-self: flex-end;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .character-section .id-card:hover {
+        transform: none;
+    }
+}
