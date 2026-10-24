@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const isOpen = navigation.classList.toggle("active");
 
             menuToggle.setAttribute("aria-expanded", String(isOpen));
+
             menuToggle.setAttribute(
                 "aria-label",
                 isOpen ? "메뉴 닫기" : "메뉴 열기"
@@ -33,8 +34,10 @@ document.addEventListener("DOMContentLoaded", () => {
             link.addEventListener("click", () => {
 
                 navigation.classList.remove("active");
+
                 menuToggle.setAttribute("aria-expanded", "false");
                 menuToggle.setAttribute("aria-label", "메뉴 열기");
+
                 menuToggle.textContent = "☰";
 
             });
@@ -230,8 +233,10 @@ document.addEventListener("DOMContentLoaded", () => {
             animateDust();
 
             window.addEventListener("resize", () => {
+
                 resizeCanvas();
                 initializeParticles();
+
             });
 
         }
@@ -313,108 +318,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     updateHeader();
-
-});
-/* =========================================
-   BILBAO CHARACTER RECORD SYSTEM
-========================================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const characters = {
-        revoli: {
-            name: "REVOLI",
-            korean: "레볼리",
-            number: "001",
-            description: "고철과 폐허 속에서 살아가는 로봇. 그의 이야기는 잿빛 세계에서 시작된다."
-        },
-
-        bao: {
-            name: "BAO",
-            korean: "바오",
-            number: "002",
-            description: "폐허가 된 세계에서 살아가는 소녀. 그녀에게는 아직 밝혀지지 않은 이야기가 있다."
-        },
-
-        ribe: {
-            name: "RIBE",
-            korean: "리베",
-            number: "003",
-            description: "쉽게 자신의 감정을 드러내지 않는 인물. 차가운 태도 뒤에는 또 다른 모습이 숨어 있다."
-        },
-
-        keiji: {
-            name: "KEIJI",
-            korean: "케이지",
-            number: "004",
-            description: "동료들과 함께 위험한 세계를 살아가는 인물."
-        },
-
-        yuri: {
-            name: "YURI",
-            korean: "유리",
-            number: "005",
-            description: "폐허 속에서 자신만의 방식으로 살아가는 인물."
-        }
-    };
-
-    const cards = document.querySelectorAll(".id-card");
-    const record = document.getElementById("character-record");
-    const closeButton = document.querySelector(".record-close");
-
-    if (!record || !closeButton) return;
-
-    cards.forEach(card => {
-
-        card.addEventListener("click", () => {
-
-            const key = card.dataset.character;
-            const character = characters[key];
-
-            if (!character) return;
-
-            document.getElementById("record-name").textContent =
-                character.name;
-
-            document.getElementById("record-name-kr").textContent =
-                character.korean;
-
-            document.getElementById("record-number").textContent =
-                character.number;
-
-            document.getElementById("record-description").textContent =
-                character.description;
-
-            record.hidden = false;
-
-            cards.forEach(item => {
-                item.classList.remove("active");
-            });
-
-            card.classList.add("active");
-
-            record.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-        });
-
-    });
-
-    closeButton.addEventListener("click", () => {
-
-        record.hidden = true;
-
-        cards.forEach(card => {
-            card.classList.remove("active");
-        });
-
-        document.getElementById("character").scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-
-    });
 
 });
