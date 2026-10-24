@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#111111">
+
+    <title>GALLERY | BILBAO</title>
+
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./gallery.css">
+
+    <script src="./gallery.js" defer></script>
+</head>
+
+<body class="gallery-page">
+
+    <!-- 상단 메뉴 -->
+    <header class="gallery-header">
+
+        <a href="./index.html" class="gallery-logo">
+            BILBAO.
+        </a>
+
+        <a href="./index.html#gallery" class="gallery-back">
+            ← BACK TO HOME
+        </a>
+
+    </header>
+
+    <main class="gallery-main">
+
+        <!-- 갤러리 제목 -->
+        <div class="gallery-heading">
+
+            <p>THE ART OF BILBAO</p>
+
+            <h1>ARTWORK ARCHIVE</h1>
+
+            <span>빌바오 아트워크 보관소</span>
+
+        </div>
+
+        <!-- 갤러리 안내 -->
+        <div class="gallery-intro">
+
+            <p>
+                잿빛 세계 속에 남겨진 순간들.<br>
+                빌바오의 이야기를 그림으로 만나보세요.
+            </p>
+
+            <span>
+                TOTAL ARTWORKS / 06
+            </span>
+
+        </div>
+
+        <!-- 작품 목록 -->
+        <section class="artwork-grid" aria-label="빌바오 작품 목록">
+
+            <!-- 작품 001 -->
+            <button class="artwork-card"
+                    type="button"
+                    data-artwork="0">
+
+                <div class="artwork-image">
+                    <span>ARTWORK 001</span>
+                </div>
+
+                <div class="artwork-info">
+                    <span>PROLOGUE</span>
+                    <h2>이야기의 시작</h2>
+                </div>
+
+            </button>
+
+            <!-- 작품 002 -->
+            <button class="artwork-card"
+                    type="button"
+                    data-artwork="1">
+
+                <div class="artwork-image">
+                    <span>ARTWORK 002</span>
+                </div>
+
+                <div class="artwork-info">
+                    <span>CHAPTER 02</span>
+                    <h2>무너진 마음</h2>
+                </div>
+
+            </button>
+
+            <!-- 작품 003 -->
+            <button class="artwork-card"
+                    type="button"
+                    data-artwork="2">
+
+                <div class="artwork-image">
+                    <span>ARTWORK 003</span>
+                </div>
+
+                <div class="artwork-info">
+                    <span>CHAPTER 04</span>
+                    <h2>작은 온기</h2>
+                </div>
+
+            </button>
+
+            <!-- 작품 004 -->
+            <button class="artwork-card"
+                    type="button"
+                    data-artwork="3">
+
+                <div class="artwork-image">
+                    <span>ARTWORK 004</span>
+                </div>
+
+                <div class="artwork-info">
+                    <span>CHAPTER 06</span>
+                    <h2>마주한 진실</h2>
+                </div>
+
+            </button>
+
+            <!-- 작품 005 -->
+            <button class="artwork-card"
+                    type="button"
+                    data-artwork="4">
+
+                <div class="artwork-image">
+                    <span>ARTWORK 005</span>
+                </div>
+
+                <div class="artwork-info">
+                    <span>CHAPTER 08</span>
+                    <h2>잿빛 속의 미소</h2>
+                </div>
+
+            </button>
+
+            <!-- 작품 006 -->
+            <button class="artwork-card"
+                    type="button"
+                    data-artwork="5">
+
+                <div class="artwork-image">
+                    <span>ARTWORK 006</span>
+                </div>
+
+                <div class="artwork-info">
+                    <span>CHAPTER 11</span>
+                    <h2>우리들의 시간</h2>
+                </div>
+
+            </button>
+
+        </section>
+
+    </main>
+
+    <!-- 작품 확대 팝업 -->
+    <div class="artwork-overlay" id="artwork-overlay" hidden>
+
+        <div class="artwork-modal"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="modal-artwork-title">
+
+            <!-- 닫기 -->
+            <button class="artwork-close"
+                    type="button"
+                    aria-label="작품 닫기">
+                ✕
+            </button>
+
+            <!-- 이전 작품 -->
+            <button class="artwork-prev"
+                    type="button"
+                    aria-label="이전 작품">
+                ←
+            </button>
+
+            <!-- 확대 이미지 -->
+            <div class="artwork-modal-image">
+                <span id="modal-artwork-placeholder">
+                    ARTWORK 001
+                </span>
+            </div>
+
+            <!-- 다음 작품 -->
+            <button class="artwork-next"
+                    type="button"
+                    aria-label="다음 작품">
+                →
+            </button>
+
+            <!-- 작품 설명 -->
+            <div class="artwork-modal-info">
+
+                <p id="modal-artwork-chapter">
+                    PROLOGUE
+                </p>
+
+                <h2 id="modal-artwork-title">
+                    이야기의 시작
+                </h2>
+
+                <p id="modal-artwork-description">
+                    작품 설명이 표시됩니다.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer class="gallery-footer">
+        © 2026 BILBAO. Created by HWAMI.
+    </footer>
+
+</body>
+</html>
