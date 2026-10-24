@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
        1. 상품 데이터
        가격은 확정 후 입력
     ===================================== */
-
+   
+const SHIPPING_FEE = 3000;
     const products = {
         postcard: {
             name: "일러스트 엽서",
