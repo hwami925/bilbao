@@ -1,1 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PERSONNEL ARCHIVE | BILBAO</title>
+
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./character.css">
+
+    <script src="./character.js" defer></script>
+</head>
+
+<body class="archive-page">
+
+    <!-- 상단 메뉴 -->
+    <header class="archive-header">
+        <a href="./index.html" class="archive-logo">BILBAO.</a>
+
+        <a href="./index.html#character" class="archive-back">
+            ← BACK TO HOME
+        </a>
+    </header>
+
+    <main class="archive-main">
+
+        <!-- 페이지 제목 -->
+        <div class="archive-heading">
+            <p>CLASSIFIED / PERSONNEL RECORDS</p>
+            <h1>PERSONNEL ARCHIVE</h1>
+            <span>인물 기록 보관소</span>
+        </div>
+
+        <!-- 타공판 -->
+        <section class="pegboard" aria-label="캐릭터 명찰 보관소">
+
+            <!-- 레볼리 -->
+            <button class="hanging-card" type="button" data-character="revoli">
+                <span class="card-hook"></span>
+                <span class="archive-card-number">FILE 001</span>
+                <span class="archive-card-photo">?</span>
+                <strong>REVOLI</strong>
+                <small>레볼리</small>
+            </button>
+
+            <!-- 빌바오 -->
+            <button class="hanging-card" type="button" data-character="bilbao">
+                <span class="card-hook"></span>
+                <span class="archive-card-number">FILE 002</span>
+                <span class="archive-card-photo">?</span>
+                <strong>BILBAO</strong>
+                <small>빌바오</small>
+            </button>
+
+            <!-- 리베 -->
+            <button class="hanging-card" type="button" data-character="ribe">
+                <span class="card-hook"></span>
+                <span class="archive-card-number">FILE 003</span>
+                <span class="archive-card-photo">?</span>
+                <strong>RIBE</strong>
+                <small>리베</small>
+            </button>
+
+            <!-- 케이지 -->
+            <button class="hanging-card" type="button" data-character="keiji">
+                <span class="card-hook"></span>
+                <span class="archive-card-number">FILE 004</span>
+                <span class="archive-card-photo">?</span>
+                <strong>KEIJI</strong>
+                <small>케이지</small>
+            </button>
+
+            <!-- 유리 -->
+            <button class="hanging-card" type="button" data-character="yuri">
+                <span class="card-hook"></span>
+                <span class="archive-card-number">FILE 005</span>
+                <span class="archive-card-photo">?</span>
+                <strong>YURI</strong>
+                <small>유리</small>
+            </button>
+
+        </section>
+
+        <p class="archive-instruction">
+            SELECT AN ID CARD TO ACCESS PERSONNEL RECORDS
+        </p>
+
+    </main>
+
+    <!-- 캐릭터 기록부 팝업 -->
+    <div class="archive-overlay" id="archive-overlay" hidden>
+
+        <section class="archive-document"
+                 role="dialog"
+                 aria-modal="true"
+                 aria-labelledby="archive-record-name">
+
+            <button class="archive-close"
+                    type="button"
+                    aria-label="기록부 닫기">
+                ✕
+            </button>
+
+            <div class="archive-document-photo">
+                CHARACTER IMAGE
+            </div>
+
+            <div class="archive-document-info">
+
+                <p>PERSONNEL RECORD / BILBAO</p>
+
+                <h2 id="archive-record-name">REVOLI</h2>
+                <h3 id="archive-record-korean">레볼리</h3>
+
+                <div class="archive-document-line"></div>
+
+                <p id="archive-record-description">
+                    캐릭터 정보가 표시됩니다.
+                </p>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</body>
+</html>
