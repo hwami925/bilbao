@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,11 +14,20 @@
 
 <body>
 
-    <!-- 상단 메뉴 -->
+    <!-- ========================================
+         상단 메뉴
+    ======================================== -->
+
     <header class="header">
+
         <a href="#home" class="header-logo">BILBAO.</a>
 
-        <button class="menu-toggle" aria-label="메뉴 열기" aria-expanded="false">
+        <button
+            class="menu-toggle"
+            type="button"
+            aria-label="메뉴 열기"
+            aria-expanded="false"
+        >
             ☰
         </button>
 
@@ -28,11 +38,16 @@
             <a href="#goods">GOODS</a>
             <a href="#about">ABOUT</a>
         </nav>
+
     </header>
+
 
     <main>
 
-        <!-- 메인 화면 -->
+        <!-- ========================================
+             HOME — 메인 화면
+        ======================================== -->
+
         <section id="home" class="hero">
 
             <div class="hero-background">
@@ -58,10 +73,16 @@
             </div>
 
             <div class="hero-content">
-                <p class="hero-subtitle">AN ORIGINAL STORY</p>
+
+                <p class="hero-subtitle">
+                    AN ORIGINAL STORY
+                </p>
 
                 <h1>BILBAO</h1>
-                <p class="hero-korean">빌바오</p>
+
+                <p class="hero-korean">
+                    빌바오
+                </p>
 
                 <p class="hero-description">
                     잿빛 세계, 그 속에서 시작되는 이야기.
@@ -70,6 +91,7 @@
                 <a href="#story" class="hero-button">
                     세계관 탐험하기 ↗
                 </a>
+
             </div>
 
             <a href="#story" class="scroll-indicator">
@@ -78,10 +100,19 @@
 
         </section>
 
-        <!-- 세계관 -->
+
+        <!-- ========================================
+             STORY — 세계관
+        ======================================== -->
+
         <section id="story" class="content-section">
+
             <div class="section-inner">
-                <p class="section-number">01 / THE WORLD</p>
+
+                <p class="section-number">
+                    01 / THE WORLD
+                </p>
+
                 <h2>STORY</h2>
 
                 <p class="section-description">
@@ -90,163 +121,297 @@
                 </p>
 
                 <div class="feature-card">
-                    <p class="feature-label">COMING NEXT</p>
-                    <h3>프롤로그 체험 게임</h3>
-                    <p>
-                        이곳에서 달리며 빌바오의 프롤로그를 경험하게 됩니다.
+
+                    <p class="feature-label">
+                        COMING NEXT
                     </p>
-                    <button disabled>준비 중</button>
+
+                    <h3>프롤로그 체험 게임</h3>
+
+                    <p>
+                        이곳에서 달리며 빌바오의 프롤로그를
+                        경험하게 됩니다.
+                    </p>
+
+                    <button type="button" disabled>
+                        준비 중
+                    </button>
+
                 </div>
+
             </div>
+
         </section>
 
-        <!-- 캐릭터 -->
-       <!-- 캐릭터 -->
-<section id="character" class="content-section character-section">
-    <div class="section-inner">
 
-        <p class="section-number">02 / PERSONNEL RECORDS</p>
-        <h2>CHARACTER</h2>
+        <!-- ========================================
+             CHARACTER — 캐릭터 미리보기
+        ======================================== -->
 
-        <p class="section-description">
-            기록된 다섯 명의 이야기.<br>
-            명찰을 선택하여 인물 기록을 열람하세요.
-        </p>
+        <section
+            id="character"
+            class="content-section character-section"
+        >
 
-        <!-- 캐릭터 명찰 목록 -->
-        <div class="character-grid">
+            <div class="section-inner">
 
-            <button class="id-card" data-character="revoli">
-                <span class="card-number">FILE 001</span>
-                <div class="card-photo">?</div>
-                <span class="card-name">REVOLI</span>
-                <span class="card-name-kr">레볼리</span>
-                <span class="card-bottom">VIEW RECORD ↗</span>
-            </button>
+                <p class="section-number">
+                    02 / PERSONNEL RECORDS
+                </p>
 
-            <button class="id-card" data-character="bao">
-                <span class="card-number">FILE 002</span>
-                <div class="card-photo">?</div>
-                <span class="card-name">BAO</span>
-                <span class="card-name-kr">바오</span>
-                <span class="card-bottom">VIEW RECORD ↗</span>
-            </button>
+                <!-- 제목과 프로필 확인 버튼 -->
+                <div class="character-title-row">
 
-            <button class="id-card" data-character="ribe">
-                <span class="card-number">FILE 003</span>
-                <div class="card-photo">?</div>
-                <span class="card-name">RIBE</span>
-                <span class="card-name-kr">리베</span>
-                <span class="card-bottom">VIEW RECORD ↗</span>
-            </button>
+                    <h2>CHARACTER</h2>
 
-            <button class="id-card" data-character="keiji">
-                <span class="card-number">FILE 004</span>
-                <div class="card-photo">?</div>
-                <span class="card-name">KEIJI</span>
-                <span class="card-name-kr">케이지</span>
-                <span class="card-bottom">VIEW RECORD ↗</span>
-            </button>
+                    <a
+                        href="./character.html"
+                        class="character-profile-link"
+                    >
+                        프로필 확인 →
+                    </a>
 
-            <button class="id-card" data-character="yuri">
-                <span class="card-number">FILE 005</span>
-                <div class="card-photo">?</div>
-                <span class="card-name">YURI</span>
-                <span class="card-name-kr">유리</span>
-                <span class="card-bottom">VIEW RECORD ↗</span>
-            </button>
-
-        </div>
-
-        <!-- 캐릭터 상세 기록부 -->
-        <div class="character-record" id="character-record" hidden>
-
-            <button class="record-close" type="button">
-                ✕ CLOSE RECORD
-            </button>
-
-            <div class="record-layout">
-
-                <div class="record-image">
-                    <span>CHARACTER IMAGE</span>
                 </div>
 
-                <div class="record-info">
+                <p class="section-description">
+                    잿빛 세계에 남겨진 다섯 명의 기록.
+                </p>
 
-                    <p class="record-label">PERSONNEL DATA / BILBAO</p>
 
-                    <h3 id="record-name">REVOLI</h3>
-                    <p id="record-name-kr">레볼리</p>
+                <!-- 캐릭터 명찰 미리보기 -->
+                <div class="character-grid">
 
-                    <div class="record-divider"></div>
+                    <!-- 레볼리 -->
+                    <div
+                        class="id-card"
+                        data-character="revoli"
+                    >
 
-                    <p class="record-field">
-                        <span>FILE NO.</span>
-                        <strong id="record-number">001</strong>
-                    </p>
+                        <span class="card-number">
+                            FILE 001
+                        </span>
 
-                    <p class="record-field">
-                        <span>STATUS</span>
-                        <strong>RECORDED</strong>
-                    </p>
+                        <div class="card-photo">?</div>
 
-                    <p class="record-description" id="record-description">
-                        캐릭터 소개가 표시됩니다.
-                    </p>
+                        <span class="card-name">
+                            REVOLI
+                        </span>
+
+                        <span class="card-name-kr">
+                            레볼리
+                        </span>
+
+                        <span class="card-bottom">
+                            PERSONNEL RECORD
+                        </span>
+
+                    </div>
+
+
+                    <!-- 빌바오 -->
+                    <div
+                        class="id-card"
+                        data-character="bilbao"
+                    >
+
+                        <span class="card-number">
+                            FILE 002
+                        </span>
+
+                        <div class="card-photo">?</div>
+
+                        <span class="card-name">
+                            BILBAO
+                        </span>
+
+                        <span class="card-name-kr">
+                            빌바오
+                        </span>
+
+                        <span class="card-bottom">
+                            PERSONNEL RECORD
+                        </span>
+
+                    </div>
+
+
+                    <!-- 리베 -->
+                    <div
+                        class="id-card"
+                        data-character="ribe"
+                    >
+
+                        <span class="card-number">
+                            FILE 003
+                        </span>
+
+                        <div class="card-photo">?</div>
+
+                        <span class="card-name">
+                            RIBE
+                        </span>
+
+                        <span class="card-name-kr">
+                            리베
+                        </span>
+
+                        <span class="card-bottom">
+                            PERSONNEL RECORD
+                        </span>
+
+                    </div>
+
+
+                    <!-- 케이지 -->
+                    <div
+                        class="id-card"
+                        data-character="keiji"
+                    >
+
+                        <span class="card-number">
+                            FILE 004
+                        </span>
+
+                        <div class="card-photo">?</div>
+
+                        <span class="card-name">
+                            KEIJI
+                        </span>
+
+                        <span class="card-name-kr">
+                            케이지
+                        </span>
+
+                        <span class="card-bottom">
+                            PERSONNEL RECORD
+                        </span>
+
+                    </div>
+
+
+                    <!-- 유리 -->
+                    <div
+                        class="id-card"
+                        data-character="yuri"
+                    >
+
+                        <span class="card-number">
+                            FILE 005
+                        </span>
+
+                        <div class="card-photo">?</div>
+
+                        <span class="card-name">
+                            YURI
+                        </span>
+
+                        <span class="card-name-kr">
+                            유리
+                        </span>
+
+                        <span class="card-bottom">
+                            PERSONNEL RECORD
+                        </span>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+        </section>
 
-    </div>
-</section>
 
-        <!-- 갤러리 -->
+        <!-- ========================================
+             GALLERY — 갤러리
+        ======================================== -->
+
         <section id="gallery" class="content-section">
+
             <div class="section-inner">
-                <p class="section-number">03 / ARTWORK</p>
+
+                <p class="section-number">
+                    03 / ARTWORK
+                </p>
+
                 <h2>GALLERY</h2>
 
                 <p class="section-description">
                     빌바오의 세계를 담은 일러스트
                 </p>
+
             </div>
+
         </section>
 
-        <!-- 굿즈 -->
+
+        <!-- ========================================
+             GOODS — 굿즈
+        ======================================== -->
+
         <section id="goods" class="content-section">
+
             <div class="section-inner">
-                <p class="section-number">04 / OFFICIAL GOODS</p>
+
+                <p class="section-number">
+                    04 / OFFICIAL GOODS
+                </p>
+
                 <h2>GOODS</h2>
 
                 <p class="section-description">
                     빌바오 공식 굿즈
                 </p>
 
-                <p>굿즈 선택 및 주문 신청 기능이 추가될 예정입니다.</p>
+                <p>
+                    굿즈 선택 및 주문 신청 기능이
+                    추가될 예정입니다.
+                </p>
+
             </div>
+
         </section>
 
-        <!-- 작품 소개 -->
+
+        <!-- ========================================
+             ABOUT — 작품 소개
+        ======================================== -->
+
         <section id="about" class="content-section">
+
             <div class="section-inner">
-                <p class="section-number">05 / ABOUT</p>
+
+                <p class="section-number">
+                    05 / ABOUT
+                </p>
+
                 <h2>ABOUT</h2>
 
                 <p class="section-description">
                     BILBAO — ORIGINAL STORY
                 </p>
 
-                <p>작품 제작 의도 및 작가 소개</p>
+                <p>
+                    작품 제작 의도 및 작가 소개
+                </p>
+
             </div>
+
         </section>
 
     </main>
 
+
+    <!-- ========================================
+         FOOTER
+    ======================================== -->
+
     <footer class="footer">
-        <p>© 2026 BILBAO. Created by HWAMI.</p>
+
+        <p>
+            © 2026 BILBAO. Created by HWAMI.
+        </p>
+
     </footer>
 
 </body>
