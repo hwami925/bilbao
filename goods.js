@@ -59,6 +59,10 @@ const SHIPPING_FEE = 3000;
     const totalPriceElement = document.getElementById(
         "order-total-price"
     );
+   
+   const shippingPriceElement = document.getElementById(
+    "order-shipping-price"
+);
 
     const nameInput = document.getElementById(
         "order-name"
@@ -157,22 +161,37 @@ const SHIPPING_FEE = 3000;
         }
 
 
-        /* 총 주문 금액 */
+/* 배송비 계산 */
 
-        if (totalPriceElement) {
+const shippingFee = totalQuantity > 0 ? SHIPPING_FEE : 0;
 
-            if (totalQuantity === 0 || hasUnknownPrice) {
+if (shippingPriceElement) {
+    shippingPriceElement.textContent =
+        `${shippingFee.toLocaleString("ko-KR")}원`;
+}
 
-                totalPriceElement.textContent = "가격 미정";
+/* 최종 결제 금액 */
 
-            } else {
+if (totalPriceElement) {
 
-                totalPriceElement.textContent =
-                    `${totalPrice.toLocaleString("ko-KR")}원`;
+    if (totalQuantity === 0) {
 
-            }
+        totalPriceElement.textContent = "0원";
 
-        }
+    } else if (hasUnknownPrice) {
+
+        totalPriceElement.textContent = "가격 미정";
+
+    } else {
+
+        const finalPrice = totalPrice + shippingFee;
+
+        totalPriceElement.textContent =
+            `${finalPrice.toLocaleString("ko-KR")}원`;
+
+    }
+
+}
 
     }
 
