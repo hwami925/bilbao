@@ -101,18 +101,107 @@
         </section>
 
         <!-- 캐릭터 -->
-        <section id="character" class="content-section">
-            <div class="section-inner">
-                <p class="section-number">02 / PEOPLE</p>
-                <h2>CHARACTER</h2>
+       <!-- 캐릭터 -->
+<section id="character" class="content-section character-section">
+    <div class="section-inner">
 
-                <p class="section-description">
-                    레볼리 · 바오 · 리베 · 케이지 · 유리
-                </p>
+        <p class="section-number">02 / PERSONNEL RECORDS</p>
+        <h2>CHARACTER</h2>
 
-                <p>캐릭터 일러스트와 소개가 추가될 예정입니다.</p>
+        <p class="section-description">
+            기록된 다섯 명의 이야기.<br>
+            명찰을 선택하여 인물 기록을 열람하세요.
+        </p>
+
+        <!-- 캐릭터 명찰 목록 -->
+        <div class="character-grid">
+
+            <button class="id-card" data-character="revoli">
+                <span class="card-number">FILE 001</span>
+                <div class="card-photo">?</div>
+                <span class="card-name">REVOLI</span>
+                <span class="card-name-kr">레볼리</span>
+                <span class="card-bottom">VIEW RECORD ↗</span>
+            </button>
+
+            <button class="id-card" data-character="bao">
+                <span class="card-number">FILE 002</span>
+                <div class="card-photo">?</div>
+                <span class="card-name">BAO</span>
+                <span class="card-name-kr">바오</span>
+                <span class="card-bottom">VIEW RECORD ↗</span>
+            </button>
+
+            <button class="id-card" data-character="ribe">
+                <span class="card-number">FILE 003</span>
+                <div class="card-photo">?</div>
+                <span class="card-name">RIBE</span>
+                <span class="card-name-kr">리베</span>
+                <span class="card-bottom">VIEW RECORD ↗</span>
+            </button>
+
+            <button class="id-card" data-character="keiji">
+                <span class="card-number">FILE 004</span>
+                <div class="card-photo">?</div>
+                <span class="card-name">KEIJI</span>
+                <span class="card-name-kr">케이지</span>
+                <span class="card-bottom">VIEW RECORD ↗</span>
+            </button>
+
+            <button class="id-card" data-character="yuri">
+                <span class="card-number">FILE 005</span>
+                <div class="card-photo">?</div>
+                <span class="card-name">YURI</span>
+                <span class="card-name-kr">유리</span>
+                <span class="card-bottom">VIEW RECORD ↗</span>
+            </button>
+
+        </div>
+
+        <!-- 캐릭터 상세 기록부 -->
+        <div class="character-record" id="character-record" hidden>
+
+            <button class="record-close" type="button">
+                ✕ CLOSE RECORD
+            </button>
+
+            <div class="record-layout">
+
+                <div class="record-image">
+                    <span>CHARACTER IMAGE</span>
+                </div>
+
+                <div class="record-info">
+
+                    <p class="record-label">PERSONNEL DATA / BILBAO</p>
+
+                    <h3 id="record-name">REVOLI</h3>
+                    <p id="record-name-kr">레볼리</p>
+
+                    <div class="record-divider"></div>
+
+                    <p class="record-field">
+                        <span>FILE NO.</span>
+                        <strong id="record-number">001</strong>
+                    </p>
+
+                    <p class="record-field">
+                        <span>STATUS</span>
+                        <strong>RECORDED</strong>
+                    </p>
+
+                    <p class="record-description" id="record-description">
+                        캐릭터 소개가 표시됩니다.
+                    </p>
+
+                </div>
+
             </div>
-        </section>
+
+        </div>
+
+    </div>
+</section>
 
         <!-- 갤러리 -->
         <section id="gallery" class="content-section">
