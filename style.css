@@ -1135,3 +1135,167 @@ button {
         transform: none;
     }
 }
+/* ========================================
+   BILBAO GOODS — MAIN PREVIEW
+======================================== */
+
+.goods-section {
+    background: #151515;
+}
+
+/* 제목과 이동 버튼 */
+
+.goods-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.goods-view-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    padding: 12px 20px;
+
+    color: #ddd;
+    border: 1px solid #777;
+    text-decoration: none;
+
+    font-size: 13px;
+    letter-spacing: 1px;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.goods-view-link:hover {
+    background: #ddd;
+    color: #111;
+    transform: translateX(5px);
+}
+
+.goods-view-link:focus-visible {
+    outline: 2px solid #d55;
+    outline-offset: 4px;
+}
+
+/* 굿즈 미리보기 */
+
+.goods-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 25px;
+    margin-top: 55px;
+}
+
+.goods-preview-item {
+    min-width: 0;
+}
+
+/* 굿즈 이미지 영역 */
+
+.goods-preview-image {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    aspect-ratio: 4 / 3;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #49443e,
+            #292725 65%,
+            #1d1c1b
+        );
+
+    border: 1px solid #615b54;
+
+    box-shadow:
+        inset 0 0 35px rgba(0, 0, 0, 0.25);
+
+    transition:
+        transform 0.35s ease,
+        border-color 0.35s ease;
+}
+
+.goods-preview-image span {
+    color: #aaa39a;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+/* 마우스 오버 */
+
+.goods-preview-item:hover .goods-preview-image {
+    transform: translateY(-6px);
+    border-color: #b4a89a;
+}
+
+/* 굿즈 이름 */
+
+.goods-preview-info {
+    padding-top: 20px;
+}
+
+.goods-preview-info span {
+    color: #888;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.goods-preview-info h3 {
+    margin-top: 10px;
+
+    color: #eee;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* 모바일 */
+
+@media (max-width: 768px) {
+
+    .goods-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .goods-view-link {
+        align-self: flex-end;
+    }
+
+    .goods-preview-grid {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+
+    .goods-preview-image {
+        aspect-ratio: 16 / 10;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .goods-preview-image {
+        transition: none;
+    }
+
+    .goods-preview-item:hover .goods-preview-image {
+        transform: none;
+    }
+
+}
