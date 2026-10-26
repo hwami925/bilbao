@@ -856,3 +856,20 @@
     }
 
 }
+/* ========================================
+   선택한 스티커 강조
+======================================== */
+
+.sticker-design-card {
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.sticker-design-card.is-selected {
+    border: 2px solid #F5B971;
+    background: #3a3027;
+}
+
+.sticker-design-card.is-selected .sticker-design-name {
+    color: #F5B971;
+    font-weight: 700;
+}
