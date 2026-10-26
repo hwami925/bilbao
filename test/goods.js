@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const SHIPPING_FEE = 3000;
 
     // 실제 주문 개시 전까지 false 유지
-const ORDERS_OPEN = true;
+const ORDERS_ENABLED = false;
 
     // 구글 Apps Script 주문 서버
 const ORDER_API_URL =
