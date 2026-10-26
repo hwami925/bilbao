@@ -1093,5 +1093,36 @@ window.testBilbaoOrder = function () {
             alert("브라우저에서 응답을 읽지 못했어. F12 콘솔을 확인해 줘.");
         }
     };
+/* ========================================
+   주문 완료 화면 미리보기
+   실제 주문 및 서버 전송 없음
+======================================== */
 
+window.previewBilbaoOrder = function () {
+
+    // 테스트용 주문 정보
+    document.getElementById("complete-order-id").textContent =
+        "BILBAO-TEST-001";
+
+    document.getElementById("complete-order-total").textContent =
+        "16,000원";
+
+    // 주문 신청서 숨기기
+    document.querySelector(".goods-order-section").hidden = true;
+
+    // 상품 목록 숨기기
+    document.querySelector(".goods-worktable").hidden = true;
+
+    // 주문 완료 화면 표시
+    const completeSection = document.getElementById("order-complete");
+
+    completeSection.hidden = false;
+
+    completeSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+    console.log("BILBAO 주문 완료 화면 미리보기 실행!");
+};
 });
