@@ -462,11 +462,29 @@ if (orderForm) {
                 submitButton.textContent = "주문 처리 중...";
             }
 
-            const result = await sendOrderToServer(orderData);
+const result = await sendOrderToServer(orderData);
 
-            alert(
-                `주문이 접수되었습니다!\n주문번호: ${result.orderId}`
-            );
+// 주문 완료 정보 표시
+document.getElementById("complete-order-id").textContent =
+    result.orderId;
+
+document.getElementById("complete-order-total").textContent =
+    `${Number(result.total).toLocaleString("ko-KR")}원`;
+
+// 주문 신청서 숨기기
+document.querySelector(".goods-order-section").hidden = true;
+
+// 상품 목록 숨기기
+document.querySelector(".goods-worktable").hidden = true;
+
+// 주문 완료 화면 표시
+const completeSection = document.getElementById("order-complete");
+
+completeSection.hidden = false;
+completeSection.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+});
 
         } catch (error) {
 
