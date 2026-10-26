@@ -873,3 +873,156 @@
     color: #F5B971;
     font-weight: 700;
 }
+/* ========================================
+   ORDER COMPLETE
+======================================== */
+
+/* hidden 속성이 기존 display 설정보다 우선하도록 */
+.goods-page [hidden] {
+    display: none !important;
+}
+
+/* 주문 완료 영역 */
+.goods-order-complete {
+    max-width: 760px;
+    margin: 80px auto 120px;
+    padding: 0 24px;
+}
+
+/* 완료 카드 */
+.order-complete-box {
+    background: #e8e3d9;
+    color: #171717;
+    padding: 60px;
+    border: 1px solid #b8b1a5;
+    box-shadow: 12px 12px 0 #292929;
+}
+
+/* 상단 제목 */
+.order-complete-heading {
+    text-align: center;
+    padding-bottom: 45px;
+    border-bottom: 1px solid #b8b1a5;
+}
+
+.order-complete-heading p {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin-bottom: 18px;
+}
+
+.order-complete-heading h2 {
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 14px;
+}
+
+.order-complete-heading span {
+    font-size: 14px;
+    color: #666;
+}
+
+/* 정보 영역 */
+.order-complete-info,
+.order-complete-payment {
+    margin-top: 40px;
+}
+
+.order-complete-info h3,
+.order-complete-payment h3 {
+    font-size: 17px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #222;
+}
+
+/* 정보 행 */
+.order-complete-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid #c8c2b7;
+    font-size: 14px;
+}
+
+.order-complete-row span {
+    color: #666;
+}
+
+.order-complete-row strong {
+    text-align: right;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+/* 입금 안내 */
+.order-complete-payment {
+    background: #d9d3c7;
+    padding: 25px;
+}
+
+.order-complete-payment h3 {
+    margin-top: 0;
+}
+
+/* 주의사항 */
+.order-complete-notice {
+    margin-top: 35px;
+    padding: 20px;
+    border: 1px solid #b8b1a5;
+}
+
+.order-complete-notice p {
+    font-size: 12px;
+    line-height: 1.8;
+    color: #555;
+    margin: 5px 0;
+}
+
+/* 홈으로 돌아가기 */
+.order-complete-home {
+    display: block;
+    margin-top: 40px;
+    padding: 20px;
+    background: #171717;
+    color: #fff;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.order-complete-home:hover {
+    background: #444;
+}
+
+/* 모바일 */
+@media (max-width: 600px) {
+
+    .goods-order-complete {
+        margin: 50px auto 80px;
+        padding: 0 16px;
+    }
+
+    .order-complete-box {
+        padding: 35px 22px;
+        box-shadow: 6px 6px 0 #292929;
+    }
+
+    .order-complete-heading h2 {
+        font-size: 23px;
+    }
+
+    .order-complete-payment {
+        padding: 18px;
+    }
+
+    .order-complete-row {
+        font-size: 12px;
+    }
+}
