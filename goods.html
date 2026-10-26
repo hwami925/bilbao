@@ -593,7 +593,76 @@
             </form>
 
         </section>
+<!-- ========================================
+     STICKER SELECT MODAL
+======================================== -->
 
+<div class="sticker-modal"
+     id="sticker-modal"
+     hidden>
+
+    <div class="sticker-modal-backdrop"
+         id="sticker-modal-backdrop">
+    </div>
+
+    <div class="sticker-modal-content"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="sticker-modal-title">
+
+        <div class="sticker-modal-header">
+
+            <div>
+                <p>STICKER COLLECTION</p>
+                <h2 id="sticker-modal-title">
+                    띠부스티커 디자인 선택
+                </h2>
+                <span>
+                    30종 중 원하는 디자인을 10장 선택해 주세요.
+                    중복 선택이 가능합니다.
+                </span>
+            </div>
+
+            <button
+                type="button"
+                class="sticker-modal-close"
+                id="sticker-modal-close"
+                aria-label="닫기"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <!-- 스티커 30종이 표시될 공간 -->
+        <div class="sticker-design-grid"
+             id="sticker-design-grid">
+        </div>
+
+        <div class="sticker-modal-footer">
+
+            <p>
+                선택한 스티커
+                <strong id="sticker-selected-count">
+                    0
+                </strong>
+                / 10장
+            </p>
+
+            <button
+                type="button"
+                class="sticker-confirm-button"
+                id="sticker-confirm-button"
+                disabled
+            >
+                디자인 선택 완료
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
     </main>
 
 
