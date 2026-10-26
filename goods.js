@@ -458,8 +458,8 @@ function updateStickerCount() {
     }
 
     if (stickerConfirmButton) {
-        stickerConfirmButton.disabled =
-            total !== STICKER_LIMIT;
+stickerConfirmButton.disabled =
+    total !== getStickerLimit();
     }
 
 }
