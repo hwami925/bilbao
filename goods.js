@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =====================================
        1. 상품 데이터
-       가격은 확정 후 입력
+       확정된 상품 가격
     ===================================== */
    
 const SHIPPING_FEE = 3000;
@@ -361,309 +361,194 @@ if (totalPriceElement) {
    9. 띠부스티커 디자인 선택 기능
 ======================================== */
 
-const stickerOpenButton = document.getElementById(
-    "sticker-open-button"
+const stickerOpenButton = document.getElementById("sticker-open-button");
+const stickerModal = document.getElementById("sticker-modal");
+const stickerModalClose = document.getElementById("sticker-modal-close");
+const stickerModalBackdrop = document.getElementById("sticker-modal-backdrop");
+const stickerDesignGrid = document.getElementById("sticker-design-grid");
+const stickerSelectedCount = document.getElementById("sticker-selected-count");
+const stickerConfirmButton = document.getElementById("sticker-confirm-button");
+const stickerSelectionSummary = document.getElementById("sticker-selection-summary");
+
+const stickerCheckbox = document.querySelector(
+    '.goods-checkbox[data-product="sticker_select"]'
 );
-
-const stickerModal = document.getElementById(
-    "sticker-modal"
-);
-
-const stickerModalClose = document.getElementById(
-    "sticker-modal-close"
-);
-
-const stickerModalBackdrop = document.getElementById(
-    "sticker-modal-backdrop"
-);
-
-const stickerDesignGrid = document.getElementById(
-    "sticker-design-grid"
-);
-
-const stickerSelectedCount = document.getElementById(
-    "sticker-selected-count"
-);
-
-const stickerConfirmButton = document.getElementById(
-    "sticker-confirm-button"
-);
-
-const stickerSelectionSummary = document.getElementById(
-    "sticker-selection-summary"
-);
-
-/* 총 30종의 스티커 */
-
-const stickerDesigns = Array.from(
-    { length: 30 },
-    (_, index) => ({
-        id: index + 1,
-        name: `스티커 ${String(index + 1).padStart(2, "0")}`,
-        quantity: 0
-    })
-);
-
-/* ========================================
-   스티커 세트 수량에 따른 선택 가능 장수
-======================================== */
+const stickerCard = stickerCheckbox?.closest(".goods-product");
+const stickerSetQuantityInput = stickerCard?.querySelector(".quantity-input");
 
 const STICKERS_PER_SET = 10;
+const stickerDesigns = Array.from({ length: 30 }, (_, index) => ({
+    id: index + 1,
+    name: `스티커 ${String(index + 1).padStart(2, "0")}`
+}));
 
-function getStickerLimit() {
-
-    const stickerCheckbox = document.querySelector(
-        '.goods-checkbox[data-product="sticker_select"]'
-    );
-
-    if (!stickerCheckbox) {
-        return STICKERS_PER_SET;
-    }
-
-    const stickerCard = stickerCheckbox.closest(".goods-product");
-
-    const quantityInput = stickerCard?.querySelector(
-        ".quantity-input"
-    );
-
-    const setQuantity = quantityInput
-        ? normalizeQuantity(quantityInput)
-        : 1;
-
-    return setQuantity * STICKERS_PER_SET;
-}
-
-let stickerDraft = stickerDesigns.map(() => 0);
-let stickerSaved = stickerDesigns.map(() => 0);
-
+let stickerDraft = Array(30).fill(0);
+let stickerSaved = Array(30).fill(0);
 let previousFocusedElement = null;
 
-/* 현재 선택한 총 수량 */
+function getStickerLimit() {
+    const sets = stickerSetQuantityInput
+        ? normalizeQuantity(stickerSetQuantityInput)
+        : 1;
+    return sets * STICKERS_PER_SET;
+}
 
 function getStickerTotal(quantities) {
-    return quantities.reduce(
-        (total, quantity) => total + quantity,
-        0
-    );
+    return quantities.reduce((sum, count) => sum + count, 0);
 }
 
-/* 선택 수량 표시 */
+// 기존 HTML의 '/ 10장' 문구를 동적 표시 요소로 한 번만 교체한다.
+const stickerCountLabel = stickerSelectedCount?.parentElement;
+let stickerLimitLabel = null;
+if (stickerCountLabel && stickerSelectedCount) {
+    for (const node of [...stickerCountLabel.childNodes]) {
+        if (node.nodeType === Node.TEXT_NODE && node.textContent.includes("/ 10장")) {
+            node.textContent = node.textContent.replace(/\/\s*10장/, "");
+        }
+    }
+    stickerLimitLabel = document.createElement("span");
+    stickerLimitLabel.id = "sticker-selection-limit";
+    stickerSelectedCount.after(stickerLimitLabel);
+}
 
 function updateStickerCount() {
-
     const total = getStickerTotal(stickerDraft);
-
-    if (stickerSelectedCount) {
-        stickerSelectedCount.textContent = total;
-    }
-
-    if (stickerConfirmButton) {
-stickerConfirmButton.disabled =
-    total !== getStickerLimit();
-    }
-
+    const limit = getStickerLimit();
+    if (stickerSelectedCount) stickerSelectedCount.textContent = total;
+    if (stickerLimitLabel) stickerLimitLabel.textContent = ` / ${limit}장`;
+    if (stickerConfirmButton) stickerConfirmButton.disabled = total !== limit;
 }
 
-/* 스티커 카드 30개 생성 */
-
 function renderStickerDesigns() {
-
     if (!stickerDesignGrid) return;
-
-    stickerDesignGrid.innerHTML = "";
+    stickerDesignGrid.replaceChildren();
 
     stickerDesigns.forEach((sticker, index) => {
-
         const card = document.createElement("div");
         card.className = "sticker-design-card";
 
         const image = document.createElement("div");
         image.className = "sticker-design-image";
-
-        /* 실제 이미지 연결 전 임시 번호 표시 */
         const placeholder = document.createElement("span");
-        placeholder.textContent =
-            String(sticker.id).padStart(2, "0");
-
+        placeholder.textContent = String(sticker.id).padStart(2, "0");
         placeholder.style.color = "#555";
         placeholder.style.fontSize = "28px";
         placeholder.style.fontWeight = "700";
-
         image.appendChild(placeholder);
 
         const name = document.createElement("p");
         name.className = "sticker-design-name";
         name.textContent = sticker.name;
 
-        const quantityControls = document.createElement("div");
-        quantityControls.className = "sticker-design-quantity";
+        const controls = document.createElement("div");
+        controls.className = "sticker-design-quantity";
+        const minus = document.createElement("button");
+        minus.type = "button";
+        minus.textContent = "−";
+        minus.setAttribute("aria-label", `${sticker.name} 수량 감소`);
+        const count = document.createElement("span");
+        count.textContent = stickerDraft[index];
+        const plus = document.createElement("button");
+        plus.type = "button";
+        plus.textContent = "+";
+        plus.setAttribute("aria-label", `${sticker.name} 수량 증가`);
 
-        const minusButton = document.createElement("button");
-        minusButton.type = "button";
-        minusButton.textContent = "−";
-        minusButton.setAttribute(
-            "aria-label",
-            `${sticker.name} 수량 감소`
-        );
-
-        const quantityText = document.createElement("span");
-        quantityText.textContent = stickerDraft[index];
-
-        const plusButton = document.createElement("button");
-        plusButton.type = "button";
-        plusButton.textContent = "+";
-        plusButton.setAttribute(
-            "aria-label",
-            `${sticker.name} 수량 증가`
-        );
-
-        minusButton.addEventListener("click", () => {
-
-            if (stickerDraft[index] <= 0) return;
-
+        minus.addEventListener("click", () => {
+            if (stickerDraft[index] === 0) return;
             stickerDraft[index]--;
-
-            quantityText.textContent = stickerDraft[index];
-
+            count.textContent = stickerDraft[index];
             updateStickerCount();
-
         });
-
-        plusButton.addEventListener("click", () => {
-
-            if (getStickerTotal(stickerDraft) >= STICKER_LIMIT) {
-                return;
-            }
-
+        plus.addEventListener("click", () => {
+            if (getStickerTotal(stickerDraft) >= getStickerLimit()) return;
             stickerDraft[index]++;
-
-            quantityText.textContent = stickerDraft[index];
-
+            count.textContent = stickerDraft[index];
             updateStickerCount();
-
         });
 
-        quantityControls.append(
-            minusButton,
-            quantityText,
-            plusButton
-        );
-
-        card.append(
-            image,
-            name,
-            quantityControls
-        );
-
+        controls.append(minus, count, plus);
+        card.append(image, name, controls);
         stickerDesignGrid.appendChild(card);
-
     });
-
     updateStickerCount();
-
 }
 
-/* 팝업 열기 */
-
-function openStickerModal() {
-
-    if (!stickerModal) return;
-
-    previousFocusedElement = document.activeElement;
-
-    stickerDraft = [...stickerSaved];
-
-    renderStickerDesigns();
-
-    stickerModal.hidden = false;
-
-    document.body.style.overflow = "hidden";
-
-    stickerModalClose?.focus();
-
-}
-
-/* 팝업 닫기 */
-
-function closeStickerModal() {
-
-    if (!stickerModal) return;
-
-    stickerModal.hidden = true;
-
-    document.body.style.overflow = "";
-
-    previousFocusedElement?.focus();
-
-}
-
-/* 선택 내용 저장 */
-
-function confirmStickerSelection() {
-
-    if (getStickerTotal(stickerDraft) !== STICKER_LIMIT) {
+function updateStickerSummary() {
+    if (!stickerSelectionSummary) return;
+    const savedTotal = getStickerTotal(stickerSaved);
+    const limit = getStickerLimit();
+    if (savedTotal === 0) {
+        stickerSelectionSummary.textContent = "아직 선택한 디자인이 없습니다.";
         return;
     }
-
-    stickerSaved = [...stickerDraft];
-
-    const selected = stickerSaved
-        .map((quantity, index) => ({
-            name: stickerDesigns[index].name,
-            quantity
-        }))
-        .filter(item => item.quantity > 0);
-
-    if (stickerSelectionSummary) {
-
-        stickerSelectionSummary.textContent =
-            selected
-                .map(item => `${item.name} × ${item.quantity}`)
-                .join(", ");
-
-    }
-
-    closeStickerModal();
-
+    const names = stickerSaved
+        .map((count, index) => count > 0 ? `${stickerDesigns[index].name} × ${count}` : null)
+        .filter(Boolean)
+        .join(", ");
+    stickerSelectionSummary.textContent = savedTotal === limit
+        ? `선택 완료 (${savedTotal}장): ${names}`
+        : `수량 변경으로 재선택 필요 (${savedTotal}/${limit}장): ${names}`;
 }
 
-/* 버튼 이벤트 */
+function openStickerModal() {
+    if (!stickerModal) return;
+    previousFocusedElement = document.activeElement;
+    stickerDraft = [...stickerSaved];
+    renderStickerDesigns();
+    stickerModal.hidden = false;
+    document.body.style.overflow = "hidden";
+    stickerModalClose?.focus();
+}
 
-stickerOpenButton?.addEventListener(
-    "click",
-    openStickerModal
-);
+function closeStickerModal() {
+    if (!stickerModal) return;
+    stickerModal.hidden = true;
+    document.body.style.overflow = "";
+    previousFocusedElement?.focus();
+}
 
-stickerModalClose?.addEventListener(
-    "click",
-    closeStickerModal
-);
+function confirmStickerSelection() {
+    if (getStickerTotal(stickerDraft) !== getStickerLimit()) return;
+    stickerSaved = [...stickerDraft];
+    updateStickerSummary();
+    closeStickerModal();
+}
 
-stickerModalBackdrop?.addEventListener(
-    "click",
-    closeStickerModal
-);
-
-stickerConfirmButton?.addEventListener(
-    "click",
-    confirmStickerSelection
-);
-
-/* ESC 키로 닫기 */
+stickerOpenButton?.addEventListener("click", openStickerModal);
+stickerModalClose?.addEventListener("click", closeStickerModal);
+stickerModalBackdrop?.addEventListener("click", closeStickerModal);
+stickerConfirmButton?.addEventListener("click", confirmStickerSelection);
 
 document.addEventListener("keydown", event => {
-
-    if (!stickerModal || stickerModal.hidden) return;
-
-    if (event.key === "Escape") {
+    if (event.key === "Escape" && stickerModal && !stickerModal.hidden) {
         closeStickerModal();
     }
-
 });
 
-/* 최초 카드 생성 */
+// 기존 수량 변경 이벤트가 처리된 다음, 스티커 선택 안내도 갱신한다.
+if (stickerSetQuantityInput) {
+    stickerSetQuantityInput.addEventListener("input", () => {
+        updateStickerCount();
+        updateStickerSummary();
+    });
+    stickerSetQuantityInput.addEventListener("change", () => {
+        updateStickerCount();
+        updateStickerSummary();
+    });
+}
+if (stickerCard) {
+    stickerCard.querySelector(".quantity-minus")?.addEventListener("click", () => {
+        updateStickerCount();
+        updateStickerSummary();
+    });
+    stickerCard.querySelector(".quantity-plus")?.addEventListener("click", () => {
+        updateStickerCount();
+        updateStickerSummary();
+    });
+}
 
 renderStickerDesigns();
+updateStickerSummary();
     updateOrderSummary();
 
 });
