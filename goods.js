@@ -404,7 +404,34 @@ const stickerDesigns = Array.from(
     })
 );
 
-const STICKER_LIMIT = 10;
+/* ========================================
+   스티커 세트 수량에 따른 선택 가능 장수
+======================================== */
+
+const STICKERS_PER_SET = 10;
+
+function getStickerLimit() {
+
+    const stickerCheckbox = document.querySelector(
+        '.goods-checkbox[data-product="sticker_select"]'
+    );
+
+    if (!stickerCheckbox) {
+        return STICKERS_PER_SET;
+    }
+
+    const stickerCard = stickerCheckbox.closest(".goods-product");
+
+    const quantityInput = stickerCard?.querySelector(
+        ".quantity-input"
+    );
+
+    const setQuantity = quantityInput
+        ? normalizeQuantity(quantityInput)
+        : 1;
+
+    return setQuantity * STICKERS_PER_SET;
+}
 
 let stickerDraft = stickerDesigns.map(() => 0);
 let stickerSaved = stickerDesigns.map(() => 0);
