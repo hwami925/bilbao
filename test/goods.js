@@ -587,7 +587,7 @@ https://script.google.com/macros/s/AKfycbytrK8NYdAPTowrhZwKKzW-ml4a6ZXjGpchXydY4
             const stickerImage = document.createElement("img");
 
             stickerImage.src =
-                `./images/stickers/${String(sticker.id).padStart(2, "0")}.png`;
+                `./../images/stickers//${String(sticker.id).padStart(2, "0")}.png`;
 
             stickerImage.alt = sticker.name;
 
