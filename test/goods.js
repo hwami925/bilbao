@@ -15,8 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
 const ORDERS_OPEN = true;
 
     // 구글 Apps Script 주문 서버
-    const ORDER_API_URL =
-https://script.google.com/macros/s/AKfycbytrK8NYdAPTowrhZwKKzW-ml4a6ZXjGpchXydY46XrcImn2MW_osLkcUr0M4o4MChf/exec
+const ORDER_API_URL =
+    "https://script.google.com/macros/s/AKfycbytrK8NYdAPTowrhZwKKzW-ml4a6ZXjGpchXydY46XrcImn2MW_osLkcUr0M4o4MChf/exec";
 
 
     /* =====================================
@@ -586,8 +586,8 @@ https://script.google.com/macros/s/AKfycbytrK8NYdAPTowrhZwKKzW-ml4a6ZXjGpchXydY4
 
             const stickerImage = document.createElement("img");
 
-            stickerImage.src =
-                `./../images/stickers//${String(sticker.id).padStart(2, "0")}.png`;
+stickerImage.src =
+    `../images/stickers/${String(sticker.id).padStart(2, "0")}.png`;
 
             stickerImage.alt = sticker.name;
 
