@@ -16,7 +16,7 @@ const ORDERS_OPEN = true;
 
     // 구글 Apps Script 주문 서버
     const ORDER_API_URL =
-        "https://script.google.com/macros/s/AKfycbzNTSdLCMtzub2A8IqjFzm3wZeNF-ysrsoyN42TkJHwZSw2_u4fXsVjyLHfr03fYNkR/exec";
+https://script.google.com/macros/s/AKfycbytrK8NYdAPTowrhZwKKzW-ml4a6ZXjGpchXydY46XrcImn2MW_osLkcUr0M4o4MChf/exec
 
 
     /* =====================================
