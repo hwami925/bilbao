@@ -326,17 +326,164 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    if (orderForm) {
+/* ========================================
+   주문 정보 생성 및 서버 연결
+   실제 주문 접수는 아직 비활성화
+======================================== */
 
-        orderForm.addEventListener("submit", event => {
+function createOrderData() {
 
-            event.preventDefault();
+    const items = [];
 
-            alert("현재는 주문 접수를 준비 중입니다.");
+    productCards.forEach(card => {
 
+        const checkbox = card.querySelector(".goods-checkbox");
+        const quantityInput = card.querySelector(".quantity-input");
+
+        if (!checkbox || !quantityInput || !checkbox.checked) {
+            return;
+        }
+
+        items.push({
+            id: checkbox.dataset.product,
+            quantity: normalizeQuantity(quantityInput)
         });
 
+    });
+
+    const stickers = stickerSaved
+        .map((quantity, index) => ({
+            id: index + 1,
+            quantity: quantity
+        }))
+        .filter(item => item.quantity > 0);
+
+    return {
+        name: document.getElementById("order-name")?.value.trim() || "",
+        depositor: document.getElementById("order-depositor")?.value.trim() || "",
+        contact: document.getElementById("order-contact")?.value.trim() || "",
+        address: document.getElementById("order-address")?.value.trim() || "",
+        request: document.getElementById("order-request")?.value.trim() || "",
+        privacy: document.getElementById("order-privacy")?.checked === true,
+        items: items,
+        stickers: items.some(item => item.id === "sticker_select")
+            ? stickers
+            : []
+    };
+
+}
+
+/* 주문 데이터 유효성 확인 */
+
+function validateOrderData(data) {
+
+    if (!data.name || !data.depositor || !data.contact || !data.address) {
+        throw new Error("필수 주문 정보를 입력해 주세요.");
     }
+
+    if (!data.privacy) {
+        throw new Error("개인정보 수집에 동의해 주세요.");
+    }
+
+    if (data.items.length === 0) {
+        throw new Error("주문할 상품을 선택해 주세요.");
+    }
+
+    const stickerSet = data.items.find(
+        item => item.id === "sticker_select"
+    );
+
+    if (stickerSet) {
+
+        const selectedCount = data.stickers.reduce(
+            (sum, item) => sum + item.quantity,
+            0
+        );
+
+        if (selectedCount !== stickerSet.quantity * 10) {
+            throw new Error("띠부스티커 선택 수량을 확인해 주세요.");
+        }
+
+    }
+
+}
+
+/* 실제 주문 서버 전송 함수 */
+
+async function sendOrderToServer(data) {
+
+    const response = await fetch(ORDER_API_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(data),
+        redirect: "follow"
+    });
+
+    if (!response.ok) {
+        throw new Error("주문 서버 연결에 실패했습니다.");
+    }
+
+    const result = await response.json();
+
+    if (!result.success) {
+        throw new Error(result.message || "주문 처리에 실패했습니다.");
+    }
+
+    return result;
+
+}
+
+/* 주문 제출 이벤트 */
+
+if (orderForm) {
+
+    orderForm.addEventListener("submit", async event => {
+
+        event.preventDefault();
+
+        // 실제 주문 개시 전까지 전송 차단
+        const ORDERS_OPEN = false;
+
+        if (!ORDERS_OPEN) {
+            alert("현재는 주문 접수를 준비 중입니다.");
+            return;
+        }
+
+        try {
+
+            const orderData = createOrderData();
+
+            validateOrderData(orderData);
+
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = "주문 처리 중...";
+            }
+
+            const result = await sendOrderToServer(orderData);
+
+            alert(
+                `주문이 접수되었습니다!\n주문번호: ${result.orderId}`
+            );
+
+        } catch (error) {
+
+            alert(error.message);
+
+        } finally {
+
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = "주문 신청하기";
+            }
+
+        }
+
+    });
+
+}
 
     /* ========================================
        9. 띠부스티커 선택 기능
