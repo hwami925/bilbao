@@ -1048,4 +1048,32 @@ window.testBilbaoOrder = function () {
 
 };
 
+
+    /* ========================================
+       STEP 11-9 — 서버 POST 연결 테스트
+       개인정보 전송 / 주문 저장 없음
+    ======================================== */
+
+    window.testBilbaoServer = async function () {
+        try {
+            console.log("빌바오 서버 POST 연결 테스트 시작");
+
+            const response = await fetch(ORDER_API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
+                body: JSON.stringify({ test: true }),
+                redirect: "follow"
+            });
+
+            const result = await response.json();
+            console.log("서버 응답:", result);
+            alert("서버 응답 확인! F12 콘솔을 봐줘.");
+        } catch (error) {
+            console.error("서버 연결 테스트 오류:", error);
+            alert("브라우저에서 응답을 읽지 못했어. F12 콘솔을 확인해 줘.");
+        }
+    };
+
 });
