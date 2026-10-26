@@ -465,34 +465,62 @@ if (orderForm) {
 
             validateOrderData(orderData);
 
+            isSubmitting = true;
+
             if (submitButton) {
                 submitButton.disabled = true;
                 submitButton.textContent = "주문 처리 중...";
             }
 
-const result = await sendOrderToServer(orderData);
+            const result = await sendOrderToServer(orderData);
 
-// 주문 완료 정보 표시
-document.getElementById("complete-order-id").textContent =
-    result.orderId;
+            // 서버에서 정상적으로 저장된 주문만 완료 처리
+            orderCompleted = true;
 
-document.getElementById("complete-order-total").textContent =
-    `${Number(result.total).toLocaleString("ko-KR")}원`;
+            // 주문 완료 정보 표시
+            document.getElementById("complete-order-id").textContent =
+                result.orderId;
 
-// 주문 신청서 숨기기
-document.querySelector(".goods-order-section").hidden = true;
+            document.getElementById("complete-order-total").textContent =
+                `${Number(result.total).toLocaleString("ko-KR")}원`;
 
-// 상품 목록 숨기기
-document.querySelector(".goods-worktable").hidden = true;
+            // 주문 신청서 숨기기
+            document.querySelector(".goods-order-section").hidden = true;
 
-// 주문 완료 화면 표시
-const completeSection = document.getElementById("order-complete");
+            // 상품 목록 숨기기
+            document.querySelector(".goods-worktable").hidden = true;
 
-completeSection.hidden = false;
-completeSection.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-});
+            // 주문 완료 화면 표시
+            const completeSection = document.getElementById("order-complete");
+
+            completeSection.hidden = false;
+
+            completeSection.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        } catch (error) {
+
+            console.error("BILBAO 주문 오류:", error);
+
+            alert(error.message);
+
+        } finally {
+
+            isSubmitting = false;
+
+            // 주문이 완료되지 않았을 때만 버튼 복구
+            if (submitButton && !orderCompleted) {
+                submitButton.disabled = false;
+                submitButton.textContent = "주문 신청하기";
+            }
+
+        }
+
+    });
+
+}
 
         } catch (error) {
 
