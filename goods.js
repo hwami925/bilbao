@@ -1021,5 +1021,31 @@ if (orderForm) {
     updateStickerSummary();
 
     updateOrderSummary();
+   /* ========================================
+   개발자용 주문 데이터 테스트
+   서버 전송 없음
+======================================== */
+
+window.testBilbaoOrder = function () {
+
+    try {
+
+        const orderData = createOrderData();
+
+        validateOrderData(orderData);
+
+        console.log("BILBAO 주문 데이터 테스트");
+        console.log(orderData);
+
+        alert("주문 데이터 생성 성공! F12 콘솔을 확인해 주세요.");
+
+    } catch (error) {
+
+        console.error(error.message);
+        alert(error.message);
+
+    }
+
+};
 
 });
