@@ -439,9 +439,17 @@ async function sendOrderToServer(data) {
 
 if (orderForm) {
 
+    let isSubmitting = false;
+    let orderCompleted = false;
+
     orderForm.addEventListener("submit", async event => {
 
         event.preventDefault();
+
+        // 주문 처리 중이거나 이미 완료됐다면 중복 제출 차단
+        if (isSubmitting || orderCompleted) {
+            return;
+        }
 
         // 실제 주문 개시 전까지 전송 차단
         const ORDERS_OPEN = false;
