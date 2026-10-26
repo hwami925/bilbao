@@ -357,7 +357,286 @@ if (totalPriceElement) {
     /* =====================================
        8. 초기 주문 요약
     ===================================== */
+/* ========================================
+   9. 띠부스티커 디자인 선택 기능
+======================================== */
 
+const stickerOpenButton = document.getElementById(
+    "sticker-open-button"
+);
+
+const stickerModal = document.getElementById(
+    "sticker-modal"
+);
+
+const stickerModalClose = document.getElementById(
+    "sticker-modal-close"
+);
+
+const stickerModalBackdrop = document.getElementById(
+    "sticker-modal-backdrop"
+);
+
+const stickerDesignGrid = document.getElementById(
+    "sticker-design-grid"
+);
+
+const stickerSelectedCount = document.getElementById(
+    "sticker-selected-count"
+);
+
+const stickerConfirmButton = document.getElementById(
+    "sticker-confirm-button"
+);
+
+const stickerSelectionSummary = document.getElementById(
+    "sticker-selection-summary"
+);
+
+/* 총 30종의 스티커 */
+
+const stickerDesigns = Array.from(
+    { length: 30 },
+    (_, index) => ({
+        id: index + 1,
+        name: `스티커 ${String(index + 1).padStart(2, "0")}`,
+        quantity: 0
+    })
+);
+
+const STICKER_LIMIT = 10;
+
+let stickerDraft = stickerDesigns.map(() => 0);
+let stickerSaved = stickerDesigns.map(() => 0);
+
+let previousFocusedElement = null;
+
+/* 현재 선택한 총 수량 */
+
+function getStickerTotal(quantities) {
+    return quantities.reduce(
+        (total, quantity) => total + quantity,
+        0
+    );
+}
+
+/* 선택 수량 표시 */
+
+function updateStickerCount() {
+
+    const total = getStickerTotal(stickerDraft);
+
+    if (stickerSelectedCount) {
+        stickerSelectedCount.textContent = total;
+    }
+
+    if (stickerConfirmButton) {
+        stickerConfirmButton.disabled =
+            total !== STICKER_LIMIT;
+    }
+
+}
+
+/* 스티커 카드 30개 생성 */
+
+function renderStickerDesigns() {
+
+    if (!stickerDesignGrid) return;
+
+    stickerDesignGrid.innerHTML = "";
+
+    stickerDesigns.forEach((sticker, index) => {
+
+        const card = document.createElement("div");
+        card.className = "sticker-design-card";
+
+        const image = document.createElement("div");
+        image.className = "sticker-design-image";
+
+        /* 실제 이미지 연결 전 임시 번호 표시 */
+        const placeholder = document.createElement("span");
+        placeholder.textContent =
+            String(sticker.id).padStart(2, "0");
+
+        placeholder.style.color = "#555";
+        placeholder.style.fontSize = "28px";
+        placeholder.style.fontWeight = "700";
+
+        image.appendChild(placeholder);
+
+        const name = document.createElement("p");
+        name.className = "sticker-design-name";
+        name.textContent = sticker.name;
+
+        const quantityControls = document.createElement("div");
+        quantityControls.className = "sticker-design-quantity";
+
+        const minusButton = document.createElement("button");
+        minusButton.type = "button";
+        minusButton.textContent = "−";
+        minusButton.setAttribute(
+            "aria-label",
+            `${sticker.name} 수량 감소`
+        );
+
+        const quantityText = document.createElement("span");
+        quantityText.textContent = stickerDraft[index];
+
+        const plusButton = document.createElement("button");
+        plusButton.type = "button";
+        plusButton.textContent = "+";
+        plusButton.setAttribute(
+            "aria-label",
+            `${sticker.name} 수량 증가`
+        );
+
+        minusButton.addEventListener("click", () => {
+
+            if (stickerDraft[index] <= 0) return;
+
+            stickerDraft[index]--;
+
+            quantityText.textContent = stickerDraft[index];
+
+            updateStickerCount();
+
+        });
+
+        plusButton.addEventListener("click", () => {
+
+            if (getStickerTotal(stickerDraft) >= STICKER_LIMIT) {
+                return;
+            }
+
+            stickerDraft[index]++;
+
+            quantityText.textContent = stickerDraft[index];
+
+            updateStickerCount();
+
+        });
+
+        quantityControls.append(
+            minusButton,
+            quantityText,
+            plusButton
+        );
+
+        card.append(
+            image,
+            name,
+            quantityControls
+        );
+
+        stickerDesignGrid.appendChild(card);
+
+    });
+
+    updateStickerCount();
+
+}
+
+/* 팝업 열기 */
+
+function openStickerModal() {
+
+    if (!stickerModal) return;
+
+    previousFocusedElement = document.activeElement;
+
+    stickerDraft = [...stickerSaved];
+
+    renderStickerDesigns();
+
+    stickerModal.hidden = false;
+
+    document.body.style.overflow = "hidden";
+
+    stickerModalClose?.focus();
+
+}
+
+/* 팝업 닫기 */
+
+function closeStickerModal() {
+
+    if (!stickerModal) return;
+
+    stickerModal.hidden = true;
+
+    document.body.style.overflow = "";
+
+    previousFocusedElement?.focus();
+
+}
+
+/* 선택 내용 저장 */
+
+function confirmStickerSelection() {
+
+    if (getStickerTotal(stickerDraft) !== STICKER_LIMIT) {
+        return;
+    }
+
+    stickerSaved = [...stickerDraft];
+
+    const selected = stickerSaved
+        .map((quantity, index) => ({
+            name: stickerDesigns[index].name,
+            quantity
+        }))
+        .filter(item => item.quantity > 0);
+
+    if (stickerSelectionSummary) {
+
+        stickerSelectionSummary.textContent =
+            selected
+                .map(item => `${item.name} × ${item.quantity}`)
+                .join(", ");
+
+    }
+
+    closeStickerModal();
+
+}
+
+/* 버튼 이벤트 */
+
+stickerOpenButton?.addEventListener(
+    "click",
+    openStickerModal
+);
+
+stickerModalClose?.addEventListener(
+    "click",
+    closeStickerModal
+);
+
+stickerModalBackdrop?.addEventListener(
+    "click",
+    closeStickerModal
+);
+
+stickerConfirmButton?.addEventListener(
+    "click",
+    confirmStickerSelection
+);
+
+/* ESC 키로 닫기 */
+
+document.addEventListener("keydown", event => {
+
+    if (!stickerModal || stickerModal.hidden) return;
+
+    if (event.key === "Escape") {
+        closeStickerModal();
+    }
+
+});
+
+/* 최초 카드 생성 */
+
+renderStickerDesigns();
     updateOrderSummary();
 
 });
