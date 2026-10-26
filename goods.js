@@ -16,37 +16,49 @@ const SHIPPING_FEE = 3000;
 const ORDER_API_URL =
     "https://script.google.com/macros/s/AKfycbzNTSdLCMtzub2A8IqjFzm3wZeNF-ysrsoyN42TkJHwZSw2_u4fXsVjyLHfr03fYNkR/exec";
    
-    const products = {
-        postcard: {
-            name: "일러스트 엽서",
-            price: null
-        },
+  /* =====================================
+   BILBAO GOODS — 상품 데이터
+===================================== */
 
-        sticker: {
-            name: "캐릭터 씰스티커",
-            price: null
-        },
+const products = {
 
-        photocard: {
-            name: "빌바오 포토카드",
-            price: null
-        },
+    /* 엽서 8장 세트 */
+    postcard: {
+        name: "일러스트 엽서 8장 세트",
+        price: 6000
+    },
 
-        clearcard: {
-            name: "투명 포토카드",
-            price: null
-        },
+    /* 일반 포토카드 5장 세트 */
+    photocard: {
+        name: "일반 포토카드 5장 세트",
+        price: 3000
+    },
 
-        cardtag: {
-            name: "캐릭터 카드택",
-            price: null
-        },
+    /* 투명 포토카드 5장 세트 */
+    clearcard: {
+        name: "투명 포토카드 5장 세트",
+        price: 3500
+    },
 
-        poster: {
-            name: "일러스트 포스터",
-            price: null
-        }
-    };
+    /* 카드택 */
+    cardtag: {
+        name: "캐릭터 카드택",
+        price: 1000
+    },
+
+    /* 띠부스티커 10장 선택 세트 */
+    sticker_select: {
+        name: "띠부스티커 10장 선택 세트",
+        price: 7000
+    },
+
+    /* 띠부스티커 30장 풀세트 */
+    sticker_full: {
+        name: "띠부스티커 30장 풀세트",
+        price: 20000
+    }
+
+};
 
 
     /* =====================================
