@@ -429,12 +429,18 @@ function renderStickerDesigns() {
 
         const image = document.createElement("div");
         image.className = "sticker-design-image";
-        const placeholder = document.createElement("span");
-        placeholder.textContent = String(sticker.id).padStart(2, "0");
-        placeholder.style.color = "#555";
-        placeholder.style.fontSize = "28px";
-        placeholder.style.fontWeight = "700";
-        image.appendChild(placeholder);
+/* 실제 스티커 이미지 연결 */
+
+const stickerImage = document.createElement("img");
+
+stickerImage.src =
+    `./images/stickers/${String(sticker.id).padStart(2, "0")}.png`;
+
+stickerImage.alt = sticker.name;
+
+stickerImage.loading = "lazy";
+
+image.appendChild(stickerImage);
 
         const name = document.createElement("p");
         name.className = "sticker-design-name";
