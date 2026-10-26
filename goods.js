@@ -11,9 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const SHIPPING_FEE = 3000;
 
-    /* 구글 스프레드시트 주문 접수 서버 */
+    // 실제 주문 개시 전까지 false 유지
+    const ORDERS_OPEN = false;
+
+    // 구글 Apps Script 주문 서버
     const ORDER_API_URL =
         "https://script.google.com/macros/s/AKfycbzNTSdLCMtzub2A8IqjFzm3wZeNF-ysrsoyN42TkJHwZSw2_u4fXsVjyLHfr03fYNkR/exec";
+
 
     /* =====================================
        2. 상품 데이터
@@ -53,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     };
 
+
     /* =====================================
        3. HTML 요소
     ===================================== */
@@ -89,8 +94,17 @@ document.addEventListener("DOMContentLoaded", () => {
         ".goods-submit"
     );
 
+
     /* =====================================
-       4. 수량값 정리
+       4. 주문 처리 상태
+    ===================================== */
+
+    let isSubmitting = false;
+    let orderCompleted = false;
+
+
+    /* =====================================
+       5. 수량값 정리
     ===================================== */
 
     function normalizeQuantity(input) {
@@ -107,8 +121,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+
     /* =====================================
-       5. 주문 요약 업데이트
+       6. 주문 요약 업데이트
     ===================================== */
 
     function updateOrderSummary() {
@@ -155,7 +170,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 
-        /* 선택한 상품 수량 */
+
+        // 선택 상품 수량
 
         if (selectedCountElement) {
 
@@ -164,7 +180,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-        /* 배송비 계산 */
+
+        // 배송비
 
         const shippingFee =
             totalQuantity > 0 ? SHIPPING_FEE : 0;
@@ -176,7 +193,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-        /* 최종 결제 금액 */
+
+        // 최종 결제 금액
 
         if (totalPriceElement) {
 
@@ -201,8 +219,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+
     /* =====================================
-       6. 상품별 이벤트
+       7. 상품별 이벤트
     ===================================== */
 
     productCards.forEach(card => {
@@ -232,7 +251,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        /* 체크박스 선택 */
+
+        // 체크박스
 
         checkbox.addEventListener("change", () => {
 
@@ -240,7 +260,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 
-        /* 수량 감소 */
+
+        // 수량 감소
 
         minusButton.addEventListener("click", () => {
 
@@ -255,7 +276,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 
-        /* 수량 증가 */
+
+        // 수량 증가
 
         plusButton.addEventListener("click", () => {
 
@@ -270,7 +292,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 
-        /* 직접 수량 입력 */
+
+        // 직접 입력
 
         quantityInput.addEventListener("input", () => {
 
@@ -288,8 +311,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
+
     /* =====================================
-       7. 주문자 이름 → 입금자명 자동 입력
+       8. 주문자명 → 입금자명 자동 입력
     ===================================== */
 
     if (nameInput && depositorInput) {
@@ -314,270 +338,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+
     /* =====================================
-       8. 주문 제출 방지
-       현재는 테스트 단계
+       9. 주문 버튼 초기 설정
     ===================================== */
 
     if (submitButton) {
 
-        submitButton.disabled = true;
-        submitButton.textContent = "주문 신청 준비 중";
+        submitButton.disabled = !ORDERS_OPEN;
+
+        submitButton.textContent = ORDERS_OPEN
+            ? "주문 신청하기"
+            : "주문 신청 준비 중";
 
     }
 
-/* ========================================
-   주문 정보 생성 및 서버 연결
-   실제 주문 접수는 아직 비활성화
-======================================== */
 
-function createOrderData() {
-
-    const items = [];
-
-    productCards.forEach(card => {
-
-        const checkbox = card.querySelector(".goods-checkbox");
-        const quantityInput = card.querySelector(".quantity-input");
-
-        if (!checkbox || !quantityInput || !checkbox.checked) {
-            return;
-        }
-
-        items.push({
-            id: checkbox.dataset.product,
-            quantity: normalizeQuantity(quantityInput)
-        });
-
-    });
-
-    const stickers = stickerSaved
-        .map((quantity, index) => ({
-            id: index + 1,
-            quantity: quantity
-        }))
-        .filter(item => item.quantity > 0);
-
-    return {
-        name: document.getElementById("order-name")?.value.trim() || "",
-        depositor: document.getElementById("order-depositor")?.value.trim() || "",
-        contact: document.getElementById("order-contact")?.value.trim() || "",
-        address: document.getElementById("order-address")?.value.trim() || "",
-        request: document.getElementById("order-request")?.value.trim() || "",
-        privacy: document.getElementById("order-privacy")?.checked === true,
-        items: items,
-        stickers: items.some(item => item.id === "sticker_select")
-            ? stickers
-            : []
-    };
-
-}
-
-/* 주문 데이터 유효성 확인 */
-
-function validateOrderData(data) {
-
-    if (!data.name || !data.depositor || !data.contact || !data.address) {
-        throw new Error("필수 주문 정보를 입력해 주세요.");
-    }
-
-    if (!data.privacy) {
-        throw new Error("개인정보 수집에 동의해 주세요.");
-    }
-
-    if (data.items.length === 0) {
-        throw new Error("주문할 상품을 선택해 주세요.");
-    }
-
-    const stickerSet = data.items.find(
-        item => item.id === "sticker_select"
-    );
-
-    if (stickerSet) {
-
-        const selectedCount = data.stickers.reduce(
-            (sum, item) => sum + item.quantity,
-            0
-        );
-
-        if (selectedCount !== stickerSet.quantity * 10) {
-            throw new Error("띠부스티커 선택 수량을 확인해 주세요.");
-        }
-
-    }
-
-}
-
-/* 실제 주문 서버 전송 함수 */
-
-async function sendOrderToServer(data) {
-
-    const response = await fetch(ORDER_API_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify(data),
-        redirect: "follow"
-    });
-
-    if (!response.ok) {
-        throw new Error("주문 서버 연결에 실패했습니다.");
-    }
-
-    const result = await response.json();
-
-    if (!result.success) {
-        throw new Error(result.message || "주문 처리에 실패했습니다.");
-    }
-
-    return result;
-
-}
-
-/* 주문 제출 이벤트 */
-
-if (orderForm) {
-
-    let isSubmitting = false;
-    let orderCompleted = false;
-
-    orderForm.addEventListener("submit", async event => {
-
-        event.preventDefault();
-
-        // 주문 처리 중이거나 이미 완료됐다면 중복 제출 차단
-        if (isSubmitting || orderCompleted) {
-            return;
-        }
-
-        // 실제 주문 개시 전까지 전송 차단
-        const ORDERS_OPEN = false;
-
-        if (!ORDERS_OPEN) {
-            alert("현재는 주문 접수를 준비 중입니다.");
-            return;
-        }
-
-        try {
-
-            const orderData = createOrderData();
-
-            validateOrderData(orderData);
-
-            isSubmitting = true;
-
-            if (submitButton) {
-                submitButton.disabled = true;
-                submitButton.textContent = "주문 처리 중...";
-            }
-
-            const result = await sendOrderToServer(orderData);
-
-            // 서버에서 정상적으로 저장된 주문만 완료 처리
-            orderCompleted = true;
-
-            // 주문 완료 정보 표시
-            document.getElementById("complete-order-id").textContent =
-                result.orderId;
-
-            document.getElementById("complete-order-total").textContent =
-                `${Number(result.total).toLocaleString("ko-KR")}원`;
-
-            // 주문 신청서 숨기기
-            document.querySelector(".goods-order-section").hidden = true;
-
-            // 상품 목록 숨기기
-            document.querySelector(".goods-worktable").hidden = true;
-
-            // 주문 완료 화면 표시
-            const completeSection = document.getElementById("order-complete");
-
-            completeSection.hidden = false;
-
-            completeSection.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-
-        } catch (error) {
-
-            console.error("BILBAO 주문 오류:", error);
-
-            alert(error.message);
-
-        } finally {
-
-            isSubmitting = false;
-
-            // 주문이 완료되지 않았을 때만 버튼 복구
-            if (submitButton && !orderCompleted) {
-                submitButton.disabled = false;
-                submitButton.textContent = "주문 신청하기";
-            }
-
-        }
-
-    });
-
-}
-
-        } catch (error) {
-
-            alert(error.message);
-
-        } finally {
-
-            if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.textContent = "주문 신청하기";
-            }
-
-        }
-
-    });
-
-}
-
-    /* ========================================
-       9. 띠부스티커 선택 기능
-    ======================================== */
-
-    const stickerOpenButton = document.getElementById(
-        "sticker-open-button"
-    );
-
-    const stickerModal = document.getElementById(
-        "sticker-modal"
-    );
-
-    const stickerModalClose = document.getElementById(
-        "sticker-modal-close"
-    );
-
-    const stickerModalBackdrop = document.getElementById(
-        "sticker-modal-backdrop"
-    );
-
-    const stickerDesignGrid = document.getElementById(
-        "sticker-design-grid"
-    );
-
-    const stickerSelectedCount = document.getElementById(
-        "sticker-selected-count"
-    );
-
-    const stickerConfirmButton = document.getElementById(
-        "sticker-confirm-button"
-    );
-
-    const stickerSelectionSummary = document.getElementById(
-        "sticker-selection-summary"
-    );
-
-    /* ========================================
-       10. 스티커 30종 실제 이름
-    ======================================== */
+    /* =====================================
+       10. 스티커 30종 데이터
+    ===================================== */
 
     const stickerNames = [
 
@@ -621,16 +400,52 @@ if (orderForm) {
 
     const stickerDesigns = stickerNames.map(
         (name, index) => ({
-
             id: index + 1,
             name: name
-
         })
     );
 
-    /* ========================================
-       11. 스티커 세트 수량 연동
-    ======================================== */
+
+    /* =====================================
+       11. 스티커 HTML 요소
+    ===================================== */
+
+    const stickerOpenButton = document.getElementById(
+        "sticker-open-button"
+    );
+
+    const stickerModal = document.getElementById(
+        "sticker-modal"
+    );
+
+    const stickerModalClose = document.getElementById(
+        "sticker-modal-close"
+    );
+
+    const stickerModalBackdrop = document.getElementById(
+        "sticker-modal-backdrop"
+    );
+
+    const stickerDesignGrid = document.getElementById(
+        "sticker-design-grid"
+    );
+
+    const stickerSelectedCount = document.getElementById(
+        "sticker-selected-count"
+    );
+
+    const stickerConfirmButton = document.getElementById(
+        "sticker-confirm-button"
+    );
+
+    const stickerSelectionSummary = document.getElementById(
+        "sticker-selection-summary"
+    );
+
+
+    /* =====================================
+       12. 스티커 세트 수량
+    ===================================== */
 
     const STICKERS_PER_SET = 10;
 
@@ -656,14 +471,21 @@ if (orderForm) {
 
     }
 
+
+    /* =====================================
+       13. 스티커 선택 상태
+    ===================================== */
+
     let stickerDraft = stickerDesigns.map(() => 0);
+
     let stickerSaved = stickerDesigns.map(() => 0);
 
     let previousFocusedElement = null;
 
-    /* ========================================
-       12. 선택 수량 계산
-    ======================================== */
+
+    /* =====================================
+       14. 스티커 수량 계산
+    ===================================== */
 
     function getStickerTotal(quantities) {
 
@@ -674,13 +496,15 @@ if (orderForm) {
 
     }
 
-    /* ========================================
-       13. 선택 장수 표시
-    ======================================== */
+
+    /* =====================================
+       15. 스티커 선택 수량 표시
+    ===================================== */
 
     function updateStickerCount() {
 
         const total = getStickerTotal(stickerDraft);
+
         const limit = getStickerLimit();
 
         if (stickerSelectedCount) {
@@ -688,8 +512,6 @@ if (orderForm) {
             stickerSelectedCount.textContent = total;
 
         }
-
-        /* 기존 HTML의 10장 표시를 동적으로 변경 */
 
         const countDisplay =
             stickerSelectedCount?.parentElement;
@@ -729,8 +551,6 @@ if (orderForm) {
 
         }
 
-        /* 정확한 장수를 선택해야 완료 가능 */
-
         if (stickerConfirmButton) {
 
             stickerConfirmButton.disabled =
@@ -740,9 +560,10 @@ if (orderForm) {
 
     }
 
-    /* ========================================
-       14. 스티커 카드 생성
-    ======================================== */
+
+    /* =====================================
+       16. 스티커 카드 생성
+    ===================================== */
 
     function renderStickerDesigns() {
 
@@ -756,7 +577,8 @@ if (orderForm) {
 
             card.className = "sticker-design-card";
 
-            /* 이미지 영역 */
+
+            // 이미지
 
             const image = document.createElement("div");
 
@@ -768,11 +590,13 @@ if (orderForm) {
                 `./images/stickers/${String(sticker.id).padStart(2, "0")}.png`;
 
             stickerImage.alt = sticker.name;
+
             stickerImage.loading = "lazy";
 
             image.appendChild(stickerImage);
 
-            /* 이름 */
+
+            // 이름
 
             const name = document.createElement("p");
 
@@ -781,15 +605,20 @@ if (orderForm) {
             name.textContent =
                 `${String(sticker.id).padStart(2, "0")} · ${sticker.name}`;
 
-            /* 수량 조절 */
+
+            // 수량 조절 영역
 
             const quantityControls = document.createElement("div");
 
             quantityControls.className = "sticker-design-quantity";
 
+
+            // 감소 버튼
+
             const minusButton = document.createElement("button");
 
             minusButton.type = "button";
+
             minusButton.textContent = "−";
 
             minusButton.setAttribute(
@@ -797,13 +626,20 @@ if (orderForm) {
                 `${sticker.name} 수량 감소`
             );
 
+
+            // 현재 수량
+
             const quantityText = document.createElement("span");
 
             quantityText.textContent = stickerDraft[index];
 
+
+            // 증가 버튼
+
             const plusButton = document.createElement("button");
 
             plusButton.type = "button";
+
             plusButton.textContent = "+";
 
             plusButton.setAttribute(
@@ -811,7 +647,8 @@ if (orderForm) {
                 `${sticker.name} 수량 증가`
             );
 
-            /* 선택 상태에 따른 카드 강조 */
+
+            // 선택 상태 업데이트
 
             function updateCardSelection() {
 
@@ -826,7 +663,8 @@ if (orderForm) {
 
             }
 
-            /* 수량 감소 */
+
+            // 수량 감소
 
             minusButton.addEventListener("click", () => {
 
@@ -835,11 +673,13 @@ if (orderForm) {
                 stickerDraft[index]--;
 
                 updateCardSelection();
+
                 updateStickerCount();
 
             });
 
-            /* 수량 증가 */
+
+            // 수량 증가
 
             plusButton.addEventListener("click", () => {
 
@@ -853,9 +693,11 @@ if (orderForm) {
                 stickerDraft[index]++;
 
                 updateCardSelection();
+
                 updateStickerCount();
 
             });
+
 
             quantityControls.append(
                 minusButton,
@@ -879,15 +721,17 @@ if (orderForm) {
 
     }
 
-    /* ========================================
-       15. 선택 내역 안내
-    ======================================== */
+
+    /* =====================================
+       17. 스티커 선택 요약
+    ===================================== */
 
     function updateStickerSummary() {
 
         if (!stickerSelectionSummary) return;
 
         const total = getStickerTotal(stickerSaved);
+
         const limit = getStickerLimit();
 
         if (total === 0) {
@@ -901,10 +745,8 @@ if (orderForm) {
 
         const selected = stickerSaved
             .map((quantity, index) => ({
-
                 name: stickerDesigns[index].name,
                 quantity: quantity
-
             }))
             .filter(item => item.quantity > 0);
 
@@ -926,9 +768,10 @@ if (orderForm) {
 
     }
 
-    /* ========================================
-       16. 팝업 열기
-    ======================================== */
+
+    /* =====================================
+       18. 스티커 팝업 열기
+    ===================================== */
 
     function openStickerModal() {
 
@@ -948,9 +791,10 @@ if (orderForm) {
 
     }
 
-    /* ========================================
-       17. 팝업 닫기
-    ======================================== */
+
+    /* =====================================
+       19. 스티커 팝업 닫기
+    ===================================== */
 
     function closeStickerModal() {
 
@@ -964,9 +808,10 @@ if (orderForm) {
 
     }
 
-    /* ========================================
-       18. 선택 내용 저장
-    ======================================== */
+
+    /* =====================================
+       20. 스티커 선택 저장
+    ===================================== */
 
     function confirmStickerSelection() {
 
@@ -985,9 +830,10 @@ if (orderForm) {
 
     }
 
-    /* ========================================
-       19. 스티커 버튼 이벤트
-    ======================================== */
+
+    /* =====================================
+       21. 스티커 버튼 이벤트
+    ===================================== */
 
     stickerOpenButton?.addEventListener(
         "click",
@@ -1009,7 +855,10 @@ if (orderForm) {
         confirmStickerSelection
     );
 
-    /* ESC 키로 닫기 */
+
+    /* =====================================
+       22. ESC 키로 팝업 닫기
+    ===================================== */
 
     document.addEventListener("keydown", event => {
 
@@ -1023,9 +872,10 @@ if (orderForm) {
 
     });
 
-    /* ========================================
-       20. 스티커 세트 수량 변경 감지
-    ======================================== */
+
+    /* =====================================
+       23. 스티커 세트 수량 변경 감지
+    ===================================== */
 
     if (stickerSetCard) {
 
@@ -1034,6 +884,7 @@ if (orderForm) {
             setTimeout(() => {
 
                 updateStickerCount();
+
                 updateStickerSummary();
 
             }, 0);
@@ -1049,6 +900,7 @@ if (orderForm) {
             () => {
 
                 updateStickerCount();
+
                 updateStickerSummary();
 
             }
@@ -1059,6 +911,7 @@ if (orderForm) {
             () => {
 
                 updateStickerCount();
+
                 updateStickerSummary();
 
             }
@@ -1066,99 +919,518 @@ if (orderForm) {
 
     }
 
-    /* ========================================
-       21. 초기 실행
-    ======================================== */
+
+    /* =====================================
+       24. 주문 데이터 생성
+    ===================================== */
+
+    function createOrderData() {
+
+        const items = [];
+
+        productCards.forEach(card => {
+
+            const checkbox = card.querySelector(
+                ".goods-checkbox"
+            );
+
+            const quantityInput = card.querySelector(
+                ".quantity-input"
+            );
+
+            if (
+                !checkbox ||
+                !quantityInput ||
+                !checkbox.checked
+            ) {
+                return;
+            }
+
+            items.push({
+
+                id: checkbox.dataset.product,
+
+                quantity: normalizeQuantity(quantityInput)
+
+            });
+
+        });
+
+
+        // 스티커 선택 정보
+
+        const stickers = stickerSaved
+            .map((quantity, index) => ({
+
+                id: index + 1,
+
+                quantity: quantity
+
+            }))
+            .filter(item => item.quantity > 0);
+
+
+        return {
+
+            name:
+                document.getElementById("order-name")?.value.trim() || "",
+
+            depositor:
+                document.getElementById("order-depositor")?.value.trim() || "",
+
+            contact:
+                document.getElementById("order-contact")?.value.trim() || "",
+
+            address:
+                document.getElementById("order-address")?.value.trim() || "",
+
+            request:
+                document.getElementById("order-request")?.value.trim() || "",
+
+            privacy:
+                document.getElementById("order-privacy")?.checked === true,
+
+            items: items,
+
+            stickers: items.some(
+                item => item.id === "sticker_select"
+            )
+                ? stickers
+                : []
+
+        };
+
+    }
+
+
+    /* =====================================
+       25. 주문 데이터 검증
+    ===================================== */
+
+    function validateOrderData(data) {
+
+        if (
+            !data.name ||
+            !data.depositor ||
+            !data.contact ||
+            !data.address
+        ) {
+
+            throw new Error(
+                "필수 주문 정보를 입력해 주세요."
+            );
+
+        }
+
+        if (!data.privacy) {
+
+            throw new Error(
+                "개인정보 수집에 동의해 주세요."
+            );
+
+        }
+
+        if (data.items.length === 0) {
+
+            throw new Error(
+                "주문할 상품을 선택해 주세요."
+            );
+
+        }
+
+        const stickerSet = data.items.find(
+            item => item.id === "sticker_select"
+        );
+
+        if (stickerSet) {
+
+            const selectedCount = data.stickers.reduce(
+                (sum, item) => sum + item.quantity,
+                0
+            );
+
+            if (
+                selectedCount !==
+                stickerSet.quantity * 10
+            ) {
+
+                throw new Error(
+                    "띠부스티커 선택 수량을 확인해 주세요."
+                );
+
+            }
+
+        }
+
+    }
+
+
+    /* =====================================
+       26. 서버로 주문 전송
+    ===================================== */
+
+    async function sendOrderToServer(data) {
+
+        const response = await fetch(ORDER_API_URL, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
+
+            body: JSON.stringify(data),
+
+            redirect: "follow"
+
+        });
+
+        if (!response.ok) {
+
+            throw new Error(
+                "주문 서버 연결에 실패했습니다."
+            );
+
+        }
+
+        const result = await response.json();
+
+        if (!result.success) {
+
+            throw new Error(
+                result.message || "주문 처리에 실패했습니다."
+            );
+
+        }
+
+        return result;
+
+    }
+
+
+    /* =====================================
+       27. 주문 완료 화면 표시
+    ===================================== */
+
+    function showOrderComplete(orderId, total) {
+
+        const orderIdElement = document.getElementById(
+            "complete-order-id"
+        );
+
+        const totalElement = document.getElementById(
+            "complete-order-total"
+        );
+
+        const orderSection = document.querySelector(
+            ".goods-order-section"
+        );
+
+        const goodsWorktable = document.querySelector(
+            ".goods-worktable"
+        );
+
+        const completeSection = document.getElementById(
+            "order-complete"
+        );
+
+        if (
+            !orderIdElement ||
+            !totalElement ||
+            !completeSection
+        ) {
+
+            throw new Error(
+                "주문 완료 화면 요소를 찾을 수 없습니다."
+            );
+
+        }
+
+        orderIdElement.textContent = orderId;
+
+        totalElement.textContent =
+            `${Number(total).toLocaleString("ko-KR")}원`;
+
+        if (orderSection) {
+
+            orderSection.hidden = true;
+
+        }
+
+        if (goodsWorktable) {
+
+            goodsWorktable.hidden = true;
+
+        }
+
+        completeSection.hidden = false;
+
+        completeSection.scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "start"
+
+        });
+
+    }
+
+
+    /* =====================================
+       28. 주문 제출 이벤트
+       중복 제출 방지
+    ===================================== */
+
+    if (orderForm) {
+
+        orderForm.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+
+                // 중복 제출 차단
+
+                if (
+                    isSubmitting ||
+                    orderCompleted
+                ) {
+                    return;
+                }
+
+
+                // 공개 주문 접수 차단
+
+                if (!ORDERS_OPEN) {
+
+                    alert(
+                        "현재는 주문 접수를 준비 중입니다."
+                    );
+
+                    return;
+
+                }
+
+
+                try {
+
+                    const orderData = createOrderData();
+
+                    validateOrderData(orderData);
+
+
+                    // 전송 중 상태
+
+                    isSubmitting = true;
+
+                    if (submitButton) {
+
+                        submitButton.disabled = true;
+
+                        submitButton.textContent =
+                            "주문 처리 중...";
+
+                    }
+
+
+                    // 서버 전송
+
+                    const result =
+                        await sendOrderToServer(orderData);
+
+
+                    // 서버에서 성공 응답을 받으면 완료 처리
+
+                    orderCompleted = true;
+
+
+                    // 주문 완료 화면 표시
+
+                    showOrderComplete(
+                        result.orderId,
+                        result.total
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "BILBAO 주문 오류:",
+                        error
+                    );
+
+                    alert(error.message);
+
+
+                } finally {
+
+                    isSubmitting = false;
+
+
+                    // 완료된 주문은 다시 제출할 수 없음
+
+                    if (submitButton) {
+
+                        if (orderCompleted) {
+
+                            submitButton.disabled = true;
+
+                            submitButton.textContent =
+                                "주문 신청 완료";
+
+                        } else {
+
+                            submitButton.disabled =
+                                !ORDERS_OPEN;
+
+                            submitButton.textContent =
+                                ORDERS_OPEN
+                                    ? "주문 신청하기"
+                                    : "주문 신청 준비 중";
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================
+       29. 초기 실행
+    ===================================== */
 
     renderStickerDesigns();
 
     updateStickerSummary();
 
     updateOrderSummary();
-   /* ========================================
-   개발자용 주문 데이터 테스트
-   서버 전송 없음
-======================================== */
-
-window.testBilbaoOrder = function () {
-
-    try {
-
-        const orderData = createOrderData();
-
-        validateOrderData(orderData);
-
-        console.log("BILBAO 주문 데이터 테스트");
-        console.log(orderData);
-
-        alert("주문 데이터 생성 성공! F12 콘솔을 확인해 주세요.");
-
-    } catch (error) {
-
-        console.error(error.message);
-        alert(error.message);
-
-    }
-
-};
 
 
-    /* ========================================
-       STEP 11-9 — 서버 POST 연결 테스트
-       개인정보 전송 / 주문 저장 없음
-    ======================================== */
+    /* =====================================
+       30. 개발자용 주문 데이터 테스트
+       서버 전송 없음
+    ===================================== */
+
+    window.testBilbaoOrder = function () {
+
+        try {
+
+            const orderData = createOrderData();
+
+            validateOrderData(orderData);
+
+            console.log(
+                "BILBAO 주문 데이터 테스트"
+            );
+
+            console.log(orderData);
+
+            alert(
+                "주문 데이터 생성 성공! F12 콘솔을 확인해 주세요."
+            );
+
+        } catch (error) {
+
+            console.error(error.message);
+
+            alert(error.message);
+
+        }
+
+    };
+
+
+    /* =====================================
+       31. 서버 연결 테스트
+       개인정보 전송 없음
+       주문 저장 없음
+    ===================================== */
 
     window.testBilbaoServer = async function () {
-        try {
-            console.log("빌바오 서버 POST 연결 테스트 시작");
 
-            const response = await fetch(ORDER_API_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "text/plain;charset=utf-8"
-                },
-                body: JSON.stringify({ test: true }),
-                redirect: "follow"
-            });
+        try {
+
+            console.log(
+                "빌바오 서버 POST 연결 테스트 시작"
+            );
+
+            const response = await fetch(
+                ORDER_API_URL,
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    },
+
+                    body: JSON.stringify({
+                        test: true
+                    }),
+
+                    redirect: "follow"
+
+                }
+            );
 
             const result = await response.json();
-            console.log("서버 응답:", result);
-            alert("서버 응답 확인! F12 콘솔을 봐줘.");
+
+            console.log(
+                "서버 응답:",
+                result
+            );
+
+            alert(
+                "서버 응답 확인! F12 콘솔을 봐줘."
+            );
+
         } catch (error) {
-            console.error("서버 연결 테스트 오류:", error);
-            alert("브라우저에서 응답을 읽지 못했어. F12 콘솔을 확인해 줘.");
+
+            console.error(
+                "서버 연결 테스트 오류:",
+                error
+            );
+
+            alert(
+                "브라우저에서 응답을 읽지 못했어. F12 콘솔을 확인해 줘."
+            );
+
         }
+
     };
-/* ========================================
-   주문 완료 화면 미리보기
-   실제 주문 및 서버 전송 없음
-======================================== */
 
-window.previewBilbaoOrder = function () {
 
-    // 테스트용 주문 정보
-    document.getElementById("complete-order-id").textContent =
-        "BILBAO-TEST-001";
+    /* =====================================
+       32. 주문 완료 화면 미리보기
+       실제 주문 전송 없음
+    ===================================== */
 
-    document.getElementById("complete-order-total").textContent =
-        "16,000원";
+    window.previewBilbaoOrder = function () {
 
-    // 주문 신청서 숨기기
-    document.querySelector(".goods-order-section").hidden = true;
+        showOrderComplete(
+            "BILBAO-TEST-001",
+            16000
+        );
 
-    // 상품 목록 숨기기
-    document.querySelector(".goods-worktable").hidden = true;
+        console.log(
+            "BILBAO 주문 완료 화면 미리보기 실행!"
+        );
 
-    // 주문 완료 화면 표시
-    const completeSection = document.getElementById("order-complete");
+    };
 
-    completeSection.hidden = false;
 
-    completeSection.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
+    /* =====================================
+       33. 초기화 완료
+    ===================================== */
 
-    console.log("BILBAO 주문 완료 화면 미리보기 실행!");
-};
+    console.log(
+        "BILBAO GOODS.JS 로딩 완료"
+    );
+
 });
