@@ -521,3 +521,338 @@
         transform: none;
     }
 }
+/* ========================================
+   BILBAO — STICKER SELECTOR
+======================================== */
+
+/* 스티커 선택 버튼 */
+
+.goods-sticker-selection {
+    margin-top: 18px;
+}
+
+.sticker-open-button {
+    width: 100%;
+    padding: 14px 18px;
+
+    background: #262626;
+    color: #f1eee7;
+
+    border: 1px solid #777;
+    border-radius: 4px;
+
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.sticker-open-button:hover {
+    background: #393939;
+    border-color: #d8c7a5;
+}
+
+.sticker-selection-summary {
+    margin-top: 10px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #aaa;
+}
+
+/* ========================================
+   MODAL
+======================================== */
+
+.sticker-modal[hidden] {
+    display: none !important;
+}
+
+.sticker-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+}
+
+/* 어두운 배경 */
+
+.sticker-modal-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(5px);
+}
+
+/* 팝업 본체 */
+
+.sticker-modal-content {
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+    max-width: 1000px;
+    max-height: 90vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #1d1d1d;
+    color: #f1eee7;
+
+    border: 1px solid #666;
+    border-radius: 6px;
+
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+
+    overflow: hidden;
+}
+
+/* ========================================
+   HEADER
+======================================== */
+
+.sticker-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+
+    padding: 28px 32px;
+
+    border-bottom: 1px solid #444;
+}
+
+.sticker-modal-header p {
+    margin: 0 0 8px;
+
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: #c4a985;
+}
+
+.sticker-modal-header h2 {
+    margin: 0 0 10px;
+
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.sticker-modal-header span {
+    font-size: 12px;
+    line-height: 1.7;
+    color: #aaa;
+}
+
+.sticker-modal-close {
+    flex-shrink: 0;
+
+    width: 36px;
+    height: 36px;
+
+    background: transparent;
+    color: #eee;
+
+    border: 1px solid #666;
+    border-radius: 3px;
+
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.sticker-modal-close:hover {
+    background: #444;
+}
+
+/* ========================================
+   STICKER GRID
+======================================== */
+
+.sticker-design-grid {
+    flex: 1;
+    min-height: 0;
+
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 18px;
+
+    padding: 28px 32px;
+
+    overflow-y: auto;
+}
+
+/* 개별 스티커 카드 */
+
+.sticker-design-card {
+    min-width: 0;
+
+    padding: 12px;
+
+    background: #292929;
+    border: 1px solid #444;
+    border-radius: 4px;
+
+    text-align: center;
+}
+
+/* 스티커 이미지 */
+
+.sticker-design-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eae6df;
+    border-radius: 3px;
+
+    overflow: hidden;
+}
+
+.sticker-design-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+/* 스티커 이름 */
+
+.sticker-design-name {
+    margin: 12px 0;
+
+    font-size: 12px;
+    color: #ddd;
+}
+
+/* 수량 조절 */
+
+.sticker-design-quantity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.sticker-design-quantity button {
+    width: 28px;
+    height: 28px;
+
+    background: #393939;
+    color: #fff;
+
+    border: 1px solid #666;
+    border-radius: 3px;
+
+    cursor: pointer;
+}
+
+.sticker-design-quantity button:hover {
+    background: #555;
+}
+
+.sticker-design-quantity span {
+    min-width: 20px;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* ========================================
+   FOOTER
+======================================== */
+
+.sticker-modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    padding: 20px 32px;
+
+    border-top: 1px solid #444;
+    background: #222;
+}
+
+.sticker-modal-footer p {
+    margin: 0;
+    font-size: 13px;
+}
+
+.sticker-modal-footer strong {
+    color: #e7bd8b;
+    font-size: 20px;
+}
+
+.sticker-confirm-button {
+    padding: 13px 24px;
+
+    background: #e7bd8b;
+    color: #191919;
+
+    border: none;
+    border-radius: 3px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.sticker-confirm-button:hover:not(:disabled) {
+    background: #f5d3a8;
+}
+
+.sticker-confirm-button:disabled {
+    background: #555;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 768px) {
+
+    .sticker-modal {
+        padding: 10px;
+    }
+
+    .sticker-modal-content {
+        max-height: 95vh;
+    }
+
+    .sticker-modal-header {
+        padding: 20px;
+    }
+
+    .sticker-modal-header h2 {
+        font-size: 19px;
+    }
+
+    .sticker-design-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        padding: 18px;
+    }
+
+    .sticker-modal-footer {
+        padding: 16px;
+    }
+
+    .sticker-confirm-button {
+        padding: 12px 14px;
+        font-size: 12px;
+    }
+
+}
