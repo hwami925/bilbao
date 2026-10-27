@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#111111">
+
+    <title>BILBAO : PROLOGUE | 빌바오</title>
+
+    <!-- 브라우저 탭 아이콘 -->
+    <link rel="icon" type="image/png" href="./images/logo/bilbao-logo.png">
+
+    <!-- 게임 전용 스타일 -->
+    <link rel="stylesheet" href="./game.css">
+
+    <!-- 게임 스크립트 -->
+    <script src="./game.js" defer></script>
+</head>
+
+<body class="game-page">
+
+    <!-- 상단 메뉴 -->
+    <header class="game-header">
+
+        <a href="./index.html" class="game-logo">
+            <img
+                src="./images/logo/bilbao-logo.png"
+                alt="BILBAO 로고"
+            >
+        </a>
+
+        <a href="./index.html#story" class="game-back">
+            ← BACK TO HOME
+        </a>
+
+    </header>
+
+    <main class="game-main">
+
+        <!-- 게임 제목 -->
+        <div class="game-heading">
+
+            <p>YEAR 3010 / BUSAN</p>
+
+            <h1>PROLOGUE</h1>
+
+            <span>잿빛 세계를 달리다</span>
+
+        </div>
+
+        <!-- 게임 영역 -->
+        <section class="game-container" aria-label="빌바오 프롤로그 게임">
+
+            <!-- 게임 상단 정보 -->
+            <div class="game-hud">
+
+                <div class="game-hud-item">
+                    <span>DISTANCE</span>
+                    <strong id="game-distance">0000 M</strong>
+                </div>
+
+                <div class="game-hud-item">
+                    <span>STATUS</span>
+                    <strong id="game-status">STANDBY</strong>
+                </div>
+
+            </div>
+
+            <!-- 실제 게임 화면 -->
+            <div class="game-screen">
+
+                <canvas
+                    id="game-canvas"
+                    width="960"
+                    height="420"
+                    aria-label="레볼리가 장애물을 피하며 달리는 게임"
+                ></canvas>
+
+                <!-- 게임 시작 화면 -->
+                <div class="game-overlay" id="game-start-screen">
+
+                    <div class="game-overlay-content">
+
+                        <p class="game-overlay-label">
+                            PERSONNEL 013 / REVOLI
+                        </p>
+
+                        <h2>도망쳐.</h2>
+
+                        <p class="game-overlay-description">
+                            무너진 도시, 끝없이 쌓인 고철.<br>
+                            레볼리는 잿빛 세계를 달리기 시작한다.
+                        </p>
+
+                        <button
+                            type="button"
+                            class="game-button"
+                            id="game-start-button"
+                        >
+                            ▶ GAME START
+                        </button>
+
+                        <span class="game-controls">
+                            SPACE / ↑ : JUMP
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- 게임 오버 화면 -->
+                <div
+                    class="game-overlay"
+                    id="game-over-screen"
+                    hidden
+                >
+
+                    <div class="game-overlay-content">
+
+                        <p class="game-overlay-label">
+                            SIGNAL LOST
+                        </p>
+
+                        <h2>GAME OVER</h2>
+
+                        <p class="game-overlay-description">
+                            레볼리의 움직임이 멈췄다.
+                        </p>
+
+                        <p class="game-result">
+                            DISTANCE :
+                            <strong id="game-final-distance">0000 M</strong>
+                        </p>
+
+                        <button
+                            type="button"
+                            class="game-button"
+                            id="game-restart-button"
+                        >
+                            ↻ RETRY
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- 엔딩 화면 -->
+                <div
+                    class="game-overlay"
+                    id="game-ending-screen"
+                    hidden
+                >
+
+                    <div class="game-overlay-content">
+
+                        <p class="game-overlay-label">
+                            PROLOGUE COMPLETE
+                        </p>
+
+                        <h2>마침내, 그곳에.</h2>
+
+                        <p class="game-overlay-description">
+                            끝없이 이어질 것 같던 길의 끝.<br>
+                            레볼리는 누군가를 마주하게 된다.
+                        </p>
+
+                        <button
+                            type="button"
+                            class="game-button"
+                            id="game-ending-restart"
+                        >
+                            ↻ PLAY AGAIN
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- 게임 하단 안내 -->
+            <div class="game-bottom">
+
+                <p>
+                    SURVIVE THE RUINS.
+                    REACH THE DESTINATION.
+                </p>
+
+                <span>
+                    BILBAO / PROLOGUE EXPERIENCE
+                </span>
+
+            </div>
+
+        </section>
+
+        <!-- 조작 안내 -->
+        <div class="game-instructions">
+
+            <div>
+                <span class="game-key">SPACE</span>
+                <span class="game-key">↑</span>
+                <p>점프</p>
+            </div>
+
+            <p>
+                장애물을 뛰어넘어 목적지까지 도달하세요.
+            </p>
+
+        </div>
+
+    </main>
+
+    <!-- 하단 -->
+    <footer class="game-footer">
+        © 2026 BILBAO. Created by HWAMI.
+    </footer>
+
+</body>
+</html>
