@@ -25,6 +25,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const endingRestartButton = document.getElementById("game-ending-restart");
 
     /* ========================================
+       REVOLI SPRITES
+    ======================================== */
+
+    const revoliRunImages = [
+        "./images/game/revoli/run_01.png",
+        "./images/game/revoli/run_02.png",
+        "./images/game/revoli/run_03.png",
+        "./images/game/revoli/run_04.png"
+    ].map(src => {
+        const img = new Image();
+        img.src = src;
+        return img;
+    });
+
+    const revoliJumpImage = new Image();
+    revoliJumpImage.src = "./images/game/revoli/jump.png";
+
+    let runFrame = 0;
+    let runAnimationTimer = 0;
+
+    const RUN_ANIMATION_SPEED = 7;
+
+    /* ========================================
        GAME SETTINGS
     ======================================== */
 
@@ -58,10 +81,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const player = {
         x: 130,
         y: GROUND_Y - 65,
-
         width: 48,
         height: 65,
-
         velocityY: 0,
         jumping: false
     };
@@ -94,7 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ======================================== */
 
     function resetGame() {
-
         distance = 0;
         speed = 6;
         frame = 0;
@@ -109,6 +129,9 @@ document.addEventListener("DOMContentLoaded", () => {
         player.velocityY = 0;
         player.jumping = false;
 
+        runFrame = 0;
+        runAnimationTimer = 0;
+
         updateHUD();
     }
 
@@ -117,7 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ======================================== */
 
     function startGame() {
-
         if (animationId !== null) {
             cancelAnimationFrame(animationId);
             animationId = null;
@@ -138,7 +160,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ======================================== */
 
     function jump() {
-
         if (gameState !== "playing") return;
         if (player.jumping) return;
 
@@ -151,7 +172,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ======================================== */
 
     function createObstacle() {
-
         const types = [
             {
                 type: "scrap",
@@ -177,10 +197,8 @@ document.addEventListener("DOMContentLoaded", () => {
         obstacles.push({
             x: WIDTH + 30,
             y: GROUND_Y - selected.height,
-
             width: selected.width,
             height: selected.height,
-
             type: selected.type
         });
     }
@@ -190,14 +208,11 @@ document.addEventListener("DOMContentLoaded", () => {
     ======================================== */
 
     function createDust() {
-
         particles.push({
             x: WIDTH,
             y: random(60, GROUND_Y),
-
             size: random(1, 3),
             speed: random(0.5, 2),
-
             alpha: random(0.1, 0.5)
         });
     }
@@ -207,12 +222,10 @@ document.addEventListener("DOMContentLoaded", () => {
     ======================================== */
 
     function updatePlayer() {
-
         player.velocityY += GRAVITY;
         player.y += player.velocityY;
 
         if (player.y >= GROUND_Y - player.height) {
-
             player.y = GROUND_Y - player.height;
             player.velocityY = 0;
             player.jumping = false;
@@ -224,11 +237,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ======================================== */
 
     function updateObstacles() {
-
         spawnTimer++;
 
         if (spawnTimer >= nextSpawn) {
-
             createObstacle();
 
             spawnTimer = 0;
@@ -249,11 +260,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ======================================== */
 
     function checkCollision() {
-
         const margin = 8;
 
         for (const obstacle of obstacles) {
-
             if (
                 player.x + margin <
                 obstacle.x + obstacle.width - margin &&
@@ -278,7 +287,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ======================================== */
 
     function gameOver() {
-
         gameState = "over";
 
         statusText.textContent = "SIGNAL LOST";
@@ -294,7 +302,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ======================================== */
 
     function gameEnding() {
-
         gameState = "ending";
 
         statusText.textContent = "COMPLETE";
@@ -329,7 +336,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.fillStyle = "#333438";
 
         for (let i = 0; i < 15; i++) {
-
             const x = i * 75;
             const h = 60 + (i % 4) * 20;
 
@@ -355,11 +361,9 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.fillStyle = "#27292c";
 
         ctx.beginPath();
-
         ctx.moveTo(0, GROUND_Y);
 
         for (let x = 0; x <= WIDTH; x += 40) {
-
             const y =
                 GROUND_Y - 25 -
                 Math.sin(x * 0.03) * 12 -
@@ -391,7 +395,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const offset = (frame * speed) % 80;
 
         for (let x = -80; x < WIDTH + 80; x += 80) {
-
             ctx.beginPath();
 
             ctx.moveTo(x - offset, GROUND_Y + 25);
@@ -407,9 +410,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function drawPlayer() {
 
+        // 레볼리 이미지 표시 크기
+        const spriteSize = 120;
+
+        // 기존 충돌 판정 영역 중심에 이미지 배치
+        const spriteX =
+            player.x + player.width / 2 - spriteSize / 2;
+
+        const spriteY =
+            player.y + player.height - spriteSize;
+
+        // 점프 중에는 점프 이미지 표시
+        const currentImage = player.jumping
+            ? revoliJumpImage
+            : revoliRunImages[runFrame];
+
         ctx.save();
 
-        // 그림자
+        // 바닥 그림자
         ctx.fillStyle = "rgba(0,0,0,0.3)";
 
         ctx.beginPath();
@@ -424,78 +442,28 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         ctx.fill();
 
-        // 로봇 몸체
-        ctx.fillStyle = "#d5d6d6";
-
-        ctx.fillRect(
-            player.x + 8,
-            player.y + 25,
-            32,
-            28
-        );
-
-        // 로봇 머리
-        ctx.fillStyle = "#eeeeee";
-
-        ctx.fillRect(
-            player.x + 4,
-            player.y,
-            40,
-            30
-        );
-
-        // 카메라 눈
-        ctx.fillStyle = "#242424";
-
-        ctx.beginPath();
-
-        ctx.arc(
-            player.x + 25,
-            player.y + 15,
-            10,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-
-        // 카메라 렌즈
-        ctx.fillStyle = "#7ba0aa";
-
-        ctx.beginPath();
-
-        ctx.arc(
-            player.x + 25,
-            player.y + 15,
-            5,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-
-        // 다리 애니메이션
-        const legOffset =
-            player.jumping ? 0 : Math.sin(frame * 0.3) * 8;
-
-        ctx.strokeStyle = "#dddddd";
-        ctx.lineWidth = 7;
-
-        ctx.beginPath();
-
-        ctx.moveTo(player.x + 17, player.y + 53);
-        ctx.lineTo(
-            player.x + 14,
-            player.y + 64 + legOffset
-        );
-
-        ctx.moveTo(player.x + 32, player.y + 53);
-        ctx.lineTo(
-            player.x + 35,
-            player.y + 64 - legOffset
-        );
-
-        ctx.stroke();
+        // 레볼리 이미지 그리기
+        if (
+            currentImage.complete &&
+            currentImage.naturalWidth > 0
+        ) {
+            ctx.drawImage(
+                currentImage,
+                spriteX,
+                spriteY,
+                spriteSize,
+                spriteSize
+            );
+        } else {
+            // 이미지 로딩 중 임시 표시
+            ctx.fillStyle = "#eeeeee";
+            ctx.fillRect(
+                player.x,
+                player.y,
+                player.width,
+                player.height
+            );
+        }
 
         ctx.restore();
     }
@@ -505,21 +473,15 @@ document.addEventListener("DOMContentLoaded", () => {
     ======================================== */
 
     function drawObstacles() {
-
         obstacles.forEach(obstacle => {
 
             ctx.save();
 
             if (obstacle.type === "scrap") {
-
                 ctx.fillStyle = "#777777";
-
             } else if (obstacle.type === "metal") {
-
                 ctx.fillStyle = "#4b4b4b";
-
             } else {
-
                 ctx.fillStyle = "#625c59";
             }
 
@@ -560,14 +522,12 @@ document.addEventListener("DOMContentLoaded", () => {
     ======================================== */
 
     function drawParticles() {
-
         particles.forEach(particle => {
 
             ctx.fillStyle =
                 `rgba(210, 190, 170, ${particle.alpha})`;
 
             ctx.beginPath();
-
             ctx.arc(
                 particle.x,
                 particle.y,
@@ -575,7 +535,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 0,
                 Math.PI * 2
             );
-
             ctx.fill();
         });
     }
@@ -585,7 +544,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ======================================== */
 
     function updateParticles() {
-
         if (frame % 12 === 0) {
             createDust();
         }
@@ -619,14 +577,28 @@ document.addEventListener("DOMContentLoaded", () => {
         speed = Math.min(12, 6 + distance / 700);
 
         updatePlayer();
+
+        // 달리기 애니메이션
+        if (!player.jumping) {
+            runAnimationTimer++;
+
+            if (runAnimationTimer >= RUN_ANIMATION_SPEED) {
+                runAnimationTimer = 0;
+
+                runFrame =
+                    (runFrame + 1) % revoliRunImages.length;
+            }
+        }
+
         updateObstacles();
         updateParticles();
 
         checkCollision();
 
-        if (gameState === "playing" &&
-            distance >= GOAL_DISTANCE) {
-
+        if (
+            gameState === "playing" &&
+            distance >= GOAL_DISTANCE
+        ) {
             gameEnding();
         }
 
@@ -644,39 +616,46 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-   /* ========================================
-   CONTROLS
-   PC + MOBILE
-======================================== */
+    /* ========================================
+       CONTROLS
+       PC + MOBILE
+    ======================================== */
 
-// PC 키보드 조작
-document.addEventListener("keydown", (event) => {
+    // PC 키보드
+    document.addEventListener("keydown", (event) => {
 
-    if (
-        event.code === "Space" ||
-        event.code === "ArrowUp"
-    ) {
-        event.preventDefault();
+        if (
+            event.code === "Space" ||
+            event.code === "ArrowUp"
+        ) {
+            event.preventDefault();
 
-        if (!event.repeat) {
+            if (!event.repeat) {
+                jump();
+            }
+        }
+    });
+
+    // PC 마우스 클릭 + 모바일 터치
+    canvas.addEventListener("pointerdown", (event) => {
+
+        if (
+            event.pointerType === "mouse" &&
+            event.button !== 0
+        ) {
+            return;
+        }
+
+        if (gameState === "playing") {
+            event.preventDefault();
             jump();
         }
-    }
-});
+    });
 
-// PC 마우스 클릭 + 모바일 터치
-canvas.addEventListener("pointerdown", (event) => {
+    /* ========================================
+       BUTTON EVENTS
+    ======================================== */
 
-    if (event.pointerType === "mouse" && event.button !== 0) {
-        return;
-    }
-
-    if (gameState === "playing") {
-        event.preventDefault();
-        jump();
-    }
-
-});
     startButton.addEventListener("click", startGame);
     restartButton.addEventListener("click", startGame);
     endingRestartButton.addEventListener("click", startGame);
