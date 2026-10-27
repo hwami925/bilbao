@@ -704,3 +704,96 @@
         height: 350px;
     }
 }
+/* ========================================
+   캐릭터 상세 프로필 디자인
+======================================== */
+
+/* 프로필 전체 */
+.archive-profile {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #aaa69d;
+}
+
+/* 기본 정보 한 줄 */
+.archive-profile-row {
+    display: grid;
+    grid-template-columns: 75px minmax(0, 1fr);
+    gap: 15px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* 항목 이름 */
+.archive-profile-row span {
+    color: #77736c;
+    font-weight: 600;
+}
+
+/* 항목 내용 */
+.archive-profile-row strong {
+    color: #252525;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+/* 성격 / 대표 대사 */
+.archive-profile-section {
+    margin-top: 28px;
+}
+
+/* 소제목 */
+.archive-profile-section h4 {
+    margin: 0 0 12px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #77736c;
+}
+
+/* 설명 */
+.archive-profile-section p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.9;
+    color: #333;
+    overflow-wrap: break-word;
+}
+
+/* 대표 대사 */
+.archive-quote {
+    margin-top: 25px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.35);
+    border-left: 3px solid #555;
+}
+
+.archive-quote p {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.9;
+}
+
+/* 상세 기록부 정보 영역 */
+.archive-document-info {
+    min-width: 0;
+    padding: 15px 0;
+}
+
+/* 모바일 */
+@media (max-width: 700px) {
+    .archive-profile {
+        margin-top: 20px;
+    }
+
+    .archive-profile-row {
+        grid-template-columns: 60px minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .archive-quote {
+        padding: 15px;
+    }
+}
