@@ -820,13 +820,14 @@
     transform: none;
 }
 
-/* 케이지 전용 */
+/* 케이지 전용 이미지 확대 */
 .archive-document-photo img.character-keiji {
-    width: 100%;
+    width: 125%;
+    max-width: none;
     height: 100%;
     object-fit: contain;
     object-position: center;
-    transform: none;
+    transform: translateX(-10%);
 }
 
 /* 모바일 */
