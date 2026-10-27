@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
             description: "빌바오의 엔지니어 스승. 대장의 말은 잘 듣지만 리베나 미나와 가끔 티격태격할 때가 있다."
         },
 
-        MINA: {
+        mina: {
             name: "MINA",
             korean: "미나",
            image: "./images/portraits/04.png",
