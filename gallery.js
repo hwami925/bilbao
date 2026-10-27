@@ -111,6 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let currentIndex = 0;
     let lastFocusedCard = null;
+   let imageRequestId = 0;
 
 
     /* =====================================
@@ -129,8 +130,69 @@ document.addEventListener("DOMContentLoaded", () => {
         titleElement.textContent = artwork.title;
         descriptionElement.textContent = artwork.description;
 
-        // 이미지가 등록되어 있다면 표시
-        if (artwork.image) {
+       // 이전 이미지 로딩 요청 구분
+const requestId = ++imageRequestId;
+
+// 새 이미지가 준비될 때까지 기존 이미지 숨기기
+modalImage.hidden = true;
+modalImage.removeAttribute("src");
+
+placeholder.textContent = "LOADING...";
+placeholder.hidden = false;
+
+downloadButton.hidden = true;
+downloadButton.removeAttribute("href");
+
+if (artwork.image) {
+
+    const newImage = new Image();
+
+    newImage.onload = () => {
+
+        // 다른 작품으로 이동했다면 이전 요청 무시
+        if (requestId !== imageRequestId) return;
+
+        modalImage.src = artwork.image;
+        modalImage.alt = artwork.title;
+        modalImage.hidden = false;
+
+        placeholder.hidden = true;
+
+        // 다운로드 버튼
+        downloadButton.href = artwork.image;
+
+        const extension = artwork.image
+            .split(".")
+            .pop()
+            .split("?")[0]
+            .toLowerCase();
+
+        const validExtension = /^(png|jpg|jpeg|webp|gif)$/;
+
+        const fileExtension = validExtension.test(extension)
+            ? extension
+            : "png";
+
+        downloadButton.download =
+            `BILBAO_ARTWORK_${String(currentIndex + 1).padStart(3, "0")}.${fileExtension}`;
+
+        downloadButton.hidden = false;
+    };
+
+    newImage.onerror = () => {
+
+        if (requestId !== imageRequestId) return;
+
+        placeholder.textContent = "IMAGE NOT FOUND";
+    };
+
+    newImage.src = artwork.image;
+
+} else {
+
+    placeholder.textContent =
+        `ARTWORK ${String(currentIndex + 1).padStart(3, "0")}`;
+}
 
             modalImage.src = artwork.image;
             modalImage.alt = artwork.title;
