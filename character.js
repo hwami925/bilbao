@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
             description: "빌바오의 엔지니어 스승. 대장의 말은 잘 듣지만 리베나 미나와 가끔 티격태격할 때가 있다."
         },
 
-        yuri: {
+        MINA: {
             name: "MINA",
             korean: "미나",
             description: "폐허 속에서 자신만의 방식으로 살아가는 인물. 자신만의 신념(고집)이 올곧아 종종 케이지와 티격댄다."
