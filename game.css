@@ -560,3 +560,10 @@ body.game-page {
         text-align: center;
     }
 }
+/* 모바일 게임 화면 터치 조작 */
+
+#game-canvas {
+    touch-action: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
