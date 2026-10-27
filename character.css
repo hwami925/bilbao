@@ -603,3 +603,17 @@
         transform: none;
     }
 }
+/* 상세 기록부 캐릭터 얼굴 이미지 */
+.archive-document-photo {
+    min-height: 0;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #999;
+}
+
+.archive-document-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
