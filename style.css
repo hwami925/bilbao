@@ -1299,3 +1299,75 @@ button {
     }
 
 }
+/* ========================================
+   BILBAO CHARACTER — REAL ID CARDS
+======================================== */
+
+/* 실제 명찰 이미지 적용 */
+.character-section .id-card {
+    display: block;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+    cursor: default;
+    transform-origin: center top;
+}
+
+/* 기존 가짜 명찰 구멍과 질감 제거 */
+.character-section .id-card::before,
+.character-section .id-card::after {
+    display: none;
+}
+
+/* 명찰 이미지 */
+.character-section .id-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+    pointer-events: none;
+}
+
+/* 게시판에 붙인 듯한 배치 */
+.character-section .id-card:nth-child(1) {
+    transform: rotate(-3deg);
+}
+
+.character-section .id-card:nth-child(2) {
+    transform: rotate(2deg);
+}
+
+.character-section .id-card:nth-child(3) {
+    transform: rotate(-1deg);
+}
+
+.character-section .id-card:nth-child(4) {
+    transform: rotate(3deg);
+}
+
+.character-section .id-card:nth-child(5) {
+    transform: rotate(-2deg);
+}
+
+/* 마우스를 올리면 살짝 움찔 */
+.character-section .id-card:hover {
+    transform: translateY(-8px) rotate(0deg);
+    box-shadow: 0 22px 45px rgba(0, 0, 0, 0.65);
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+    .character-section .character-grid {
+        gap: 18px;
+    }
+}
+
+/* 움직임 최소화 설정 */
+@media (prefers-reduced-motion: reduce) {
+    .character-section .id-card,
+    .character-section .id-card:hover {
+        transform: none;
+    }
+}
