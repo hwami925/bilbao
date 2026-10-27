@@ -797,3 +797,13 @@
         padding: 15px;
     }
 }
+/* 전신 일러스트 기본 확대 */
+.archive-document-photo img {
+    transform: scale(1.15);
+    transform-origin: center;
+}
+
+/* 케이지만 추가 확대 */
+.archive-document-photo img.character-keiji {
+    transform: scale(1.35);
+}
