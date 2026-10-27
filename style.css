@@ -1415,3 +1415,30 @@ button {
 .gallery-preview-image {
     cursor: pointer;
 }
+/* ABOUT 상세 페이지 버튼 */
+
+#about .about-more-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 30px;
+    padding: 14px 26px;
+
+    border: 1px solid rgba(255, 255, 255, 0.6);
+
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-decoration: none;
+
+    transition: 0.3s ease;
+}
+
+#about .about-more-button:hover {
+    background: #f0ece5;
+    border-color: #f0ece5;
+    color: #171717;
+    transform: translateY(-3px);
+}
