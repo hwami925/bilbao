@@ -9,30 +9,35 @@ document.addEventListener("DOMContentLoaded", () => {
         revoli: {
             name: "REVOLI",
             korean: "레볼리",
+            image: "./images/characters/portraits/01.png",
             description: "한 때는 전쟁을 이끌었던 대장이었지만 현재엔 폐허와 고철 속에서 살아가는 롯. 잿빛 세계에서 그의 이야기가 시작된다."
         },
 
         bilbao: {
             name: "BILBAO",
             korean: "빌바오",
+           	image: "./images/characters/portraits/00.png",
             description: "폐허가 된 세계에서 살아가며, 모두에게 동기를 심어준 소녀. 그녀에게는 아직 밝혀지지 않은 이야기가 있다."
         },
 
         ribe: {
             name: "RIBE",
             korean: "리베",
+           	image: "./images/characters/portraits/02.png",
             description: "컴플리터 멤버 중에서 가장 감정이 풍부한 롯. 하지만 그 내면엔 또 다른 상처가 숨겨져 있다."
         },
 
         keiji: {
             name: "KEIJI",
             korean: "케이지",
+           	image: "./images/characters/portraits/03.png",
             description: "빌바오의 엔지니어 스승. 대장의 말은 잘 듣지만 리베나 미나와 가끔 티격태격할 때가 있다."
         },
 
         MINA: {
             name: "MINA",
             korean: "미나",
+           image: "./images/characters/portraits/04.png",
             description: "폐허 속에서 자신만의 방식으로 살아가는 인물. 자신만의 신념(고집)이 올곧아 종종 케이지와 티격댄다."
         }
     };
