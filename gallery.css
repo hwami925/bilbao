@@ -749,3 +749,23 @@
     outline: 3px solid #a65a5a;
     outline-offset: 4px;
 }
+/* ========================================
+   GALLERY — POLAROID FINAL
+======================================== */
+
+/* 1~9번: 세로형 삽화 */
+.artwork-card:nth-child(-n+9) .artwork-image {
+    aspect-ratio: 2 / 3;
+}
+
+/* 10번: 가로형 삽화 */
+.artwork-card:nth-child(10) .artwork-image {
+    aspect-ratio: 4 / 3;
+}
+
+/* 이미지 비율 유지 */
+.artwork-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
