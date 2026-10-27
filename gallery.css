@@ -769,3 +769,31 @@
     height: 100%;
     object-fit: contain;
 }
+/* ========================================
+   GALLERY — MODAL IMAGE FINAL
+======================================== */
+
+/* 확대 이미지 영역 */
+.artwork-modal-image {
+    aspect-ratio: auto;
+    min-height: 0;
+    background: transparent;
+    border: none;
+}
+
+/* 실제 삽화 */
+.artwork-modal-image img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 65vh;
+    object-fit: contain;
+    border: 10px solid #eee;
+    box-sizing: border-box;
+}
+
+/* 로딩 중 표시 */
+.artwork-modal-image:has(img[hidden]) {
+    min-height: 350px;
+}
