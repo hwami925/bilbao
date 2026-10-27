@@ -797,3 +797,32 @@
 .artwork-modal-image:has(img[hidden]) {
     min-height: 350px;
 }
+/* ========================================
+   GALLERY — HEADER LOGO
+======================================== */
+
+.gallery-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gallery-logo img {
+    display: block;
+
+    width: auto;
+    height: 38px;
+    max-width: 180px;
+
+    object-fit: contain;
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+
+    .gallery-logo img {
+        height: 30px;
+        max-width: 140px;
+    }
+
+}
