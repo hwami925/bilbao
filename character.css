@@ -807,3 +807,15 @@
 .archive-document-photo img.character-keiji {
     transform: scale(1.35);
 }
+/* 전신 일러스트가 잘리지 않도록 설정 */
+.archive-document-photo {
+    height: 650px;
+    overflow: visible;
+}
+
+.archive-document-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform: none;
+}
