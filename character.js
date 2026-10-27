@@ -147,7 +147,11 @@ imageElement.onerror = function () {
     imageElement.style.visibility = "visible";
 };
 
-imageElement.alt = character.korean + " 얼굴 이미지";
+imageElement.alt = character.korean + " 전신 이미지";
+
+// 케이지만 별도 확대 스타일 적용
+imageElement.classList.toggle("character-keiji", key === "keiji");
+
 imageElement.src = character.image;
 
 if (imageElement.complete) {
