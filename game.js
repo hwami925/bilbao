@@ -1,0 +1,692 @@
+/* ========================================
+   BILBAO : PROLOGUE
+   2D RUNNER GAME
+======================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* ========================================
+       HTML ELEMENTS
+    ======================================== */
+
+    const canvas = document.getElementById("game-canvas");
+    const ctx = canvas.getContext("2d");
+
+    const distanceText = document.getElementById("game-distance");
+    const statusText = document.getElementById("game-status");
+    const finalDistanceText = document.getElementById("game-final-distance");
+
+    const startScreen = document.getElementById("game-start-screen");
+    const overScreen = document.getElementById("game-over-screen");
+    const endingScreen = document.getElementById("game-ending-screen");
+
+    const startButton = document.getElementById("game-start-button");
+    const restartButton = document.getElementById("game-restart-button");
+    const endingRestartButton = document.getElementById("game-ending-restart");
+
+    /* ========================================
+       GAME SETTINGS
+    ======================================== */
+
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
+
+    const GROUND_Y = 340;
+    const GOAL_DISTANCE = 3000;
+
+    const GRAVITY = 0.85;
+    const JUMP_POWER = -16;
+
+    let gameState = "standby";
+
+    let distance = 0;
+    let speed = 6;
+    let frame = 0;
+
+    let obstacles = [];
+    let particles = [];
+
+    let spawnTimer = 0;
+    let nextSpawn = 90;
+
+    let animationId = null;
+
+    /* ========================================
+       PLAYER
+    ======================================== */
+
+    const player = {
+        x: 130,
+        y: GROUND_Y - 65,
+
+        width: 48,
+        height: 65,
+
+        velocityY: 0,
+        jumping: false
+    };
+
+    /* ========================================
+       UTILITY
+    ======================================== */
+
+    function random(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    function updateHUD() {
+        distanceText.textContent =
+            String(Math.floor(distance)).padStart(4, "0") + " M";
+    }
+
+    function showScreen(screen) {
+        startScreen.hidden = true;
+        overScreen.hidden = true;
+        endingScreen.hidden = true;
+
+        if (screen) {
+            screen.hidden = false;
+        }
+    }
+
+    /* ========================================
+       RESET GAME
+    ======================================== */
+
+    function resetGame() {
+
+        distance = 0;
+        speed = 6;
+        frame = 0;
+
+        obstacles = [];
+        particles = [];
+
+        spawnTimer = 0;
+        nextSpawn = 90;
+
+        player.y = GROUND_Y - player.height;
+        player.velocityY = 0;
+        player.jumping = false;
+
+        updateHUD();
+    }
+
+    /* ========================================
+       START GAME
+    ======================================== */
+
+    function startGame() {
+
+        if (animationId !== null) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+
+        resetGame();
+
+        gameState = "playing";
+        statusText.textContent = "RUNNING";
+
+        showScreen(null);
+
+        animationId = requestAnimationFrame(gameLoop);
+    }
+
+    /* ========================================
+       JUMP
+    ======================================== */
+
+    function jump() {
+
+        if (gameState !== "playing") return;
+        if (player.jumping) return;
+
+        player.velocityY = JUMP_POWER;
+        player.jumping = true;
+    }
+
+    /* ========================================
+       OBSTACLES
+    ======================================== */
+
+    function createObstacle() {
+
+        const types = [
+            {
+                type: "scrap",
+                width: 48,
+                height: 48
+            },
+            {
+                type: "metal",
+                width: 35,
+                height: 70
+            },
+            {
+                type: "machine",
+                width: 60,
+                height: 42
+            }
+        ];
+
+        const selected = types[
+            Math.floor(Math.random() * types.length)
+        ];
+
+        obstacles.push({
+            x: WIDTH + 30,
+            y: GROUND_Y - selected.height,
+
+            width: selected.width,
+            height: selected.height,
+
+            type: selected.type
+        });
+    }
+
+    /* ========================================
+       PARTICLES
+    ======================================== */
+
+    function createDust() {
+
+        particles.push({
+            x: WIDTH,
+            y: random(60, GROUND_Y),
+
+            size: random(1, 3),
+            speed: random(0.5, 2),
+
+            alpha: random(0.1, 0.5)
+        });
+    }
+
+    /* ========================================
+       UPDATE PLAYER
+    ======================================== */
+
+    function updatePlayer() {
+
+        player.velocityY += GRAVITY;
+        player.y += player.velocityY;
+
+        if (player.y >= GROUND_Y - player.height) {
+
+            player.y = GROUND_Y - player.height;
+            player.velocityY = 0;
+            player.jumping = false;
+        }
+    }
+
+    /* ========================================
+       UPDATE OBSTACLES
+    ======================================== */
+
+    function updateObstacles() {
+
+        spawnTimer++;
+
+        if (spawnTimer >= nextSpawn) {
+
+            createObstacle();
+
+            spawnTimer = 0;
+            nextSpawn = Math.floor(random(75, 120));
+        }
+
+        obstacles.forEach(obstacle => {
+            obstacle.x -= speed;
+        });
+
+        obstacles = obstacles.filter(obstacle => {
+            return obstacle.x + obstacle.width > -20;
+        });
+    }
+
+    /* ========================================
+       COLLISION
+    ======================================== */
+
+    function checkCollision() {
+
+        const margin = 8;
+
+        for (const obstacle of obstacles) {
+
+            if (
+                player.x + margin <
+                obstacle.x + obstacle.width - margin &&
+
+                player.x + player.width - margin >
+                obstacle.x + margin &&
+
+                player.y + margin <
+                obstacle.y + obstacle.height - margin &&
+
+                player.y + player.height - margin >
+                obstacle.y + margin
+            ) {
+                gameOver();
+                return;
+            }
+        }
+    }
+
+    /* ========================================
+       GAME OVER
+    ======================================== */
+
+    function gameOver() {
+
+        gameState = "over";
+
+        statusText.textContent = "SIGNAL LOST";
+
+        finalDistanceText.textContent =
+            String(Math.floor(distance)).padStart(4, "0") + " M";
+
+        showScreen(overScreen);
+    }
+
+    /* ========================================
+       ENDING
+    ======================================== */
+
+    function gameEnding() {
+
+        gameState = "ending";
+
+        statusText.textContent = "COMPLETE";
+
+        showScreen(endingScreen);
+    }
+
+    /* ========================================
+       BACKGROUND
+    ======================================== */
+
+    function drawBackground() {
+
+        // 하늘
+        const sky = ctx.createLinearGradient(0, 0, 0, HEIGHT);
+
+        sky.addColorStop(0, "#282b30");
+        sky.addColorStop(0.6, "#55565a");
+        sky.addColorStop(1, "#7b6661");
+
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+        // 붉은 태양
+        ctx.fillStyle = "rgba(180, 75, 65, 0.45)";
+
+        ctx.beginPath();
+        ctx.arc(750, 125, 65, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 먼 도시 실루엣
+        ctx.fillStyle = "#333438";
+
+        for (let i = 0; i < 15; i++) {
+
+            const x = i * 75;
+            const h = 60 + (i % 4) * 20;
+
+            ctx.fillRect(x, GROUND_Y - h - 45, 55, h);
+        }
+
+        // 붉은 013 기둥
+        ctx.fillStyle = "#733b3b";
+        ctx.fillRect(820, 100, 30, 240);
+
+        ctx.save();
+
+        ctx.translate(838, 210);
+        ctx.rotate(-Math.PI / 2);
+
+        ctx.fillStyle = "#c9a2a2";
+        ctx.font = "bold 18px Consolas";
+        ctx.fillText("013", -20, 0);
+
+        ctx.restore();
+
+        // 고철산
+        ctx.fillStyle = "#27292c";
+
+        ctx.beginPath();
+
+        ctx.moveTo(0, GROUND_Y);
+
+        for (let x = 0; x <= WIDTH; x += 40) {
+
+            const y =
+                GROUND_Y - 25 -
+                Math.sin(x * 0.03) * 12 -
+                Math.cos(x * 0.07) * 8;
+
+            ctx.lineTo(x, y);
+        }
+
+        ctx.lineTo(WIDTH, GROUND_Y);
+        ctx.closePath();
+        ctx.fill();
+
+        // 바닥
+        ctx.fillStyle = "#191a1c";
+        ctx.fillRect(0, GROUND_Y, WIDTH, HEIGHT - GROUND_Y);
+
+        // 바닥 선
+        ctx.strokeStyle = "#555555";
+        ctx.lineWidth = 2;
+
+        ctx.beginPath();
+        ctx.moveTo(0, GROUND_Y);
+        ctx.lineTo(WIDTH, GROUND_Y);
+        ctx.stroke();
+
+        // 움직이는 바닥 무늬
+        ctx.strokeStyle = "#3c3c3c";
+
+        const offset = (frame * speed) % 80;
+
+        for (let x = -80; x < WIDTH + 80; x += 80) {
+
+            ctx.beginPath();
+
+            ctx.moveTo(x - offset, GROUND_Y + 25);
+            ctx.lineTo(x + 35 - offset, GROUND_Y + 25);
+
+            ctx.stroke();
+        }
+    }
+
+    /* ========================================
+       DRAW PLAYER
+    ======================================== */
+
+    function drawPlayer() {
+
+        ctx.save();
+
+        // 그림자
+        ctx.fillStyle = "rgba(0,0,0,0.3)";
+
+        ctx.beginPath();
+        ctx.ellipse(
+            player.x + player.width / 2,
+            GROUND_Y + 5,
+            30,
+            6,
+            0,
+            0,
+            Math.PI * 2
+        );
+        ctx.fill();
+
+        // 로봇 몸체
+        ctx.fillStyle = "#d5d6d6";
+
+        ctx.fillRect(
+            player.x + 8,
+            player.y + 25,
+            32,
+            28
+        );
+
+        // 로봇 머리
+        ctx.fillStyle = "#eeeeee";
+
+        ctx.fillRect(
+            player.x + 4,
+            player.y,
+            40,
+            30
+        );
+
+        // 카메라 눈
+        ctx.fillStyle = "#242424";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            player.x + 25,
+            player.y + 15,
+            10,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+
+        // 카메라 렌즈
+        ctx.fillStyle = "#7ba0aa";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            player.x + 25,
+            player.y + 15,
+            5,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+
+        // 다리 애니메이션
+        const legOffset =
+            player.jumping ? 0 : Math.sin(frame * 0.3) * 8;
+
+        ctx.strokeStyle = "#dddddd";
+        ctx.lineWidth = 7;
+
+        ctx.beginPath();
+
+        ctx.moveTo(player.x + 17, player.y + 53);
+        ctx.lineTo(
+            player.x + 14,
+            player.y + 64 + legOffset
+        );
+
+        ctx.moveTo(player.x + 32, player.y + 53);
+        ctx.lineTo(
+            player.x + 35,
+            player.y + 64 - legOffset
+        );
+
+        ctx.stroke();
+
+        ctx.restore();
+    }
+
+    /* ========================================
+       DRAW OBSTACLES
+    ======================================== */
+
+    function drawObstacles() {
+
+        obstacles.forEach(obstacle => {
+
+            ctx.save();
+
+            if (obstacle.type === "scrap") {
+
+                ctx.fillStyle = "#777777";
+
+            } else if (obstacle.type === "metal") {
+
+                ctx.fillStyle = "#4b4b4b";
+
+            } else {
+
+                ctx.fillStyle = "#625c59";
+            }
+
+            ctx.fillRect(
+                obstacle.x,
+                obstacle.y,
+                obstacle.width,
+                obstacle.height
+            );
+
+            // 금속 테두리
+            ctx.strokeStyle = "#242424";
+            ctx.lineWidth = 3;
+
+            ctx.strokeRect(
+                obstacle.x,
+                obstacle.y,
+                obstacle.width,
+                obstacle.height
+            );
+
+            // 위험 표시
+            ctx.fillStyle = "#b44b4b";
+
+            ctx.fillRect(
+                obstacle.x + 5,
+                obstacle.y + 8,
+                obstacle.width - 10,
+                5
+            );
+
+            ctx.restore();
+        });
+    }
+
+    /* ========================================
+       DRAW PARTICLES
+    ======================================== */
+
+    function drawParticles() {
+
+        particles.forEach(particle => {
+
+            ctx.fillStyle =
+                `rgba(210, 190, 170, ${particle.alpha})`;
+
+            ctx.beginPath();
+
+            ctx.arc(
+                particle.x,
+                particle.y,
+                particle.size,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+        });
+    }
+
+    /* ========================================
+       UPDATE PARTICLES
+    ======================================== */
+
+    function updateParticles() {
+
+        if (frame % 12 === 0) {
+            createDust();
+        }
+
+        particles.forEach(particle => {
+            particle.x -= particle.speed + speed * 0.3;
+        });
+
+        particles = particles.filter(particle => {
+            return particle.x > -10;
+        });
+    }
+
+    /* ========================================
+       GAME LOOP
+    ======================================== */
+
+    function gameLoop() {
+
+        if (gameState !== "playing") {
+            animationId = null;
+            return;
+        }
+
+        frame++;
+
+        // 이동 거리
+        distance += speed * 0.12;
+
+        // 점점 빨라지는 게임
+        speed = Math.min(12, 6 + distance / 700);
+
+        updatePlayer();
+        updateObstacles();
+        updateParticles();
+
+        checkCollision();
+
+        if (gameState === "playing" &&
+            distance >= GOAL_DISTANCE) {
+
+            gameEnding();
+        }
+
+        drawBackground();
+        drawParticles();
+        drawObstacles();
+        drawPlayer();
+
+        updateHUD();
+
+        if (gameState === "playing") {
+            animationId = requestAnimationFrame(gameLoop);
+        } else {
+            animationId = null;
+        }
+    }
+
+   /* ========================================
+   CONTROLS
+   PC + MOBILE
+======================================== */
+
+// PC 키보드 조작
+document.addEventListener("keydown", (event) => {
+
+    if (
+        event.code === "Space" ||
+        event.code === "ArrowUp"
+    ) {
+        event.preventDefault();
+
+        if (!event.repeat) {
+            jump();
+        }
+    }
+});
+
+// PC 마우스 클릭 + 모바일 터치
+canvas.addEventListener("pointerdown", (event) => {
+
+    if (event.pointerType === "mouse" && event.button !== 0) {
+        return;
+    }
+
+    if (gameState === "playing") {
+        event.preventDefault();
+        jump();
+    }
+
+});
+    startButton.addEventListener("click", startGame);
+    restartButton.addEventListener("click", startGame);
+    endingRestartButton.addEventListener("click", startGame);
+
+    /* ========================================
+       INITIAL SCREEN
+    ======================================== */
+
+    resetGame();
+    drawBackground();
+    drawPlayer();
+
+});
