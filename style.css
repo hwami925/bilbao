@@ -1466,3 +1466,28 @@ button {
         max-width: 140px;
     }
 }
+/* 메인 화면 중앙 로고 */
+
+.hero-title {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-title img {
+    display: block;
+    width: 85%;
+    max-width: 850px;
+    height: auto;
+    object-fit: contain;
+
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.35));
+}
+
+@media (max-width: 768px) {
+    .hero-title img {
+        width: 92%;
+    }
+}
