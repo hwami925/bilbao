@@ -65,8 +65,22 @@ document.addEventListener("DOMContentLoaded", () => {
         nameElement.textContent = character.name;
         koreanElement.textContent = character.korean;
         descriptionElement.textContent = character.description;
-       imageElement.src = character.image;
+       imageElement.style.visibility = "hidden";
+
+imageElement.onload = function () {
+    imageElement.style.visibility = "visible";
+};
+
+imageElement.onerror = function () {
+    imageElement.style.visibility = "visible";
+};
+
 imageElement.alt = character.korean + " 얼굴 이미지";
+imageElement.src = character.image;
+
+if (imageElement.complete) {
+    imageElement.style.visibility = "visible";
+}
 
         lastFocusedCard = card;
 
