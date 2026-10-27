@@ -9,44 +9,68 @@ document.addEventListener("DOMContentLoaded", () => {
        1. 작품 데이터
     ===================================== */
 
-    const artworks = [
-        {
-            chapter: "PROLOGUE",
-            title: "이야기의 시작",
-            description: "모든 이야기가 시작된 순간.",
-            image: ""
-        },
-        {
-            chapter: "CHAPTER 02",
-            title: "무너진 마음",
-            description: "폐허 속에 남겨진 기억.",
-            image: ""
-        },
-        {
-            chapter: "CHAPTER 04",
-            title: "작은 온기",
-            description: "잿빛 세계에서 발견한 작은 온기.",
-            image: ""
-        },
-        {
-            chapter: "CHAPTER 06",
-            title: "마주한 진실",
-            description: "서로의 선택이 엇갈리는 순간.",
-            image: ""
-        },
-        {
-            chapter: "CHAPTER 08",
-            title: "잿빛 속의 미소",
-            description: "어둠 속에서도 사라지지 않는 미소.",
-            image: ""
-        },
-        {
-            chapter: "CHAPTER 11",
-            title: "우리들의 시간",
-            description: "함께하기에 더욱 소중한 시간.",
-            image: ""
-        }
-    ];
+   const artworks = [
+    {
+        chapter: "PROLOGUE",
+        title: "고철 위에 피어난 꽃",
+        description: "주변 고철에 노을빛이 반사되면서 나도 모르게 고철 위에 피어난 꽃을 떠올리게 되었다.",
+        image: "./images/gallery/01.jpg"
+    },
+    {
+        chapter: "CHAPTER 01",
+        title: "평화로운 나날, 다가오는 불안",
+        description: "아, 그렇구나.. 그러니까 부부..는 아니라는 거지? 아, 아니 내가 무슨 소릴하는 거지.. 방금 건 못 들은 걸로 해줘..",
+        image: "./images/gallery/02.jpg"
+    },
+    {
+        chapter: "CHAPTER 02",
+        title: "자신을 가둔 안드로이드, 케이지",
+        description: "그런 우리에게 대답이라도 하듯 비가 쏟아지기 시작했고, 케이지와 나의 볼에는 눈물이 아닌.. 빗물이 흘러내렸다.",
+        image: "./images/gallery/03.jpg"
+    },
+    {
+        chapter: "CHAPTER 03",
+        title: "센터 그리고 위기",
+        description: "순간 머리를 잃은 채 멈춰 있는 몸이 움직이더니 칼을 휘두르며 자리를 벗어나던 녀석에게 달려가 그의 몸을 베어냈다.",
+        image: "./images/gallery/04.jpg"
+    },
+    {
+        chapter: "CHAPTER 04",
+        title: "계획 그리고 파트너",
+        description: "아빠, 흐흑... 아빠... 흐흑.. | 그래, 그래. 여기 있으니까 아무 걱정하지 않아도 된단다.",
+        image: "./images/gallery/05.jpg"
+    },
+    {
+        chapter: "CHAPTER 06",
+        title: "암시장, 그리고 새로운 만남",
+        description: "그럼, 이 자리에서 넌 내 손에 죽어야겠군 | ...하?",
+        image: "./images/gallery/06.jpg"
+    },
+    {
+        chapter: "ARTWORK 07",
+        title: "너의 무기는 곧 나의 먹이가 된다",
+        description: "엿이나 먹어. 이 새끼야.",
+        image: "./images/gallery/07.jpg"
+    },
+    {
+        chapter: "ARTWORK 08",
+        title: "로봇과 인간, 아빠와 딸",
+        description: "모든 일이 끝나면, 아빠하고 나, 단둘이서 여기에 다시 오자. 그리고 있었던 일들 모두 웃으면서 얘기하자.",
+        image: "./images/gallery/08.jpg"
+    },
+    {
+        chapter: "ARTWORK 10",
+        title: "최종 전투, 혹은 시작",
+        description: "그럼 지금부터 키바우의 재판을 시작하겠다.",
+        image: "./images/gallery/09.jpg"
+    },
+    {
+        chapter: "ARTWORK 11",
+        title: "앞을 향해 미래를 향해",
+        description: "안녕, 부산. 그동안 나와 바오에게 안전한 보금자리를 빌려줘서 정말 고마웠다.",
+        image: "./images/gallery/10.jpg"
+    }
+];
 
 
     /* =====================================
