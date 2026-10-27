@@ -1,0 +1,562 @@
+/* ========================================
+   BILBAO : PROLOGUE
+   GAME PAGE STYLE
+======================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body.game-page {
+    margin: 0;
+    min-height: 100vh;
+    background: #111111;
+    color: #f2f2f2;
+    font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+/* ========================================
+   HEADER
+======================================== */
+
+.game-header {
+    width: 100%;
+    height: 82px;
+    padding: 0 6%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    background: #111111;
+}
+
+.game-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.game-logo img {
+    display: block;
+    width: auto;
+    height: 38px;
+    max-width: 180px;
+    object-fit: contain;
+}
+
+.game-back {
+    color: #bcbcbc;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    transition: color 0.2s;
+}
+
+.game-back:hover {
+    color: #ffffff;
+}
+
+/* ========================================
+   MAIN
+======================================== */
+
+.game-main {
+    width: min(1120px, 92%);
+    margin: 0 auto;
+    padding: 72px 0 90px;
+}
+
+/* ========================================
+   PAGE HEADING
+======================================== */
+
+.game-heading {
+    text-align: center;
+    margin-bottom: 55px;
+}
+
+.game-heading > p {
+    margin: 0 0 18px;
+    color: #999999;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 5px;
+}
+
+.game-heading h1 {
+    margin: 0;
+    color: #f5f5f5;
+    font-size: clamp(48px, 9vw, 100px);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: 8px;
+}
+
+.game-heading > span {
+    display: block;
+    margin-top: 18px;
+    color: #aaaaaa;
+    font-size: 15px;
+    letter-spacing: 4px;
+}
+
+/* ========================================
+   GAME CONTAINER
+======================================== */
+
+.game-container {
+    width: 100%;
+    padding: 18px;
+
+    background: #1b1b1b;
+    border: 1px solid #414141;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+/* ========================================
+   GAME HUD
+======================================== */
+
+.game-hud {
+    min-height: 58px;
+    padding: 0 18px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: #252525;
+    border-bottom: 1px solid #454545;
+}
+
+.game-hud-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.game-hud-item span {
+    color: #999999;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.game-hud-item strong {
+    color: #eeeeee;
+    font-family: Consolas, monospace;
+    font-size: 15px;
+    letter-spacing: 1px;
+}
+
+/* ========================================
+   GAME SCREEN
+======================================== */
+
+.game-screen {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 960 / 420;
+
+    overflow: hidden;
+    background: #393939;
+}
+
+/* 게임 캔버스 */
+
+#game-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+}
+
+/* 화면의 오래된 모니터 느낌 */
+
+.game-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+    z-index: 5;
+
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.025) 0px,
+        rgba(0, 0, 0, 0.025) 2px,
+        transparent 2px,
+        transparent 5px
+    );
+}
+
+/* ========================================
+   GAME OVERLAYS
+======================================== */
+
+.game-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px;
+    text-align: center;
+
+    background: rgba(10, 10, 10, 0.83);
+    backdrop-filter: blur(5px);
+}
+
+/* hidden 속성이 실제로 화면을 숨기도록 */
+
+.game-overlay[hidden] {
+    display: none !important;
+}
+
+.game-overlay-content {
+    width: 100%;
+    max-width: 600px;
+}
+
+.game-overlay-label {
+    margin: 0 0 22px;
+
+    color: #c66b6b;
+    font-family: Consolas, monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 4px;
+}
+
+.game-overlay-content h2 {
+    margin: 0 0 20px;
+
+    color: #ffffff;
+    font-size: clamp(32px, 5vw, 58px);
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.game-overlay-description {
+    margin: 0 auto 28px;
+
+    color: #c7c7c7;
+    font-size: 14px;
+    line-height: 2;
+    word-break: keep-all;
+}
+
+/* ========================================
+   BUTTONS
+======================================== */
+
+.game-button {
+    min-width: 220px;
+    min-height: 54px;
+    padding: 14px 30px;
+
+    border: 1px solid #d7d7d7;
+    background: #eeeeee;
+
+    color: #151515;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 2px;
+
+    cursor: pointer;
+    transition:
+        background 0.2s,
+        color 0.2s,
+        transform 0.2s;
+}
+
+.game-button:hover {
+    background: #b74949;
+    border-color: #b74949;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.game-button:active {
+    transform: translateY(0);
+}
+
+.game-button:focus-visible,
+.game-back:focus-visible,
+.game-logo:focus-visible {
+    outline: 3px solid #d16a6a;
+    outline-offset: 4px;
+}
+
+.game-controls {
+    display: block;
+    margin-top: 22px;
+
+    color: #888888;
+    font-family: Consolas, monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.game-result {
+    margin: 0 0 26px;
+    color: #aaaaaa;
+    font-family: Consolas, monospace;
+    font-size: 15px;
+    letter-spacing: 2px;
+}
+
+.game-result strong {
+    color: #ffffff;
+}
+
+/* ========================================
+   GAME BOTTOM
+======================================== */
+
+.game-bottom {
+    min-height: 52px;
+    padding: 14px 18px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    background: #252525;
+    border-top: 1px solid #454545;
+}
+
+.game-bottom p,
+.game-bottom span {
+    margin: 0;
+    color: #8f8f8f;
+    font-family: Consolas, monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+}
+
+/* ========================================
+   INSTRUCTIONS
+======================================== */
+
+.game-instructions {
+    margin-top: 34px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+}
+
+.game-instructions > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.game-key {
+    min-width: 54px;
+    padding: 10px 14px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #666666;
+    border-bottom: 3px solid #666666;
+    border-radius: 5px;
+
+    color: #eeeeee;
+    background: #242424;
+
+    font-family: Consolas, monospace;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.game-instructions p {
+    margin: 0;
+    color: #999999;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* ========================================
+   FOOTER
+======================================== */
+
+.game-footer {
+    padding: 28px 20px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    color: #777777;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+/* ========================================
+   TABLET
+======================================== */
+
+@media (max-width: 768px) {
+
+    .game-header {
+        height: 68px;
+        padding: 0 5%;
+    }
+
+    .game-logo img {
+        height: 30px;
+        max-width: 140px;
+    }
+
+    .game-back {
+        font-size: 10px;
+        letter-spacing: 1px;
+    }
+
+    .game-main {
+        width: 95%;
+        padding: 48px 0 65px;
+    }
+
+    .game-heading {
+        margin-bottom: 36px;
+    }
+
+    .game-heading h1 {
+        letter-spacing: 4px;
+    }
+
+    .game-container {
+        padding: 8px;
+    }
+
+    .game-hud {
+        min-height: 48px;
+        padding: 0 12px;
+    }
+
+    .game-hud-item {
+        gap: 8px;
+    }
+
+    .game-hud-item span {
+        font-size: 9px;
+        letter-spacing: 1px;
+    }
+
+    .game-hud-item strong {
+        font-size: 12px;
+    }
+
+    .game-overlay {
+        padding: 16px;
+    }
+
+    .game-overlay-label {
+        margin-bottom: 12px;
+        font-size: 9px;
+        letter-spacing: 2px;
+    }
+
+    .game-overlay-content h2 {
+        margin-bottom: 12px;
+        font-size: 30px;
+    }
+
+    .game-overlay-description {
+        margin-bottom: 16px;
+        font-size: 11px;
+        line-height: 1.7;
+    }
+
+    .game-button {
+        min-width: 160px;
+        min-height: 42px;
+        padding: 10px 18px;
+        font-size: 11px;
+    }
+
+    .game-controls {
+        margin-top: 12px;
+        font-size: 10px;
+    }
+
+    .game-bottom {
+        padding: 12px;
+    }
+
+    .game-bottom p,
+    .game-bottom span {
+        font-size: 9px;
+    }
+
+    .game-instructions {
+        flex-direction: column;
+        gap: 16px;
+    }
+}
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 480px) {
+
+    .game-heading h1 {
+        font-size: 42px;
+        letter-spacing: 2px;
+    }
+
+    .game-heading > span {
+        font-size: 12px;
+    }
+
+    .game-hud-item span {
+        font-size: 8px;
+    }
+
+    .game-hud-item strong {
+        font-size: 10px;
+    }
+
+    .game-screen {
+        min-height: 220px;
+        aspect-ratio: auto;
+    }
+
+    .game-bottom span {
+        display: none;
+    }
+
+    .game-overlay-content h2 {
+        font-size: 25px;
+    }
+
+    .game-overlay-description {
+        font-size: 10px;
+    }
+
+    .game-instructions > p {
+        text-align: center;
+    }
+}
