@@ -1491,3 +1491,39 @@ button {
         width: 92%;
     }
 }
+/* ========================================
+   STORY — GAME PLAY BUTTON
+======================================== */
+
+.game-play-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 48px;
+    margin-top: 20px;
+    padding: 12px 28px;
+
+    background: #eeeeee;
+    border: 1px solid #eeeeee;
+
+    color: #171717;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-decoration: none;
+
+    transition: all 0.2s ease;
+}
+
+.game-play-link:hover {
+    background: #b74949;
+    border-color: #b74949;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.game-play-link:focus-visible {
+    outline: 3px solid #d16a6a;
+    outline-offset: 4px;
+}
