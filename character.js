@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const nameElement = document.getElementById("archive-record-name");
     const koreanElement = document.getElementById("archive-record-korean");
     const descriptionElement = document.getElementById("archive-record-description");
+   const imageElement = document.getElementById("archive-record-image");
 
     if (!overlay || !closeButton) return;
 
@@ -64,6 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
         nameElement.textContent = character.name;
         koreanElement.textContent = character.korean;
         descriptionElement.textContent = character.description;
+       imageElement.src = character.image;
+imageElement.alt = character.korean + " 얼굴 이미지";
 
         lastFocusedCard = card;
 
