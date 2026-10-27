@@ -1412,3 +1412,6 @@ button {
         transition: none;
     }
 }
+.gallery-preview-image {
+    cursor: pointer;
+}
