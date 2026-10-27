@@ -1442,3 +1442,27 @@ button {
     color: #171717;
     transform: translateY(-3px);
 }
+/* ========================================
+   HOME — HEADER LOGO
+======================================== */
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.header-logo img {
+    display: block;
+    width: auto;
+    height: 38px;
+    max-width: 180px;
+    object-fit: contain;
+}
+
+@media (max-width: 768px) {
+    .header-logo img {
+        height: 30px;
+        max-width: 140px;
+    }
+}
