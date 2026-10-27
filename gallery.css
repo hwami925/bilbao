@@ -211,6 +211,8 @@
 
 /* 사진마다 기울기 다르게 */
 
+/* 사진마다 기울기 다르게 */
+
 .artwork-card:nth-child(1) {
     transform: rotate(-4deg);
 }
@@ -233,6 +235,22 @@
 
 .artwork-card:nth-child(6) {
     transform: rotate(2deg);
+}
+
+.artwork-card:nth-child(7) {
+    transform: rotate(-3deg);
+}
+
+.artwork-card:nth-child(8) {
+    transform: rotate(4deg);
+}
+
+.artwork-card:nth-child(9) {
+    transform: rotate(-2deg);
+}
+
+.artwork-card:nth-child(10) {
+    transform: rotate(3deg);
 }
 
 /* 사진 크기와 비율에 변화 */
