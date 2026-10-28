@@ -1,3 +1,4 @@
+
 /* ========================================
    BILBAO : PROLOGUE
    2D RUNNER GAME
@@ -32,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const storyPanel = document.getElementById("game-story");
    const gameCg = document.getElementById("game-cg");
    // 개발자용 구간 이동 메뉴
-const debugMenu = document.getElementById("game-debug-menu");
+let debugMenu = document.getElementById("game-debug-menu");
     const storyDialogue = document.getElementById("story-dialogue");
     const storySpeaker = document.getElementById("story-speaker-name");
     const storyText = document.getElementById("story-dialogue-text");
@@ -179,6 +180,7 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
 
     let runStage = 1;
     let storyLines = [];
+    let currentStoryScene = "";
     let storyIndex = 0;
     let storyAfter = null;
     let typingTimer = null;
@@ -262,6 +264,7 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
         gameState = "story";
         statusText.textContent = "STORY";
         showScreen(null);
+        currentStoryScene = sceneName;
         storyLines = STORY_SCENES[sceneName].map(line => ({ ...line }));
         storyIndex = 0;
         storyAfter = afterStory;
@@ -298,9 +301,7 @@ if (line.cg && !line.cgPlayed) {
         typingFinished = false;
         // 캐릭터 반신 일러스트는 추후 파일을 연결할 예정
         // 캐릭터 표시 설정
-const currentScene = Object.keys(STORY_SCENES).find(
-    key => STORY_SCENES[key] === storyLines
-);
+const currentScene = currentStoryScene;
 
 // 도입부에서는 레볼리만 표시
 if (currentScene === "intro") {
@@ -553,6 +554,10 @@ storyRight.classList.toggle(
 
     // 마지막 대사 이후 암전 → 타이틀 → 완료 화면
     function showFinalTitle() {
+        if (titleTimer1 !== null) { clearTimeout(titleTimer1); titleTimer1 = null; }
+        if (titleTimer2 !== null) { clearTimeout(titleTimer2); titleTimer2 = null; }
+        document.querySelectorAll(".game-final-title-card").forEach(el => el.remove());
+        hideStory();
         gameState = "ending";
         statusText.textContent = "COMPLETE";
         showScreen(null);
@@ -574,9 +579,11 @@ storyRight.classList.toggle(
         titleCard.append(title, subtitle);
         screen.appendChild(titleCard);
         requestAnimationFrame(() => { titleCard.style.opacity = "1"; });
-        setTimeout(() => {
+        titleTimer1 = setTimeout(() => {
+            titleTimer1 = null;
             titleCard.style.opacity = "0";
-            setTimeout(() => {
+            titleTimer2 = setTimeout(() => {
+                titleTimer2 = null;
                 titleCard.remove();
                 // 기존 엔딩 오버레이의 문구도 최종 엔딩에 맞게 변경
                 const heading = endingScreen.querySelector("h2");
@@ -1040,7 +1047,9 @@ function stopCurrentSequence() {
         gameCg.hidden = true;
     }
 
-    // 기존 타이틀 연출 제거
+    // 기존 타이틀 타이머 및 연출 제거
+    if (titleTimer1 !== null) { clearTimeout(titleTimer1); titleTimer1 = null; }
+    if (titleTimer2 !== null) { clearTimeout(titleTimer2); titleTimer2 = null; }
     document.querySelectorAll(".game-final-title-card")
         .forEach(element => element.remove());
 
@@ -1087,11 +1096,44 @@ function skipToSection(section) {
     }
 }
 
+// HTML에 디버그 메뉴가 없더라도 자동 생성
+if (!debugMenu) {
+    debugMenu = document.createElement("div");
+    debugMenu.id = "game-debug-menu";
+    debugMenu.className = "game-debug-menu";
+    debugMenu.hidden = true;
+    debugMenu.innerHTML = `
+        <div class="game-debug-title">DEBUG / 구간 이동</div>
+        <button type="button" data-skip="intro">프롤로그</button>
+        <button type="button" data-skip="runner1">1차 러너</button>
+        <button type="button" data-skip="encounter">빌바오 발견</button>
+        <button type="button" data-skip="runner2">2차 러너</button>
+        <button type="button" data-skip="ending">엔딩 스토리</button>
+        <button type="button" data-skip="final">최종 타이틀</button>
+    `;
+    document.querySelector(".game-screen").appendChild(debugMenu);
+}
+// 다른 화면보다 위에 보이도록 고정
+Object.assign(debugMenu.style, {
+    position: "absolute", top: "12px", right: "12px", zIndex: "100",
+    width: "190px", maxHeight: "calc(100% - 24px)", overflowY: "auto",
+    padding: "12px", border: "1px solid #666", borderRadius: "8px",
+    background: "rgba(15,15,18,.95)", color: "white"
+});
+
+debugMenu.querySelectorAll("button[data-skip]").forEach(button => {
+    Object.assign(button.style, {
+        display: "block", width: "100%", marginTop: "6px", padding: "8px",
+        background: "#29292d", color: "#fff", border: "1px solid #555",
+        borderRadius: "4px", cursor: "pointer"
+    });
+});
+
 // Shift + D로 메뉴 열기 / 닫기
 document.addEventListener("keydown", event => {
     if (event.shiftKey && event.code === "KeyD") {
         event.preventDefault();
-        debugMenu.hidden = !debugMenu.hidden;
+        if (!event.repeat) debugMenu.hidden = !debugMenu.hidden;
     }
 });
 
@@ -1102,6 +1144,7 @@ debugMenu.querySelectorAll("[data-skip]").forEach(button => {
     });
 });
     function startPrologue() {
+        stopCurrentSequence();
         runStage = 1;
         resetGame();
         showStory("intro", startGame);
