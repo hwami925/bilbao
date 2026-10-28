@@ -301,6 +301,80 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
     }
 
     /* ========================================
+       MINI ILLUSTRATIONS - 스토리 컷인 3종
+       HTML/CSS 파일 수정 없이 자동으로 생성
+    ======================================== */
+    const MINI_ILLUSTRATIONS = new Map([
+        ["연기를 따라 시선을 옮기자 하얀 글씨로 013이라 적혀 있는 빨간 기둥이 눈에 들어왔다.", "./images/game/mini/chimney_013.png"],
+        ["그렇게 대화를 하려는 순간 나의 예상과는 다르게 소녀는 나에게서 완전히 등을 뒤돌린 상태였다.", "./images/game/mini/bilbao_turn_away.png"],
+        ["소녀는 잠시 머뭇거리는 듯하더니 장난감을 집어 자신의 품에 안았다.", "./images/game/mini/bilbao_rabbit_hug.png"]
+    ]);
+
+    const miniStyle = document.createElement("style");
+    miniStyle.textContent = `
+        .bilbao-mini-cut {
+            position: absolute;
+            left: 50%; top: 42%;
+            width: min(260px, 42vw, 48vh);
+            aspect-ratio: 1 / 1;
+            box-sizing: border-box;
+            border: 4px solid #000;
+            border-radius: 6px;
+            background: #fff;
+            object-fit: cover;
+            box-shadow: 0 8px 22px rgba(0,0,0,.45);
+            transform: translate(-50%, -50%) scale(.98);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .3s ease, transform .3s ease, visibility .3s;
+            pointer-events: none;
+            z-index: 15;
+        }
+        .bilbao-mini-cut.is-visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    `;
+    document.head.appendChild(miniStyle);
+
+    const miniScreen = document.querySelector(".game-screen");
+    const miniImage = document.createElement("img");
+    miniImage.className = "bilbao-mini-cut";
+    miniImage.alt = "스토리 미니 일러스트";
+    miniImage.decoding = "async";
+    if (miniScreen) {
+        if (getComputedStyle(miniScreen).position === "static") {
+            miniScreen.style.position = "relative";
+        }
+        miniScreen.appendChild(miniImage);
+    }
+
+    function updateMiniIllustration(line) {
+        const path = line ? MINI_ILLUSTRATIONS.get(line.text) : null;
+        miniImage.classList.remove("is-visible");
+        miniImage.dataset.requestedPath = path || "";
+        if (!path) return;
+        // 이미지가 준비되지 않았다면 깨진 이미지 아이콘을 표시하지 않음
+        miniImage.onload = () => {
+            if (miniImage.dataset.requestedPath === path && gameState === "story") {
+                miniImage.classList.add("is-visible");
+            }
+        };
+        miniImage.onerror = () => console.warn("미니 일러스트 파일을 찾을 수 없습니다:", path);
+        miniImage.dataset.requestedPath = path;
+        if (miniImage.getAttribute("src") !== path) {
+            miniImage.src = path;
+        } else if (miniImage.complete && miniImage.naturalWidth > 0) {
+            requestAnimationFrame(() => {
+                if (miniImage.dataset.requestedPath === path && gameState === "story") {
+                    miniImage.classList.add("is-visible");
+                }
+            });
+        }
+    }
+
+    /* ========================================
        STORY SYSTEM
     ======================================== */
 
@@ -312,6 +386,7 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
     }
 
     function hideStory() {
+        updateMiniIllustration(null);
         stopTyping();
         storyPanel.hidden = true;
     }
@@ -339,6 +414,7 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
     function showStoryLine() {
         stopTyping();
         const line = storyLines[storyIndex];
+        updateMiniIllustration(line);
        // 이벤트 CG가 지정된 지문에서 카메라 연출 실행
 if (line.cg && !line.cgPlayed) {
     line.cgPlayed = true;
@@ -669,6 +745,7 @@ function playBilbaoCg(onComplete) {
     }
 
     // 기존 스토리 화면 숨기기
+    updateMiniIllustration(null);
     storyPanel.hidden = true;
 
     // 이벤트 일러스트 표시
@@ -1097,6 +1174,7 @@ function stopCurrentSequence() {
     }
 
     // 스토리 타이핑 중지
+    updateMiniIllustration(null);
     stopTyping();
     storyPanel.hidden = true;
 
