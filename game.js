@@ -31,6 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // 비주얼 노벨 UI
     const storyPanel = document.getElementById("game-story");
    const gameCg = document.getElementById("game-cg");
+   // 개발자용 구간 이동 메뉴
+const debugMenu = document.getElementById("game-debug-menu");
     const storyDialogue = document.getElementById("story-dialogue");
     const storySpeaker = document.getElementById("story-speaker-name");
     const storyText = document.getElementById("story-dialogue-text");
@@ -557,6 +559,7 @@ storyRight.classList.toggle(
 
         const screen = document.querySelector(".game-screen");
         const titleCard = document.createElement("div");
+       titleCard.classList.add("game-final-title-card");
         titleCard.setAttribute("aria-label", "빌바오 고철 위에 피어난 꽃");
         titleCard.style.cssText = `position:absolute;inset:0;z-index:20;background:#080808;
             display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -606,11 +609,14 @@ function playBilbaoCg(onComplete) {
     gameCg.classList.add("is-playing");
 
     // 5초 후 기존 스토리로 복귀
-    setTimeout(() => {
-        gameCg.classList.remove("is-playing");
-        gameCg.hidden = true;
-        onComplete();
-    }, 5000);
+   cgTimer = setTimeout(() => {
+    cgTimer = null;
+
+    gameCg.classList.remove("is-playing");
+    gameCg.hidden = true;
+
+    onComplete();
+}, 5000);
 }
    
     function gameEnding() {
@@ -1005,7 +1011,96 @@ function drawScrollingBackground(image, scrollSpeed, y, drawHeight) {
         // Enter/Space는 위의 document 핸들러에서 한 번만 처리
         if (event.code === "Space" || event.code === "Enter") event.preventDefault();
     });
+/* ========================================
+   DEBUG - 구간별 스킵
+======================================== */
 
+let cgTimer = null;
+
+// 진행 중인 연출과 게임을 정리
+function stopCurrentSequence() {
+    // 러너 애니메이션 중지
+    if (animationId !== null) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+    }
+
+    // 스토리 타이핑 중지
+    stopTyping();
+    storyPanel.hidden = true;
+
+    // CG 애니메이션 중지
+    if (cgTimer !== null) {
+        clearTimeout(cgTimer);
+        cgTimer = null;
+    }
+
+    if (gameCg) {
+        gameCg.classList.remove("is-playing");
+        gameCg.hidden = true;
+    }
+
+    // 기존 타이틀 연출 제거
+    document.querySelectorAll(".game-final-title-card")
+        .forEach(element => element.remove());
+
+    gameState = "standby";
+}
+
+// 원하는 구간으로 이동
+function skipToSection(section) {
+    stopCurrentSequence();
+
+    // 메뉴 닫기
+    debugMenu.hidden = true;
+
+    switch (section) {
+        case "intro":
+            runStage = 1;
+            resetGame();
+            showStory("intro", startGame);
+            break;
+
+        case "runner1":
+            runStage = 1;
+            startGame();
+            break;
+
+        case "encounter":
+            runStage = 2;
+            showStory("encounter", startGame);
+            break;
+
+        case "runner2":
+            runStage = 2;
+            startGame();
+            break;
+
+        case "ending":
+            runStage = 2;
+            showStory("ending", showFinalTitle);
+            break;
+
+        case "final":
+            showFinalTitle();
+            break;
+    }
+}
+
+// Shift + D로 메뉴 열기 / 닫기
+document.addEventListener("keydown", event => {
+    if (event.shiftKey && event.code === "KeyD") {
+        event.preventDefault();
+        debugMenu.hidden = !debugMenu.hidden;
+    }
+});
+
+// 버튼 클릭 시 해당 구간으로 이동
+debugMenu.querySelectorAll("[data-skip]").forEach(button => {
+    button.addEventListener("click", () => {
+        skipToSection(button.dataset.skip);
+    });
+});
     function startPrologue() {
         runStage = 1;
         resetGame();
