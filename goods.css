@@ -1047,3 +1047,39 @@
         max-width: 140px;
     }
 }
+/* ========================================
+   GOODS — 실제 상품 사진
+======================================== */
+
+.goods-product-image {
+    position: relative;
+    box-sizing: border-box;
+    padding: 10px;
+    background: #eeeae2;
+}
+
+.goods-product-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    transition: transform 0.3s ease;
+}
+
+.goods-product-image:has(img):hover img {
+    transform: scale(1.035);
+}
+
+/* 사진이 없는 상품은 기존 스타일 유지 */
+.goods-product-image:not(:has(img)) {
+    padding: 0;
+    background: linear-gradient(135deg, #777, #4b4b4b);
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+    .goods-product-image {
+        padding: 7px;
+    }
+}
