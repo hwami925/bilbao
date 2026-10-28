@@ -24,6 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const restartButton = document.getElementById("game-restart-button");
     const endingRestartButton = document.getElementById("game-ending-restart");
 
+    // 시작 화면의 기존 「도망쳐.」 제목을 작품명으로 변경
+    const startTitle = startScreen.querySelector("h1, h2");
+    if (startTitle) startTitle.textContent = "BILBAO";
+
     // 비주얼 노벨 UI
     const storyPanel = document.getElementById("game-story");
     const storyDialogue = document.getElementById("story-dialogue");
@@ -69,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 1차: 고철산 / 2차: 빌바오 추격
     const STAGE_SETTINGS = {
         1: { goal: 1200, baseSpeed: 6, maxSpeed: 10, minSpawn: 95, maxSpawn: 135 },
-        2: { goal: 850, baseSpeed: 8, maxSpeed: 12, minSpawn: 65, maxSpawn: 90 }
+        2: { goal: 850, baseSpeed: 9, maxSpeed: 16, minSpawn: 52, maxSpawn: 80 }
     };
 
     // 졸업전시용 최종 프롤로그 원문을 대사창 길이에 맞게 분리
@@ -819,7 +823,10 @@ function drawScrollingBackground(image, scrollSpeed, y, drawHeight) {
 
         // 점점 빨라지는 게임
         const config = STAGE_SETTINGS[runStage];
-        speed = Math.min(config.maxSpeed, config.baseSpeed + distance / 700);
+        speed = Math.min(
+            config.maxSpeed,
+            config.baseSpeed + distance / (runStage === 2 ? 105 : 700)
+        );
 
         updatePlayer();
 
