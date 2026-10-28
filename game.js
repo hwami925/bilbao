@@ -36,6 +36,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const storyNext = document.getElementById("story-next-indicator");
     const storyLeftImage = document.getElementById("story-character-left-image");
     const storyRightImage = document.getElementById("story-character-right-image");
+   // 캐릭터 이미지 경로
+const CHARACTER_IMAGES = {
+    revoli: "./images/game/character/revoli_normal.png",
+    bilbao: "./images/game/character/bilbao_normal.png"
+};
+
+// 이미지 등록
+storyLeftImage.src = CHARACTER_IMAGES.revoli;
+storyRightImage.src = CHARACTER_IMAGES.bilbao;
     const storyLeft = document.getElementById("story-character-left");
     const storyRight = document.getElementById("story-character-right");
 
@@ -266,10 +275,38 @@ document.addEventListener("DOMContentLoaded", () => {
         storyNext.style.visibility = "hidden";
         typingFinished = false;
         // 캐릭터 반신 일러스트는 추후 파일을 연결할 예정
-        storyLeftImage.hidden = true;
-        storyRightImage.hidden = true;
-        storyLeft.classList.toggle("is-speaking", line.speaker === "레볼리");
-        storyRight.classList.toggle("is-speaking", line.speaker === "빌바오" || line.speaker === "???");
+        // 캐릭터 표시 설정
+const currentScene = Object.keys(STORY_SCENES).find(
+    key => STORY_SCENES[key] === storyLines
+);
+
+// 도입부에서는 레볼리만 표시
+if (currentScene === "intro") {
+    storyLeftImage.hidden = false;
+    storyRightImage.hidden = true;
+}
+
+// 빌바오를 만난 이후에는 두 캐릭터 표시
+else if (currentScene === "encounter" || currentScene === "ending") {
+    storyLeftImage.hidden = false;
+    storyRightImage.hidden = false;
+}
+
+// 그 외에는 숨김
+else {
+    storyLeftImage.hidden = true;
+    storyRightImage.hidden = true;
+}
+        // 말하는 캐릭터 강조
+storyLeft.classList.toggle(
+    "is-speaking",
+    line.speaker === "레볼리"
+);
+
+storyRight.classList.toggle(
+    "is-speaking",
+    line.speaker === "빌바오" || line.speaker === "???"
+);
         let index = 0;
         typingTimer = setInterval(() => {
             index++;
