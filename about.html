@@ -1,298 +1,165 @@
+
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>ABOUT | BILBAO</title>
-
     <link rel="stylesheet" href="./about.css">
     <script src="./about.js" defer></script>
+    <style>
+        /* 작가 프로필 이미지만 적용 — 기존 about.css는 변경하지 않음 */
+        .creator-card .creator-symbol {
+            overflow: hidden;
+            padding: 0;
+        }
+        .creator-card .creator-symbol img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+    </style>
 </head>
-
 <body>
-
     <!-- 상단 메뉴 -->
     <header class="about-header">
-
-       <a href="./index.html" class="header-logo">
-    <img src="./images/logo/bilbao-logo.png" alt="BILBAO 로고">
-</a>
-
-        <a href="./index.html#about" class="back-button">
-            ← 돌아가기
+        <a href="./index.html" class="header-logo">
+            <img src="./images/logo/bilbao-logo.png" alt="BILBAO 로고">
         </a>
-
+        <a href="./index.html#about" class="back-button">← 돌아가기</a>
     </header>
-
     <main>
-
         <!-- 페이지 타이틀 -->
         <section class="about-hero">
-
-            <p class="archive-label">
-                ARCHIVE NO. 013 / YEAR 3010
-            </p>
-
+            <p class="archive-label">ARCHIVE NO. 013 / YEAR 3010</p>
             <h1>ABOUT</h1>
-
-            <p class="about-subtitle">
-                하나의 꿈에서 시작된 이야기.
-            </p>
-
+            <p class="about-subtitle">하나의 꿈에서 시작된 이야기.</p>
             <div class="hero-line"></div>
-
-            <p class="archive-description">
-                THE RECORDS OF BILBAO
-            </p>
-
+            <p class="archive-description">THE RECORDS OF BILBAO</p>
         </section>
-
 
         <!-- 작품 소개 -->
         <section class="about-section" id="story">
-
             <div class="section-heading">
                 <span>01 / THE STORY</span>
                 <h2>빌바오</h2>
             </div>
-
             <div class="archive-paper">
-
-                <p class="paper-label">
-                    PROJECT FILE — BILBAO
-                </p>
-
-                <h3>
-                    3010년,<br>
-                    전쟁이 끝난 세계.
-                </h3>
-
+                <p class="paper-label">PROJECT FILE — BILBAO</p>
+                <h3>3010년,<br>전쟁이 끝난 세계.</h3>
                 <div class="paper-divider"></div>
-
-                <p>
-                    인간과 로봇 사이에서 벌어진 긴 전쟁은
-                    결국 로봇의 승리로 막을 내렸다.
-                </p>
-
-                <p>
-                    전쟁을 승리로 이끌었던 레볼리는
+                <p>인간과 로봇 사이에서 벌어진 긴 전쟁은
+                    결국 로봇의 승리로 막을 내렸다.</p>
+                <p>전쟁을 승리로 이끌었던 레볼리는
                     그 과정에서 깊은 마음의 상처를 입고,
                     수도에서 멀리 떨어진 부산에서
-                    조용한 삶을 이어간다.
-                </p>
-
-                <p>
-                    그러던 어느 날,
+                    조용한 삶을 이어간다.</p>
+                <p>그러던 어느 날,
                     평소처럼 쓰레기장을 돌아다니던 레볼리는
-                    한 여자아이와 마주하게 된다.
-                </p>
-
-                <p>
-                    그 만남을 계기로
-                    멈춰 있던 그의 시간이 다시 움직이기 시작한다.
-                </p>
-
-                <p class="highlight-text">
-                    그리고 레볼리는 결심한다.<br>
+                    한 여자아이와 마주하게 된다.</p>
+                <p>그 만남을 계기로
+                    멈춰 있던 그의 시간이 다시 움직이기 시작한다.</p>
+                <p class="highlight-text">그리고 레볼리는 결심한다.<br>
                     다시 한번, 자신의 손으로
-                    이 세상을 바꾸기로.
-                </p>
-
+                    이 세상을 바꾸기로.</p>
             </div>
-
         </section>
-
 
         <!-- 창작의 시작 -->
         <section class="about-section" id="beginning">
-
             <div class="section-heading">
                 <span>02 / THE BEGINNING</span>
                 <h2>꿈에서 시작된 이야기</h2>
             </div>
-
             <div class="archive-paper">
-
-                <p class="paper-label">
-                    CREATION LOG — 001
-                </p>
-
-                <h3>
-                    모든 것은<br>
-                    하나의 장면에서 시작되었다.
-                </h3>
-
+                <p class="paper-label">CREATION LOG — 001</p>
+                <h3>모든 것은<br>하나의 장면에서 시작되었다.</h3>
                 <div class="paper-divider"></div>
-
-                <p>
-                    《빌바오》는 어느 날 꾸었던 꿈에서
-                    시작되었습니다.
-                </p>
-
-                <p>
-                    한 로봇이 어린 여자아이를 품에 안은 채,
-                    적들과 치열한 총격전을 벌이는 장면.
-                </p>
-
-                <p>
-                    꿈속에서 보았던 그 장면이 머릿속에 남았고,
+                <p>《빌바오》는 어느 날 꾸었던 꿈에서
+                    시작되었습니다.</p>
+                <p>한 로봇이 어린 여자아이를 품에 안은 채,
+                    적들과 치열한 총격전을 벌이는 장면.</p>
+                <p>꿈속에서 보았던 그 장면이 머릿속에 남았고,
                     이를 소설로 써내려 가면
                     재밌는 작품이 나올 수 있겠다는 생각에
-                    이야기를 쓰기 시작했습니다.
-                </p>
-
-                <p>
-                    처음에는 단순한 꿈과 상상에서 출발했지만,
+                    이야기를 쓰기 시작했습니다.</p>
+                <p>처음에는 단순한 꿈과 상상에서 출발했지만,
                     이야기를 써 내려가며
                     세계관과 인물들의 서사가
-                    조금씩 확장되었습니다.
-                </p>
-
-                <p>
-                    꿈속의 로봇은 레볼리라는 인물로,
+                    조금씩 확장되었습니다.</p>
+                <p>꿈속의 로봇은 레볼리라는 인물로,
                     그 품에 안겨있던 여자아이는 빌바오라는 인물로,
                     짧은 장면은 이렇게 하나의 세계로
-                    새롭게 만들어졌습니다.
-                </p>
-
+                    새롭게 만들어졌습니다.</p>
             </div>
-
         </section>
-
 
         <!-- 작품의 메시지 -->
         <section class="about-section" id="message">
-
             <div class="section-heading">
                 <span>03 / THE MESSAGE</span>
                 <h2>존재에 대한 질문</h2>
             </div>
-
             <div class="message-box">
-
-                <p class="message-label">
-                    THE QUESTION
-                </p>
-
-                <blockquote>
-                    “로봇에게 감정이 있다면,<br>
-                    그들은 그저 물건일 뿐인 것일까?”
-                </blockquote>
-
+                <p class="message-label">THE QUESTION</p>
+                <blockquote>“로봇에게 감정이 있다면,<br>
+                    그들은 그저 물건일 뿐인 것일까?”</blockquote>
             </div>
-
             <div class="archive-paper">
-
-                <p>
-                    이야기를 써 내려가는 과정에서
-                    하나의 철학적인 질문이 떠올랐습니다.
-                </p>
-
-                <p>
-                    로봇이 인간처럼 생각하고,
+                <p>이야기를 써 내려가는 과정에서
+                    하나의 철학적인 질문이 떠올랐습니다.</p>
+                <p>로봇이 인간처럼 생각하고,
                     감정을 느끼며,
                     누군가를 소중히 여길 수 있다면
                     우리는 그(것)들을 단순한 기계나
-                    물건으로 바라볼 수 있을까요?
-                </p>
-
-                <p>
-                    《빌바오》는 이 질문에
+                    물건으로 바라볼 수 있을까요?</p>
+                <p>《빌바오》는 이 질문에
                     정해진 답을 제시하지 않습니다.
-                    (각자의 생각은 모두 다른 법이니깐요)
-                </p>
-
-                <p>
-                    대신 독자들이 레볼리의 이야기를 따라가며
-                    저마다의 답을 생각해 보면 좋겠다고 생각하였습니다.
-                </p>
-
-                <p>
-                    그리고 상처를 안고 살아가는 인물들이
+                    (각자의 생각은 모두 다른 법이니깐요)</p>
+                <p>대신 독자들이 레볼리의 이야기를 따라가며
+                    저마다의 답을 생각해 보면 좋겠다고 생각하였습니다.</p>
+                <p>그리고 상처를 안고 살아가는 인물들이
                     서로를 만나고 다시 앞으로 나아가는 모습을 통해,
-                    누군가에게 작은 위로가 될 수 있기를 작게나마 바래봅니다.
-                </p>
-
+                    누군가에게 작은 위로가 될 수 있기를 작게나마 바래봅니다.</p>
             </div>
-
         </section>
-
 
         <!-- 작가 소개 -->
         <section class="about-section creator-section" id="creator">
-
             <div class="section-heading">
                 <span>04 / THE CREATOR</span>
                 <h2>작가 소개</h2>
             </div>
-
             <div class="creator-card">
-
                 <div class="creator-symbol">
-                    H.
+                    <img src="./images/about/hwami-profile.png" alt="작가 화미 프로필 이미지" loading="lazy">
                 </div>
-
                 <div class="creator-info">
-
-                    <p class="creator-label">
-                        ORIGINAL CREATOR
-                    </p>
-
+                    <p class="creator-label">ORIGINAL CREATOR</p>
                     <h3>HWAMI</h3>
-
-                    <p class="creator-name">
-                        화미
-                    </p>
-
+                    <p class="creator-name">화미</p>
                     <div class="creator-divider"></div>
-
                     <p class="creator-description">
-                        소소하게나마 이야기를 쓰고 
+                        소소하게나마 이야기를 쓰고
                         평소 프리랜서로써 그림을 그리는 창작자.
                         상상 속 장면들을 글과 그림으로 표현하거나,
                         때론 그 장면들을 세세히 다듬어
                         자신만의 세계를 만들어 나가고 있습니다.
                     </p>
-
                     <div class="creator-links">
-
-                        <a href="https://hwami925.github.io/"
-                           target="_blank"
-                           rel="noopener noreferrer">
-                            PORTFOLIO ↗
-                        </a>
-
-                        <a href="https://x.com/HwAmI_925"
-                           target="_blank"
-                           rel="noopener noreferrer">
-                            X / TWITTER ↗
-                        </a>
-
+                        <a href="https://hwami925.github.io/" target="_blank" rel="noopener noreferrer">PORTFOLIO ↗</a>
+                        <a href="https://x.com/HwAmI_925" target="_blank" rel="noopener noreferrer">X / TWITTER ↗</a>
                     </div>
-
                 </div>
-
             </div>
-
         </section>
-
     </main>
-
-
     <!-- 하단 -->
     <footer class="about-footer">
-
-        <p>
-            BILBAO — ARCHIVE NO. 013
-        </p>
-
-        <p>
-            © 2026 HWAMI. ALL RIGHTS RESERVED.
-        </p>
-
+        <p>BILBAO — ARCHIVE NO. 013</p>
+        <p>© 2026 HWAMI. ALL RIGHTS RESERVED.</p>
     </footer>
-
 </body>
 </html>
