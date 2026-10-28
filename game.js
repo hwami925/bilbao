@@ -106,7 +106,11 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
         encounter: [
             { speaker: "", text: "이곳에서 쓸만한 부품을 모아 여러 기계를 고치거나 만든 지도 어연 5년이라는 시간이 흘렀기 때문에 어렵지 않게 고철더미를 오를 수 있었다." },
             { speaker: "", text: "고철산을 거의 다 올라왔을 때쯤, 사람의 형태를 한 무언가가 눈에 들어오기 시작했다." },
-            { speaker: "", text: "그리고 고철산을 다 올라가자 눈 앞에 펼쳐진 것은 고철더미 위에 앉아 멍하니 하늘을 올려다보고 있는 어린 소녀의 모습이었다." },
+            {
+    speaker: "",
+    text: "그리고 고철산을 다 올라가자 눈 앞에 펼쳐진 것은 고철더미 위에 앉아 멍하니 하늘을 올려다보고 있는 어린 소녀의 모습이었다.",
+    cg: true
+},
             { speaker: "", text: "소녀는 퍼석한 머리에 빛바랜 베레모와 상처투성이의 몸에 이곳저곳이 찢어지고 누런 원피스를 입고 있었지만 주변 고철에 노을빛이 반사되면서 나도 모르게 고철 위에 피어난 꽃을 떠올리게 되었다." },
             { speaker: "", text: "생각치 못한 장면에 멍하니 소녀를 바라보고 있자 나의 시선을 눈치챘는지 소녀가 고개를 돌려 나를 빤히 쳐다보았다." },
             { speaker: "", text: "그렇게 얼마나 흘렀을까…" },
@@ -256,7 +260,7 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
         gameState = "story";
         statusText.textContent = "STORY";
         showScreen(null);
-        storyLines = STORY_SCENES[sceneName];
+        storyLines = STORY_SCENES[sceneName].map(line => ({ ...line }));
         storyIndex = 0;
         storyAfter = afterStory;
         storyPanel.hidden = false;
@@ -269,6 +273,21 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
     function showStoryLine() {
         stopTyping();
         const line = storyLines[storyIndex];
+       // 이벤트 CG가 지정된 지문에서 카메라 연출 실행
+if (line.cg && !line.cgPlayed) {
+    line.cgPlayed = true;
+
+    gameState = "cg";
+    stopTyping();
+
+    playBilbaoCg(() => {
+        gameState = "story";
+        storyPanel.hidden = false;
+        showStoryLine();
+    });
+
+    return;
+}
         storySpeaker.textContent = line.speaker || "";
         storySpeaker.hidden = !line.speaker;
         currentFullText = line.text;
@@ -595,12 +614,9 @@ function playBilbaoCg(onComplete) {
 }
    
     function gameEnding() {
-       if (runStage === 1) {
+      if (runStage === 1) {
     runStage = 2;
-
-    playBilbaoCg(() => {
-        showStory("encounter", startGame);
-    });
+    showStory("encounter", startGame);
 } else {
             showStory("ending", () => {
                 showFinalTitle();
