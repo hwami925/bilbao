@@ -258,7 +258,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function showStoryLine() {
         stopTyping();
         const line = storyLines[storyIndex];
-        storySpeaker.textContent = line.speaker || "NARRATION";
+        storySpeaker.textContent = line.speaker || "";
+storySpeaker.hidden = !line.speaker;
         currentFullText = line.text;
         storyText.textContent = "";
         storyNext.style.visibility = "hidden";
