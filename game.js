@@ -1,4 +1,5 @@
 
+
 /* ========================================
    BILBAO : PROLOGUE
    2D RUNNER GAME
@@ -203,6 +204,8 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
     let nextSpawn = 90;
 
     let animationId = null;
+    let titleTimer1 = null;
+    let titleTimer2 = null;
 
     /* ========================================
        PLAYER
