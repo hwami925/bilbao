@@ -1083,3 +1083,72 @@
         padding: 7px;
     }
 }
+/* ========================================
+   NOVEL EXHIBITION — 판매하지 않는 전시 도서
+======================================== */
+
+.goods-novel-exhibition {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 45px;
+    margin-bottom: 55px;
+    padding: 35px;
+    background: #252321;
+    border: 1px solid #504a43;
+}
+
+.goods-novel-photo {
+    display: block;
+    padding: 12px;
+    background: #d6d1c6;
+    overflow: hidden;
+}
+
+.goods-novel-photo img {
+    display: block;
+    width: 100%;
+    max-height: 440px;
+    object-fit: contain;
+    transition: transform 0.3s;
+}
+
+.goods-novel-photo:hover img {
+    transform: scale(1.025);
+}
+
+.goods-novel-description {
+    color: #eee;
+}
+
+.goods-novel-label {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: #c89a83;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.goods-novel-description h2 {
+    margin: 0 0 22px;
+    font-size: clamp(25px, 3vw, 38px);
+}
+
+.goods-novel-description p {
+    color: #bbb;
+    font-size: 14px;
+    line-height: 2;
+}
+
+@media (max-width: 768px) {
+    .goods-novel-exhibition {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        padding: 20px;
+    }
+
+    .goods-novel-description h2 {
+        font-size: 26px;
+    }
+}
