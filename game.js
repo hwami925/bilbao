@@ -250,8 +250,9 @@ document.addEventListener("DOMContentLoaded", () => {
         storyIndex = 0;
         storyAfter = afterStory;
         storyPanel.hidden = false;
+        // 스토리 구간에서는 러너 스프라이트를 그리지 않습니다.
+        // 직전 달리기 프레임을 지워 공중에 멈춘 레볼리가 남지 않도록 합니다.
         drawBackground();
-        drawPlayer();
         showStoryLine();
     }
 
@@ -856,9 +857,11 @@ function drawScrollingBackground(image, scrollSpeed, y, drawHeight) {
         }
 
         drawBackground();
-        drawParticles();
-        drawObstacles();
-        drawPlayer();
+        if (gameState === "playing") {
+            drawParticles();
+            drawObstacles();
+            drawPlayer();
+        }
 
         updateHUD();
 
