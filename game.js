@@ -264,6 +264,31 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
     }
 
 
+    // 최종 타이틀: 희망 BGM을 음소거하지 않고 잔잔한 배경음으로 낮춤
+    function softenEndingBgm(duration = 3200) {
+        const audio = bgmTracks.hope;
+        if (currentBgm !== audio) return;
+        if (bgmFadeId !== null) {
+            cancelAnimationFrame(bgmFadeId);
+            bgmFadeId = null;
+        }
+        const startVolume = audio.volume;
+        const targetVolume = BGM_VOLUME * 0.30;
+        const startTime = performance.now();
+        function fade(now) {
+            if (currentBgm !== audio) { bgmFadeId = null; return; }
+            const progress = Math.min(1, (now - startTime) / duration);
+            const eased = progress * progress * (3 - 2 * progress);
+            audio.volume = startVolume + (targetVolume - startVolume) * eased;
+            if (progress < 1) {
+                bgmFadeId = requestAnimationFrame(fade);
+            } else {
+                bgmFadeId = null;
+            }
+        }
+        bgmFadeId = requestAnimationFrame(fade);
+    }
+
     /* ========================================
        PLAYER
     ======================================== */
@@ -691,7 +716,7 @@ storyRight.classList.toggle(
         showScreen(overScreen);
     }
 
-    // 마지막 대사 이후 암전 → 타이틀 → 완료 화면
+    // 마지막 대사 이후 암전 → 로고 서서히 등장 + BGM 잔잔하게 → 완료 화면
     function showFinalTitle() {
         if (titleTimer1 !== null) { clearTimeout(titleTimer1); titleTimer1 = null; }
         if (titleTimer2 !== null) { clearTimeout(titleTimer2); titleTimer2 = null; }
@@ -699,40 +724,50 @@ storyRight.classList.toggle(
         hideStory();
         gameState = "ending";
         switchBgm("hope");
+        softenEndingBgm(3200);
         statusText.textContent = "COMPLETE";
         showScreen(null);
 
         const screen = document.querySelector(".game-screen");
         const titleCard = document.createElement("div");
-       titleCard.classList.add("game-final-title-card");
+        titleCard.classList.add("game-final-title-card");
         titleCard.setAttribute("aria-label", "빌바오 고철 위에 피어난 꽃");
+        // 검은 배경은 바로 등장, 로고와 부제만 천천히 드러납니다.
         titleCard.style.cssText = `position:absolute;inset:0;z-index:20;background:#080808;
             display:flex;flex-direction:column;align-items:center;justify-content:center;
-            text-align:center;color:#fff;opacity:0;transition:opacity 1.5s ease;
-            pointer-events:auto;padding:20px;`;
+            text-align:center;color:#fff;opacity:1;pointer-events:auto;padding:20px;`;
         const title = document.createElement("h2");
         title.textContent = "BILBAO";
-        title.style.cssText = "font-size:clamp(36px,8vw,76px);letter-spacing:0.16em;margin:0 0 16px;";
+        title.style.cssText = `font-size:clamp(36px,8vw,76px);letter-spacing:0.16em;
+            margin:0 0 16px;opacity:0;transform:translateY(12px);
+            transition:opacity 3.2s ease,transform 3.2s ease;`;
         const subtitle = document.createElement("p");
         subtitle.textContent = "고철 위에 피어난 꽃";
-        subtitle.style.cssText = "font-size:clamp(14px,2.5vw,23px);letter-spacing:0.14em;color:#ddd;margin:0;";
+        subtitle.style.cssText = `font-size:clamp(14px,2.5vw,23px);letter-spacing:0.14em;
+            color:#ddd;margin:0;opacity:0;transform:translateY(12px);
+            transition:opacity 3.2s ease 0.35s,transform 3.2s ease 0.35s;`;
         titleCard.append(title, subtitle);
         screen.appendChild(titleCard);
-        requestAnimationFrame(() => { titleCard.style.opacity = "1"; });
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            title.style.opacity = "1";
+            title.style.transform = "translateY(0)";
+            subtitle.style.opacity = "1";
+            subtitle.style.transform = "translateY(0)";
+        }));
         titleTimer1 = setTimeout(() => {
             titleTimer1 = null;
+            titleCard.style.transition = "opacity 1.5s ease";
             titleCard.style.opacity = "0";
             titleTimer2 = setTimeout(() => {
                 titleTimer2 = null;
                 titleCard.remove();
-                // 기존 엔딩 오버레이의 문구도 최종 엔딩에 맞게 변경
                 const heading = endingScreen.querySelector("h2");
                 const desc = endingScreen.querySelector(".game-overlay-description");
                 if (heading) heading.textContent = "고철 위에 피어난 꽃";
                 if (desc) desc.textContent = "PROLOGUE COMPLETE — 두 사람의 이야기가 시작된다.";
                 showScreen(endingScreen);
             }, 1500);
-        }, 4200);
+        }, 5500);
     }
 
     /* ========================================
