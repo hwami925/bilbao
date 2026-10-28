@@ -1013,11 +1013,14 @@ body.game-page {
 
 @keyframes bilbaoCameraRise {
     0% {
+        /* 고철산 맨 아래에서 시작 */
         transform: translateX(-50%) translateY(0);
     }
 
     100% {
-        /* 그림의 위쪽까지 이동 */
-        transform: translateX(-50%) translateY(calc(100% - 100cqh));
+        /* 하늘까지 올라가지 않고 빌바오 근처에서 정지 */
+        transform: translateX(-50%) translateY(
+            calc((100cqh - 100%) * 0.78)
+        );
     }
 }
