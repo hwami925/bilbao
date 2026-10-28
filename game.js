@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 비주얼 노벨 UI
     const storyPanel = document.getElementById("game-story");
+   const gameCg = document.getElementById("game-cg");
     const storyDialogue = document.getElementById("story-dialogue");
     const storySpeaker = document.getElementById("story-speaker-name");
     const storyText = document.getElementById("story-dialogue-text");
@@ -568,12 +569,39 @@ storyRight.classList.toggle(
     /* ========================================
        ENDING
     ======================================== */
+function playBilbaoCg(onComplete) {
+    if (!gameCg) {
+        onComplete();
+        return;
+    }
 
+    // 기존 스토리 화면 숨기기
+    storyPanel.hidden = true;
+
+    // 이벤트 일러스트 표시
+    gameCg.hidden = false;
+    gameCg.classList.remove("is-playing");
+
+    // 애니메이션을 처음부터 실행
+    void gameCg.offsetWidth;
+    gameCg.classList.add("is-playing");
+
+    // 5초 후 기존 스토리로 복귀
+    setTimeout(() => {
+        gameCg.classList.remove("is-playing");
+        gameCg.hidden = true;
+        onComplete();
+    }, 5000);
+}
+   
     function gameEnding() {
-        if (runStage === 1) {
-            runStage = 2;
-            showStory("encounter", startGame);
-        } else {
+       if (runStage === 1) {
+    runStage = 2;
+
+    playBilbaoCg(() => {
+        showStory("encounter", startGame);
+    });
+} else {
             showStory("ending", () => {
                 showFinalTitle();
             });
