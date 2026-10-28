@@ -1026,8 +1026,6 @@ function drawScrollingBackground(image, scrollSpeed, y, drawHeight) {
 ======================================== */
 
 let cgTimer = null;
-   let titleTimer1 = null;
-let titleTimer2 = null;
 
 // 진행 중인 연출과 게임을 정리
 function stopCurrentSequence() {
