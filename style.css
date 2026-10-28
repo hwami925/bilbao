@@ -1,3 +1,4 @@
+
 /* =========================================
    BILBAO OFFICIAL WEBSITE
    STYLE.CSS
@@ -1550,4 +1551,35 @@ button {
     .goods-section .goods-preview-image img {
         transition: none;
     }
+}
+
+
+/* ========================================
+   HOME — ABOUT BOOK PREVIEW
+======================================== */
+.about-preview-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+    align-items: center;
+    gap: clamp(36px, 6vw, 100px);
+}
+.about-preview-copy { min-width: 0; }
+.about-preview-book {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+}
+.about-preview-book img {
+    display: block;
+    width: 100%;
+    max-width: 470px;
+    max-height: 560px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 22px 25px rgba(0, 0, 0, 0.45));
+}
+@media (max-width: 768px) {
+    .about-preview-layout { grid-template-columns: 1fr; gap: 45px; }
+    .about-preview-book img { max-width: min(85%, 360px); }
 }
