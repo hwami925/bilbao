@@ -312,97 +312,113 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ========================================
        BACKGROUND
     ======================================== */
+// =====================================
+// 빌바오 배경 이미지
+// =====================================
 
-    function drawBackground() {
+const backgroundImages = {};
 
-        // 하늘
-        const sky = ctx.createLinearGradient(0, 0, 0, HEIGHT);
+const backgroundFiles = {
+    city: "./images/game/background/city.png",
+    scrapyard: "./images/game/background/scrapyard.png",
+    foreground: "./images/game/background/foreground.png",
+    ground: "./images/game/background/ground.png"
+};
 
-        sky.addColorStop(0, "#282b30");
-        sky.addColorStop(0.6, "#55565a");
-        sky.addColorStop(1, "#7b6661");
+for (const name in backgroundFiles) {
+    const img = new Image();
+    img.src = backgroundFiles[name];
+    backgroundImages[name] = img;
+}
 
-        ctx.fillStyle = sky;
-        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+// 배경 이미지 반복 스크롤
+function drawScrollingBackground(image, scrollSpeed, y, drawHeight) {
 
-        // 붉은 태양
-        ctx.fillStyle = "rgba(180, 75, 65, 0.45)";
-
-        ctx.beginPath();
-        ctx.arc(750, 125, 65, 0, Math.PI * 2);
-        ctx.fill();
-
-        // 먼 도시 실루엣
-        ctx.fillStyle = "#333438";
-
-        for (let i = 0; i < 15; i++) {
-            const x = i * 75;
-            const h = 60 + (i % 4) * 20;
-
-            ctx.fillRect(x, GROUND_Y - h - 45, 55, h);
-        }
-
-        // 붉은 013 기둥
-        ctx.fillStyle = "#733b3b";
-        ctx.fillRect(820, 100, 30, 240);
-
-        ctx.save();
-
-        ctx.translate(838, 210);
-        ctx.rotate(-Math.PI / 2);
-
-        ctx.fillStyle = "#c9a2a2";
-        ctx.font = "bold 18px Consolas";
-        ctx.fillText("013", -20, 0);
-
-        ctx.restore();
-
-        // 고철산
-        ctx.fillStyle = "#27292c";
-
-        ctx.beginPath();
-        ctx.moveTo(0, GROUND_Y);
-
-        for (let x = 0; x <= WIDTH; x += 40) {
-            const y =
-                GROUND_Y - 25 -
-                Math.sin(x * 0.03) * 12 -
-                Math.cos(x * 0.07) * 8;
-
-            ctx.lineTo(x, y);
-        }
-
-        ctx.lineTo(WIDTH, GROUND_Y);
-        ctx.closePath();
-        ctx.fill();
-
-        // 바닥
-        ctx.fillStyle = "#191a1c";
-        ctx.fillRect(0, GROUND_Y, WIDTH, HEIGHT - GROUND_Y);
-
-        // 바닥 선
-        ctx.strokeStyle = "#555555";
-        ctx.lineWidth = 2;
-
-        ctx.beginPath();
-        ctx.moveTo(0, GROUND_Y);
-        ctx.lineTo(WIDTH, GROUND_Y);
-        ctx.stroke();
-
-        // 움직이는 바닥 무늬
-        ctx.strokeStyle = "#3c3c3c";
-
-        const offset = (frame * speed) % 80;
-
-        for (let x = -80; x < WIDTH + 80; x += 80) {
-            ctx.beginPath();
-
-            ctx.moveTo(x - offset, GROUND_Y + 25);
-            ctx.lineTo(x + 35 - offset, GROUND_Y + 25);
-
-            ctx.stroke();
-        }
+    if (!image || !image.complete || image.naturalWidth === 0) {
+        return;
     }
+
+    // 원본 비율 유지
+    const drawWidth = image.naturalWidth * (drawHeight / image.naturalHeight);
+
+    const offset = ((frame * speed * scrollSpeed) % drawWidth + drawWidth) % drawWidth;
+
+    for (let x = -offset; x < WIDTH; x += drawWidth) {
+        ctx.drawImage(image, x, y, drawWidth, drawHeight);
+    }
+}
+   function drawBackground() {
+
+    // =====================================
+    // 1. 하늘
+    // =====================================
+
+    const sky = ctx.createLinearGradient(0, 0, 0, HEIGHT);
+
+    sky.addColorStop(0, "#282b30");
+    sky.addColorStop(0.6, "#55565a");
+    sky.addColorStop(1, "#7b6661");
+
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    // =====================================
+    // 2. 붉은 태양
+    // =====================================
+
+    ctx.fillStyle = "rgba(180, 75, 65, 0.45)";
+
+    ctx.beginPath();
+    ctx.arc(750, 125, 65, 0, Math.PI * 2);
+    ctx.fill();
+
+    // =====================================
+    // 3. 먼 도시
+    // =====================================
+
+    drawScrollingBackground(
+        backgroundImages.city,
+        0.08,
+        0,
+        HEIGHT
+    );
+
+    // =====================================
+    // 4. 고철산
+    // =====================================
+
+    drawScrollingBackground(
+        backgroundImages.scrapyard,
+        0.2,
+        0,
+        HEIGHT
+    );
+
+    // =====================================
+    // 5. 가까운 고철
+    // =====================================
+
+    drawScrollingBackground(
+        backgroundImages.foreground,
+        0.45,
+        GROUND_Y - 145,
+        145
+    );
+
+    // =====================================
+    // 6. 바닥
+    // =====================================
+
+    ctx.fillStyle = "#191a1c";
+    ctx.fillRect(0, GROUND_Y, WIDTH, HEIGHT - GROUND_Y);
+
+    drawScrollingBackground(
+        backgroundImages.ground,
+        1,
+        GROUND_Y,
+        HEIGHT - GROUND_Y
+    );
+}
 
     /* ========================================
        DRAW PLAYER
