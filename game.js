@@ -24,6 +24,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const restartButton = document.getElementById("game-restart-button");
     const endingRestartButton = document.getElementById("game-ending-restart");
 
+    // 비주얼 노벨 UI
+    const storyPanel = document.getElementById("game-story");
+    const storyDialogue = document.getElementById("story-dialogue");
+    const storySpeaker = document.getElementById("story-speaker-name");
+    const storyText = document.getElementById("story-dialogue-text");
+    const storyNext = document.getElementById("story-next-indicator");
+    const storyLeftImage = document.getElementById("story-character-left-image");
+    const storyRightImage = document.getElementById("story-character-right-image");
+    const storyLeft = document.getElementById("story-character-left");
+    const storyRight = document.getElementById("story-character-right");
+
     /* ========================================
        REVOLI SPRITES
     ======================================== */
@@ -55,7 +66,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const HEIGHT = canvas.height;
 
     const GROUND_Y = 340;
-    const GOAL_DISTANCE = 3000;
+    // 1차 달리기와 2차 추격전 각각의 목표 거리
+    const GOAL_DISTANCE = 1200;
+
+    // 원작 대사를 아직 전달받지 않아 아래는 임시 연출 문구입니다.
+    // 소설 원문으로 바꿀 때 STORY_SCENES만 수정하면 됩니다.
+    const STORY_SCENES = {
+        intro: [
+            { speaker: "", text: "3010년, 부산. 고철이 산처럼 쌓인 도시." },
+            { speaker: "", text: "붉게 물든 하늘 아래, 레볼리는 오늘도 고철산을 오른다." },
+            { speaker: "레볼리", text: "……이제 조금만 더 가면 돼." }
+        ],
+        encounter: [
+            { speaker: "", text: "언덕 끝에서, 레볼리는 낯선 소녀를 발견했다." },
+            { speaker: "레볼리", text: "어……? 잠깐!" },
+            { speaker: "", text: "소녀는 레볼리를 보자마자 몸을 돌려 달아났다." },
+            { speaker: "레볼리", text: "기다려!" }
+        ],
+        ending: [
+            { speaker: "", text: "숨 가쁜 추격 끝에, 두 사람의 거리가 좁혀졌다." },
+            { speaker: "", text: "이 만남은 레볼리의 운명을 바꾸게 된다." }
+        ]
+    };
+
+    let runStage = 1;
+    let storyLines = [];
+    let storyIndex = 0;
+    let storyAfter = null;
+    let typingTimer = null;
+    let typingFinished = true;
+    let currentFullText = "";
 
     const GRAVITY = 0.85;
     const JUMP_POWER = -16;
@@ -111,6 +151,85 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ========================================
+       STORY SYSTEM
+    ======================================== */
+
+    function stopTyping() {
+        if (typingTimer !== null) {
+            clearInterval(typingTimer);
+            typingTimer = null;
+        }
+    }
+
+    function hideStory() {
+        stopTyping();
+        storyPanel.hidden = true;
+    }
+
+    function showStory(sceneName, afterStory) {
+        if (animationId !== null) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+        gameState = "story";
+        statusText.textContent = "STORY";
+        showScreen(null);
+        storyLines = STORY_SCENES[sceneName];
+        storyIndex = 0;
+        storyAfter = afterStory;
+        storyPanel.hidden = false;
+        drawBackground();
+        drawPlayer();
+        showStoryLine();
+    }
+
+    function showStoryLine() {
+        stopTyping();
+        const line = storyLines[storyIndex];
+        storySpeaker.textContent = line.speaker || "NARRATION";
+        currentFullText = line.text;
+        storyText.textContent = "";
+        storyNext.style.visibility = "hidden";
+        typingFinished = false;
+        // 캐릭터 반신 일러스트는 추후 파일을 연결할 예정
+        storyLeftImage.hidden = true;
+        storyRightImage.hidden = true;
+        storyLeft.classList.toggle("is-speaking", line.speaker === "레볼리");
+        storyRight.classList.toggle("is-speaking", line.speaker === "빌바오");
+        let index = 0;
+        typingTimer = setInterval(() => {
+            index++;
+            storyText.textContent = currentFullText.slice(0, index);
+            if (index >= currentFullText.length) {
+                finishTyping();
+            }
+        }, 32);
+    }
+
+    function finishTyping() {
+        stopTyping();
+        storyText.textContent = currentFullText;
+        typingFinished = true;
+        storyNext.style.visibility = "visible";
+    }
+
+    function advanceStory() {
+        if (gameState !== "story") return;
+        if (!typingFinished) {
+            finishTyping();
+            return;
+        }
+        storyIndex++;
+        if (storyIndex < storyLines.length) {
+            showStoryLine();
+            return;
+        }
+        const callback = storyAfter;
+        hideStory();
+        if (callback) callback();
+    }
+
+    /* ========================================
        RESET GAME
     ======================================== */
 
@@ -145,6 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
             animationId = null;
         }
 
+        hideStory();
         resetGame();
 
         gameState = "playing";
@@ -302,11 +422,16 @@ document.addEventListener("DOMContentLoaded", () => {
     ======================================== */
 
     function gameEnding() {
-        gameState = "ending";
-
-        statusText.textContent = "COMPLETE";
-
-        showScreen(endingScreen);
+        if (runStage === 1) {
+            runStage = 2;
+            showStory("encounter", startGame);
+        } else {
+            showStory("ending", () => {
+                gameState = "ending";
+                statusText.textContent = "COMPLETE";
+                showScreen(endingScreen);
+            });
+        }
     }
 
     /* ========================================
@@ -640,6 +765,13 @@ function drawScrollingBackground(image, scrollSpeed, y, drawHeight) {
     // PC 키보드
     document.addEventListener("keydown", (event) => {
 
+        if (gameState === "story" &&
+            (event.code === "Space" || event.code === "Enter")) {
+            event.preventDefault();
+            if (!event.repeat) advanceStory();
+            return;
+        }
+
         if (
             event.code === "Space" ||
             event.code === "ArrowUp"
@@ -672,9 +804,21 @@ function drawScrollingBackground(image, scrollSpeed, y, drawHeight) {
        BUTTON EVENTS
     ======================================== */
 
-    startButton.addEventListener("click", startGame);
+    storyDialogue.addEventListener("click", advanceStory);
+    storyDialogue.addEventListener("keydown", event => {
+        // Enter/Space는 위의 document 핸들러에서 한 번만 처리
+        if (event.code === "Space" || event.code === "Enter") event.preventDefault();
+    });
+
+    function startPrologue() {
+        runStage = 1;
+        resetGame();
+        showStory("intro", startGame);
+    }
+
+    startButton.addEventListener("click", startPrologue);
     restartButton.addEventListener("click", startGame);
-    endingRestartButton.addEventListener("click", startGame);
+    endingRestartButton.addEventListener("click", startPrologue);
 
     /* ========================================
        INITIAL SCREEN
