@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 1차: 고철산 / 2차: 빌바오 추격
     const STAGE_SETTINGS = {
         1: { goal: 1200, baseSpeed: 6, maxSpeed: 10, minSpawn: 95, maxSpawn: 135 },
-        2: { goal: 850, baseSpeed: 9, maxSpeed: 16, minSpawn: 52, maxSpawn: 80 }
+        2: { goal: 1500, baseSpeed: 9, maxSpeed: 16, minSpawn: 52, maxSpawn: 80 }
     };
 
     // 졸업전시용 최종 프롤로그 원문을 대사창 길이에 맞게 분리
@@ -92,9 +92,9 @@ document.addEventListener("DOMContentLoaded", () => {
             { speaker: "", text: "그와 동시에 출구 쪽의 종소리가 더 크게 울려 퍼졌고, 쉽게 결정을 내리지 못한 나는 고철산과 출구 쪽을 반복해서 바라보았다." },
             { speaker: "레볼리", text: "쓸만한게 있을지 모르니 저곳까지만 들르도록 할까?" },
             { speaker: "", text: "작게 중얼거린 나는 가방을 고쳐 메며 고철산을 오르기 시작했다." },
-            { speaker: "", text: "이곳에서 쓸만한 부품을 모아 여러 기계를 고치거나 만든 지도 어연 5년이라는 시간이 흘렀기 때문에 어렵지 않게 고철더미를 오를 수 있었다." },
         ],
         encounter: [
+            { speaker: "", text: "이곳에서 쓸만한 부품을 모아 여러 기계를 고치거나 만든 지도 어연 5년이라는 시간이 흘렀기 때문에 어렵지 않게 고철더미를 오를 수 있었다." },
             { speaker: "", text: "고철산을 거의 다 올라왔을 때쯤, 사람의 형태를 한 무언가가 눈에 들어오기 시작했다." },
             { speaker: "", text: "그리고 고철산을 다 올라가자 눈 앞에 펼쳐진 것은 고철더미 위에 앉아 멍하니 하늘을 올려다보고 있는 어린 소녀의 모습이었다." },
             { speaker: "", text: "소녀는 퍼석한 머리에 빛바랜 베레모와 상처투성이의 몸에 이곳저곳이 찢어지고 누런 원피스를 입고 있었지만 주변 고철에 노을빛이 반사되면서 나도 모르게 고철 위에 피어난 꽃을 떠올리게 되었다." },
@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stopTyping();
         const line = storyLines[storyIndex];
         storySpeaker.textContent = line.speaker || "";
-storySpeaker.hidden = !line.speaker;
+        storySpeaker.hidden = !line.speaker;
         currentFullText = line.text;
         storyText.textContent = "";
         storyNext.style.visibility = "hidden";
