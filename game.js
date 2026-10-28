@@ -1,5 +1,6 @@
 
 
+
 /* ========================================
    BILBAO : PROLOGUE
    2D RUNNER GAME
@@ -208,6 +209,62 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
     let titleTimer2 = null;
 
     /* ========================================
+       BGM - 장면별 음악 및 부드러운 전환
+       MP3 파일은 game.html과 같은 위치의 audio 폴더에 배치
+    ======================================== */
+    const BGM_VOLUME = 0.48;
+    const BGM_FADE_MS = 950;
+    const bgmTracks = {
+        story: new Audio("./audio/스토리.mp3"),
+        runner: new Audio("./audio/달리기.mp3"),
+        hope: new Audio("./audio/희망.mp3")
+    };
+    Object.values(bgmTracks).forEach(audio => {
+        audio.loop = true;
+        audio.preload = "auto";
+        audio.volume = 0;
+    });
+    let currentBgm = null;
+    let bgmFadeId = null;
+
+    function switchBgm(name) {
+        const next = name ? bgmTracks[name] : null;
+        if (currentBgm === next) return;
+        if (bgmFadeId !== null) {
+            cancelAnimationFrame(bgmFadeId);
+            bgmFadeId = null;
+        }
+        const previous = currentBgm;
+        const previousVolume = previous ? previous.volume : 0;
+        currentBgm = next;
+        if (next) {
+            next.volume = 0;
+            next.currentTime = 0;
+            const playResult = next.play();
+            if (playResult && typeof playResult.catch === "function") {
+                playResult.catch(error => console.warn("BGM 재생 실패:", error));
+            }
+        }
+        const startedAt = performance.now();
+        function fade(now) {
+            const progress = Math.min(1, (now - startedAt) / BGM_FADE_MS);
+            if (previous) previous.volume = previousVolume * (1 - progress);
+            if (next) next.volume = BGM_VOLUME * progress;
+            if (progress < 1) {
+                bgmFadeId = requestAnimationFrame(fade);
+            } else {
+                bgmFadeId = null;
+                if (previous) {
+                    previous.pause();
+                    previous.currentTime = 0;
+                }
+            }
+        }
+        bgmFadeId = requestAnimationFrame(fade);
+    }
+
+
+    /* ========================================
        PLAYER
     ======================================== */
 
@@ -268,6 +325,7 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
         statusText.textContent = "STORY";
         showScreen(null);
         currentStoryScene = sceneName;
+        switchBgm(sceneName === "ending" ? "hope" : "story");
         storyLines = STORY_SCENES[sceneName].map(line => ({ ...line }));
         storyIndex = 0;
         storyAfter = afterStory;
@@ -405,6 +463,7 @@ storyRight.classList.toggle(
         resetGame();
 
         gameState = "playing";
+        switchBgm("runner");
         statusText.textContent = "RUNNING";
 
         showScreen(null);
@@ -546,6 +605,7 @@ storyRight.classList.toggle(
 
     function gameOver() {
         gameState = "over";
+        switchBgm(null);
 
         statusText.textContent = "SIGNAL LOST";
 
@@ -562,6 +622,7 @@ storyRight.classList.toggle(
         document.querySelectorAll(".game-final-title-card").forEach(el => el.remove());
         hideStory();
         gameState = "ending";
+        switchBgm("hope");
         statusText.textContent = "COMPLETE";
         showScreen(null);
 
