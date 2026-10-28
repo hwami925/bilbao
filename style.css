@@ -1583,3 +1583,11 @@ button {
     .about-preview-layout { grid-template-columns: 1fr; gap: 45px; }
     .about-preview-book img { max-width: min(85%, 360px); }
 }
+
+/* ABOUT 책 이미지 위치만 아래로 조정 */
+@media (min-width: 769px) {
+    .about-preview-book { transform: translateY(65px); }
+}
+@media (max-width: 768px) {
+    .about-preview-book { transform: translateY(24px); }
+}
