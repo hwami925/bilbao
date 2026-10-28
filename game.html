@@ -77,7 +77,94 @@
                     aria-label="레볼리가 장애물을 피하며 달리는 게임"
                 ></canvas>
 
-                <!-- 게임 시작 화면 -->
+                <!-- ========================================
+                     STORY / VISUAL NOVEL
+                ======================================== -->
+
+                <div
+                    class="game-story"
+                    id="game-story"
+                    hidden
+                    aria-label="빌바오 스토리"
+                >
+
+                    <!-- 캐릭터 일러스트 영역 -->
+                    <div class="game-story-characters">
+
+                        <!-- 왼쪽 캐릭터 -->
+                        <div
+                            class="game-story-character game-story-character-left"
+                            id="story-character-left"
+                        >
+                            <img
+                                id="story-character-left-image"
+                                src=""
+                                alt=""
+                                hidden
+                            >
+                        </div>
+
+                        <!-- 오른쪽 캐릭터 -->
+                        <div
+                            class="game-story-character game-story-character-right"
+                            id="story-character-right"
+                        >
+                            <img
+                                id="story-character-right-image"
+                                src=""
+                                alt=""
+                                hidden
+                            >
+                        </div>
+
+                    </div>
+
+                    <!-- 스토리 대사창 -->
+                    <div
+                        class="game-story-dialogue"
+                        id="story-dialogue"
+                        role="button"
+                        tabindex="0"
+                        aria-label="다음 대사 보기"
+                    >
+
+                        <!-- 화자 이름 -->
+                        <div class="game-story-speaker">
+
+                            <span id="story-speaker-name">
+                                레볼리
+                            </span>
+
+                        </div>
+
+                        <!-- 대사 내용 -->
+                        <p
+                            class="game-story-text"
+                            id="story-dialogue-text"
+                            aria-live="polite"
+                        ></p>
+
+                        <!-- 다음 대사 안내 -->
+                        <span
+                            class="game-story-next"
+                            id="story-next-indicator"
+                        >
+                            ▼
+                        </span>
+
+                    </div>
+
+                    <!-- 스토리 조작 안내 -->
+                    <div class="game-story-controls">
+                        CLICK / SPACE / ENTER : NEXT
+                    </div>
+
+                </div>
+
+                <!-- ========================================
+                     GAME START
+                ======================================== -->
+
                 <div class="game-overlay" id="game-start-screen">
 
                     <div class="game-overlay-content">
@@ -109,7 +196,10 @@
 
                 </div>
 
-                <!-- 게임 오버 화면 -->
+                <!-- ========================================
+                     GAME OVER
+                ======================================== -->
+
                 <div
                     class="game-overlay"
                     id="game-over-screen"
@@ -145,7 +235,10 @@
 
                 </div>
 
-                <!-- 엔딩 화면 -->
+                <!-- ========================================
+                     GAME ENDING
+                ======================================== -->
+
                 <div
                     class="game-overlay"
                     id="game-ending-screen"
