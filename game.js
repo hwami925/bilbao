@@ -1,6 +1,3 @@
-
-
-
 /* ========================================
    BILBAO : PROLOGUE
    2D RUNNER GAME
@@ -227,9 +224,48 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
     let currentBgm = null;
     let bgmFadeId = null;
 
+    // 모바일 브라우저는 사용자 조작 없이 새 오디오를 재생하는 것을 제한할 수 있습니다.
+    // 시작/재시작 버튼을 누르는 순간 모든 BGM을 한 번씩 재생해 활성화합니다.
+    // 현재 선택된 BGM 이외의 곡은 즉시 일시정지합니다.
+    function unlockBgmOnGesture() {
+        Object.values(bgmTracks).forEach(audio => {
+            if (audio === currentBgm && !audio.paused) return;
+            audio.muted = false;
+            audio.volume = 0;
+            const attempt = audio.play();
+            if (attempt && typeof attempt.then === "function") {
+                attempt.then(() => {
+                    if (audio !== currentBgm) {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                }).catch(error => {
+                    console.warn("모바일 BGM 활성화 대기:", error);
+                });
+            } else if (audio !== currentBgm) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        });
+    }
+
+    // 모바일에서 재생이 막혔거나 탭 전환 뒤 멈춘 경우 다음 터치로 복구합니다.
+    function resumeCurrentBgmOnGesture() {
+        if (!currentBgm || !currentBgm.paused) return;
+        const attempt = currentBgm.play();
+        if (attempt && typeof attempt.catch === "function") {
+            attempt.catch(error => console.warn("BGM 재생 재시도 실패:", error));
+        }
+    }
+    document.addEventListener("pointerdown", resumeCurrentBgmOnGesture, { passive: true });
+    document.addEventListener("touchstart", resumeCurrentBgmOnGesture, { passive: true });
+
     function switchBgm(name) {
         const next = name ? bgmTracks[name] : null;
-        if (currentBgm === next) return;
+        if (currentBgm === next) {
+            resumeCurrentBgmOnGesture();
+            return;
+        }
         if (bgmFadeId !== null) {
             cancelAnimationFrame(bgmFadeId);
             bgmFadeId = null;
@@ -1321,6 +1357,7 @@ debugMenu.querySelectorAll("[data-skip]").forEach(button => {
     });
 });
     function startPrologue() {
+        unlockBgmOnGesture();
         stopCurrentSequence();
         runStage = 1;
         resetGame();
@@ -1328,7 +1365,10 @@ debugMenu.querySelectorAll("[data-skip]").forEach(button => {
     }
 
     startButton.addEventListener("click", startPrologue);
-    restartButton.addEventListener("click", startGame);
+    restartButton.addEventListener("click", () => {
+        unlockBgmOnGesture();
+        startGame();
+    });
     endingRestartButton.addEventListener("click", startPrologue);
 
     /* ========================================
