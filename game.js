@@ -266,7 +266,12 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
     }
     function switchBgm(name) {
         const next = name ? bgmTracks[name] : null;
-        if (currentBgm === next) return;
+        if (currentBgm === next) {
+            // 시작 화면의 pointerdown에서 요청한 재생이 브라우저에 의해
+            // 중단됐을 경우, 이어지는 실제 클릭에서도 재시도합니다.
+            if (next && (next.paused || next.readyState === 0)) playSelectedBgm(true);
+            return;
+        }
         if (bgmFadeId !== null) {
             cancelAnimationFrame(bgmFadeId);
             bgmFadeId = null;
@@ -1223,6 +1228,11 @@ function drawScrollingBackground(image, scrollSpeed, y, drawHeight) {
        BUTTON EVENTS
     ======================================== */
 
+    // BGM 버튼 없이도 사용자가 대사를 터치할 때 재생이 차단됐는지 확인.
+    // 실제 터치 이벤트 안에서 play()를 재요청하므로 모바일 정책에 대응합니다.
+    storyDialogue.addEventListener("click", () => {
+        if (currentBgm && currentBgm.paused) playSelectedBgm(true);
+    });
     storyDialogue.addEventListener("click", advanceStory);
     storyDialogue.addEventListener("keydown", event => {
         // Enter/Space는 위의 document 핸들러에서 한 번만 처리
@@ -1458,6 +1468,9 @@ debugMenu.querySelectorAll("[data-skip]").forEach(button => {
         }
         refreshFullscreenButton();
     }
+    fullscreenButton.addEventListener("click", () => {
+        if (currentBgm && currentBgm.paused) playSelectedBgm(true);
+    });
     fullscreenButton.addEventListener("click", toggleGameFullscreen);
     document.addEventListener("fullscreenchange", refreshFullscreenButton);
 
@@ -1479,7 +1492,10 @@ debugMenu.querySelectorAll("[data-skip]").forEach(button => {
 
     // 클릭 이벤트에서도 프롤로그/BGM을 전체화면 요청보다 먼저 처리합니다.
     startButton.addEventListener("click", () => {
+        // 터치에서 시작한 오디오 요청이 취소돼도 클릭에서 다시 재생.
+        // 전체화면 요청보다 앞에서 실행합니다.
         startPrologue();
+        if (currentBgm && currentBgm.paused) playSelectedBgm(true);
         if (window.matchMedia("(pointer: coarse)").matches) {
             enterGameFullscreen();
         }
