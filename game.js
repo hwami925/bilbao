@@ -1463,13 +1463,27 @@ debugMenu.querySelectorAll("[data-skip]").forEach(button => {
 
     // 모바일에서 '프롤로그 시작'을 누른 사용자 동작으로 전체화면 진입 요청.
     // BGM 재생이 이 클릭 이벤트에서 계속 시작되도록 기존 리스너는 그대로 둡니다.
+    // 모바일 브라우저의 오디오 정책 대응:
+    // 전체화면 요청보다 먼저, 실제 사용자 터치(pointerdown)에서 BGM을 시작합니다.
+    // 화면에는 BGM 버튼/아이콘을 만들지 않습니다.
+    startButton.addEventListener("pointerdown", () => {
+        if (!window.matchMedia("(pointer: coarse)").matches) return;
+        if (currentBgm && currentBgm !== bgmTracks.story) {
+            currentBgm.pause();
+            currentBgm.currentTime = 0;
+        }
+        currentBgm = bgmTracks.story;
+        currentBgm.currentTime = 0;
+        playSelectedBgm(true);
+    }, { passive: true });
+
+    // 클릭 이벤트에서도 프롤로그/BGM을 전체화면 요청보다 먼저 처리합니다.
     startButton.addEventListener("click", () => {
+        startPrologue();
         if (window.matchMedia("(pointer: coarse)").matches) {
             enterGameFullscreen();
         }
     });
-
-    startButton.addEventListener("click", startPrologue);
     restartButton.addEventListener("click", startGame);
     endingRestartButton.addEventListener("click", startPrologue);
 
