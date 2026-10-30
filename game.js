@@ -418,6 +418,20 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
             visibility: visible;
             transform: translate(-50%, -50%) scale(1);
         }
+        /* 모바일: 미니 일러스트가 하단 대사창을 가리지 않도록 축소 */
+        @media (max-width: 768px), (max-height: 500px) and (pointer: coarse) {
+            .bilbao-mini-cut {
+                left: 50%;
+                top: 18%;
+                width: min(96px, 23vw, 24vh);
+                border-width: 2px;
+                border-radius: 4px;
+                transform: translate(-50%, -50%) scale(.98);
+            }
+            .bilbao-mini-cut.is-visible {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
     `;
     document.head.appendChild(miniStyle);
 
