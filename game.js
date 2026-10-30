@@ -229,40 +229,15 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
     let bgmFadeId = null;
     let bgmLastError = "";
 
-    // 모바일에서 직접 눌러 소리를 켜거나 재시도할 수 있는 버튼.
-    // 파일 오류/자동재생 차단을 사용자 화면에서 확인할 수 있게 합니다.
-    const audioButton = document.createElement("button");
-    audioButton.type = "button";
-    audioButton.textContent = "🔊 BGM 켜기";
-    audioButton.setAttribute("aria-label", "배경음악 켜기 또는 다시 재생하기");
-    Object.assign(audioButton.style, {
-        position: "absolute", left: "12px", top: "12px", zIndex: "110",
-        padding: "8px 12px", border: "1px solid #999", borderRadius: "7px",
-        background: "rgba(0,0,0,.78)", color: "#fff", fontSize: "13px",
-        cursor: "pointer", touchAction: "manipulation"
-    });
-    const audioStatus = document.createElement("div");
-    Object.assign(audioStatus.style, {
-        position: "absolute", left: "12px", top: "54px", zIndex: "110",
-        maxWidth: "min(320px,80%)", padding: "5px 8px",
-        borderRadius: "5px", background: "rgba(0,0,0,.8)", color: "#fff",
-        fontSize: "11px", lineHeight: "1.4", pointerEvents: "none", display: "none"
-    });
-    const gameScreenForAudio = document.querySelector(".game-screen");
-    if (gameScreenForAudio) {
-        if (getComputedStyle(gameScreenForAudio).position === "static") gameScreenForAudio.style.position = "relative";
-        gameScreenForAudio.append(audioButton, audioStatus);
-    }
+    // BGM은 게임 시작 시 자동 재생하며, 화면에 버튼이나 상태창을 만들지 않습니다.
     function reportBgm(message) {
-        audioStatus.textContent = message;
-        audioStatus.style.display = "block";
         console.info("[BILBAO BGM]", message);
     }
     Object.entries(bgmTracks).forEach(([name, audio]) => {
         audio.addEventListener("error", () => {
             const code = audio.error ? audio.error.code : "unknown";
             bgmLastError = `${name} 파일 오류 (코드 ${code})`;
-            if (currentBgm === audio) reportBgm(bgmLastError + " — audio 폴더와 MP3 파일명을 확인해 줘!");
+            if (currentBgm === audio) reportBgm(bgmLastError);
         });
     });
 
@@ -281,12 +256,10 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
         if (result && typeof result.then === "function") {
             result.then(() => {
                 if (audio !== currentBgm) return;
-                audioButton.textContent = "🔊 BGM 재생 중";
                 if (fromTap) reportBgm("BGM 재생 요청 성공 — 소리가 없으면 미디어 음량을 확인해 줘!");
             }).catch(error => {
                 if (audio !== currentBgm) return;
                 bgmLastError = error.name;
-                audioButton.textContent = "🔊 BGM 다시 켜기";
                 reportBgm("BGM 재생 실패: " + error.name + " — 버튼을 다시 눌러 줘!");
             });
         }
@@ -307,20 +280,9 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
         if (next) {
             next.currentTime = 0;
             playSelectedBgm();
-        } else {
-            audioButton.textContent = "🔊 BGM 켜기";
         }
     }
-    audioButton.addEventListener("click", event => {
-        event.stopPropagation();
-        if (!currentBgm) {
-            reportBgm("게임 시작 후 다시 눌러 줘!");
-            return;
-        }
-        // 반드시 사용자의 클릭 이벤트 안에서 play() 호출
-        playSelectedBgm(true);
-    });
-    // 첫 게임 시작 버튼 클릭 자체에서 재생이 시도되므로 모바일 정책과 호환됩니다.
+    // 첫 게임 시작 버튼 클릭에서 BGM 재생을 시도합니다.
 
     // 최종 타이틀: 희망 BGM을 음소거하지 않고 잔잔한 배경음으로 낮춤
     function softenEndingBgm(duration = 3200) {
