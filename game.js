@@ -1,3 +1,6 @@
+
+
+
 /* ========================================
    BILBAO : PROLOGUE
    2D RUNNER GAME
@@ -219,86 +222,105 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
     Object.values(bgmTracks).forEach(audio => {
         audio.loop = true;
         audio.preload = "auto";
-        audio.volume = 0;
+        audio.volume = BGM_VOLUME;
+        audio.muted = false;
     });
     let currentBgm = null;
     let bgmFadeId = null;
+    let bgmLastError = "";
 
-    // 모바일 브라우저는 사용자 조작 없이 새 오디오를 재생하는 것을 제한할 수 있습니다.
-    // 시작/재시작 버튼을 누르는 순간 모든 BGM을 한 번씩 재생해 활성화합니다.
-    // 현재 선택된 BGM 이외의 곡은 즉시 일시정지합니다.
-    function unlockBgmOnGesture() {
-        Object.values(bgmTracks).forEach(audio => {
-            if (audio === currentBgm && !audio.paused) return;
-            audio.muted = false;
-            audio.volume = 0;
-            const attempt = audio.play();
-            if (attempt && typeof attempt.then === "function") {
-                attempt.then(() => {
-                    if (audio !== currentBgm) {
-                        audio.pause();
-                        audio.currentTime = 0;
-                    }
-                }).catch(error => {
-                    console.warn("모바일 BGM 활성화 대기:", error);
-                });
-            } else if (audio !== currentBgm) {
-                audio.pause();
-                audio.currentTime = 0;
-            }
+    // 모바일에서 직접 눌러 소리를 켜거나 재시도할 수 있는 버튼.
+    // 파일 오류/자동재생 차단을 사용자 화면에서 확인할 수 있게 합니다.
+    const audioButton = document.createElement("button");
+    audioButton.type = "button";
+    audioButton.textContent = "🔊 BGM 켜기";
+    audioButton.setAttribute("aria-label", "배경음악 켜기 또는 다시 재생하기");
+    Object.assign(audioButton.style, {
+        position: "absolute", left: "12px", top: "12px", zIndex: "110",
+        padding: "8px 12px", border: "1px solid #999", borderRadius: "7px",
+        background: "rgba(0,0,0,.78)", color: "#fff", fontSize: "13px",
+        cursor: "pointer", touchAction: "manipulation"
+    });
+    const audioStatus = document.createElement("div");
+    Object.assign(audioStatus.style, {
+        position: "absolute", left: "12px", top: "54px", zIndex: "110",
+        maxWidth: "min(320px,80%)", padding: "5px 8px",
+        borderRadius: "5px", background: "rgba(0,0,0,.8)", color: "#fff",
+        fontSize: "11px", lineHeight: "1.4", pointerEvents: "none", display: "none"
+    });
+    const gameScreenForAudio = document.querySelector(".game-screen");
+    if (gameScreenForAudio) {
+        if (getComputedStyle(gameScreenForAudio).position === "static") gameScreenForAudio.style.position = "relative";
+        gameScreenForAudio.append(audioButton, audioStatus);
+    }
+    function reportBgm(message) {
+        audioStatus.textContent = message;
+        audioStatus.style.display = "block";
+        console.info("[BILBAO BGM]", message);
+    }
+    Object.entries(bgmTracks).forEach(([name, audio]) => {
+        audio.addEventListener("error", () => {
+            const code = audio.error ? audio.error.code : "unknown";
+            bgmLastError = `${name} 파일 오류 (코드 ${code})`;
+            if (currentBgm === audio) reportBgm(bgmLastError + " — audio 폴더와 MP3 파일명을 확인해 줘!");
         });
-    }
+    });
 
-    // 모바일에서 재생이 막혔거나 탭 전환 뒤 멈춘 경우 다음 터치로 복구합니다.
-    function resumeCurrentBgmOnGesture() {
-        if (!currentBgm || !currentBgm.paused) return;
-        const attempt = currentBgm.play();
-        if (attempt && typeof attempt.catch === "function") {
-            attempt.catch(error => console.warn("BGM 재생 재시도 실패:", error));
-        }
-    }
-    document.addEventListener("pointerdown", resumeCurrentBgmOnGesture, { passive: true });
-    document.addEventListener("touchstart", resumeCurrentBgmOnGesture, { passive: true });
-
-    function switchBgm(name) {
-        const next = name ? bgmTracks[name] : null;
-        if (currentBgm === next) {
-            resumeCurrentBgmOnGesture();
+    function playSelectedBgm(fromTap = false) {
+        if (!currentBgm) return;
+        const audio = currentBgm;
+        audio.muted = false;
+        // 모바일에서 0 볼륨 페이드로 시작하면 소리가 복구되지 않는 경우를 피합니다.
+        audio.volume = BGM_VOLUME;
+        let result;
+        try { result = audio.play(); }
+        catch (error) {
+            reportBgm("재생 오류: " + error.name);
             return;
         }
+        if (result && typeof result.then === "function") {
+            result.then(() => {
+                if (audio !== currentBgm) return;
+                audioButton.textContent = "🔊 BGM 재생 중";
+                if (fromTap) reportBgm("BGM 재생 요청 성공 — 소리가 없으면 미디어 음량을 확인해 줘!");
+            }).catch(error => {
+                if (audio !== currentBgm) return;
+                bgmLastError = error.name;
+                audioButton.textContent = "🔊 BGM 다시 켜기";
+                reportBgm("BGM 재생 실패: " + error.name + " — 버튼을 다시 눌러 줘!");
+            });
+        }
+    }
+    function switchBgm(name) {
+        const next = name ? bgmTracks[name] : null;
+        if (currentBgm === next) return;
         if (bgmFadeId !== null) {
             cancelAnimationFrame(bgmFadeId);
             bgmFadeId = null;
         }
         const previous = currentBgm;
-        const previousVolume = previous ? previous.volume : 0;
         currentBgm = next;
+        if (previous) {
+            previous.pause();
+            previous.currentTime = 0;
+        }
         if (next) {
-            next.volume = 0;
             next.currentTime = 0;
-            const playResult = next.play();
-            if (playResult && typeof playResult.catch === "function") {
-                playResult.catch(error => console.warn("BGM 재생 실패:", error));
-            }
+            playSelectedBgm();
+        } else {
+            audioButton.textContent = "🔊 BGM 켜기";
         }
-        const startedAt = performance.now();
-        function fade(now) {
-            const progress = Math.min(1, (now - startedAt) / BGM_FADE_MS);
-            if (previous) previous.volume = previousVolume * (1 - progress);
-            if (next) next.volume = BGM_VOLUME * progress;
-            if (progress < 1) {
-                bgmFadeId = requestAnimationFrame(fade);
-            } else {
-                bgmFadeId = null;
-                if (previous) {
-                    previous.pause();
-                    previous.currentTime = 0;
-                }
-            }
-        }
-        bgmFadeId = requestAnimationFrame(fade);
     }
-
+    audioButton.addEventListener("click", event => {
+        event.stopPropagation();
+        if (!currentBgm) {
+            reportBgm("게임 시작 후 다시 눌러 줘!");
+            return;
+        }
+        // 반드시 사용자의 클릭 이벤트 안에서 play() 호출
+        playSelectedBgm(true);
+    });
+    // 첫 게임 시작 버튼 클릭 자체에서 재생이 시도되므로 모바일 정책과 호환됩니다.
 
     // 최종 타이틀: 희망 BGM을 음소거하지 않고 잔잔한 배경음으로 낮춤
     function softenEndingBgm(duration = 3200) {
@@ -1357,7 +1379,6 @@ debugMenu.querySelectorAll("[data-skip]").forEach(button => {
     });
 });
     function startPrologue() {
-        unlockBgmOnGesture();
         stopCurrentSequence();
         runStage = 1;
         resetGame();
@@ -1365,10 +1386,7 @@ debugMenu.querySelectorAll("[data-skip]").forEach(button => {
     }
 
     startButton.addEventListener("click", startPrologue);
-    restartButton.addEventListener("click", () => {
-        unlockBgmOnGesture();
-        startGame();
-    });
+    restartButton.addEventListener("click", startGame);
     endingRestartButton.addEventListener("click", startPrologue);
 
     /* ========================================
