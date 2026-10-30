@@ -422,8 +422,8 @@ storyRightImage.src = CHARACTER_IMAGES.bilbao;
         @media (max-width: 768px), (max-height: 500px) and (pointer: coarse) {
             .bilbao-mini-cut {
                 left: 50%;
-                top: 18%;
-                width: min(96px, 23vw, 24vh);
+                top: 29%;
+                width: min(180px, 43vw, 29dvh);
                 border-width: 2px;
                 border-radius: 4px;
                 transform: translate(-50%, -50%) scale(.98);
@@ -1398,6 +1398,114 @@ debugMenu.querySelectorAll("[data-skip]").forEach(button => {
         resetGame();
         showStory("intro", startGame);
     }
+
+    // 모바일 몰입형 게임 화면: 전체화면을 지원하는 브라우저에서는
+    // 사용자 버튼 터치 시 전체화면을 요청하고, 실패 시 페이지 내 확장 모드를 사용합니다.
+    const gameContainer = document.querySelector(".game-container");
+    const immersiveStyle = document.createElement("style");
+    immersiveStyle.textContent = `
+        .game-container:fullscreen,
+        .game-container:-webkit-full-screen,
+        .game-container.bilbao-expanded {
+            width: 100vw !important;
+            height: 100dvh !important;
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+            background: #151515 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+        }
+        .game-container.bilbao-expanded {
+            position: fixed !important;
+            inset: 0 !important;
+            z-index: 2147483000 !important;
+        }
+        .game-container:fullscreen .game-hud,
+        .game-container:-webkit-full-screen .game-hud,
+        .game-container.bilbao-expanded .game-hud { flex: 0 0 auto; }
+        .game-container:fullscreen .game-screen,
+        .game-container:-webkit-full-screen .game-screen,
+        .game-container.bilbao-expanded .game-screen {
+            flex: 1 1 auto !important;
+            min-height: 0 !important;
+            height: auto !important;
+            aspect-ratio: auto !important;
+        }
+        .game-container:fullscreen #game-canvas,
+        .game-container:-webkit-full-screen #game-canvas,
+        .game-container.bilbao-expanded #game-canvas {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain !important;
+        }
+        .bilbao-fullscreen-toggle {
+            position: absolute; right: 12px; bottom: 12px;
+            z-index: 120; padding: 7px 10px;
+            border: 1px solid #888; border-radius: 5px;
+            color: white; background: rgba(0,0,0,.72);
+            font: 12px sans-serif; cursor: pointer;
+        }
+        @media (pointer: coarse) {
+            .game-container:fullscreen .bilbao-mini-cut,
+            .game-container:-webkit-full-screen .bilbao-mini-cut,
+            .game-container.bilbao-expanded .bilbao-mini-cut {
+                top: 31%; width: min(190px, 45vw, 29dvh);
+            }
+        }
+    `;
+    document.head.appendChild(immersiveStyle);
+
+    let fallbackExpanded = false;
+    const fullscreenButton = document.createElement("button");
+    fullscreenButton.type = "button";
+    fullscreenButton.className = "bilbao-fullscreen-toggle";
+    fullscreenButton.textContent = "⛶ 전체화면";
+    if (gameContainer) {
+        gameContainer.style.position = "relative";
+        gameContainer.appendChild(fullscreenButton);
+    }
+    function refreshFullscreenButton() {
+        const expanded = document.fullscreenElement === gameContainer || fallbackExpanded;
+        fullscreenButton.textContent = expanded ? "↙ 화면 복귀" : "⛶ 전체화면";
+    }
+    async function enterGameFullscreen() {
+        if (!gameContainer) return;
+        if (document.fullscreenElement === gameContainer || fallbackExpanded) return;
+        try {
+            if (!gameContainer.requestFullscreen) throw new Error("Fullscreen API unavailable");
+            await gameContainer.requestFullscreen();
+        } catch (error) {
+            fallbackExpanded = true;
+            gameContainer.classList.add("bilbao-expanded");
+            document.body.style.overflow = "hidden";
+        }
+        refreshFullscreenButton();
+    }
+    async function toggleGameFullscreen() {
+        if (document.fullscreenElement === gameContainer) {
+            await document.exitFullscreen();
+        } else if (fallbackExpanded) {
+            fallbackExpanded = false;
+            gameContainer.classList.remove("bilbao-expanded");
+            document.body.style.overflow = "";
+        } else {
+            await enterGameFullscreen();
+        }
+        refreshFullscreenButton();
+    }
+    fullscreenButton.addEventListener("click", toggleGameFullscreen);
+    document.addEventListener("fullscreenchange", refreshFullscreenButton);
+
+    // 모바일에서 '프롤로그 시작'을 누른 사용자 동작으로 전체화면 진입 요청.
+    // BGM 재생이 이 클릭 이벤트에서 계속 시작되도록 기존 리스너는 그대로 둡니다.
+    startButton.addEventListener("click", () => {
+        if (window.matchMedia("(pointer: coarse)").matches) {
+            enterGameFullscreen();
+        }
+    });
 
     startButton.addEventListener("click", startPrologue);
     restartButton.addEventListener("click", startGame);
