@@ -27,7 +27,8 @@
 .emoticon-card img{display:block;width:100%;aspect-ratio:1;object-fit:contain}
 .emoticon-card span{display:block;margin-top:9px;text-align:center;font-size:12px}
 .emoticon-note{color:#aaa;font-size:13px;margin-top:20px}
-.emoticon-dialog{background:#222;color:#fff;border:1px solid #888;border-radius:10px;padding:30px 20px 20px;max-width:min(90vw,440px);width:90%;text-align:center;box-sizing:border-box}
+.emoticon-dialog{position:fixed !important;inset:0 !important;margin:auto !important;background:#222;color:#fff;border:1px solid #888;border-radius:10px;padding:30px 20px 20px;max-width:min(90vw,440px);width:90%;text-align:center;box-sizing:border-box}
+.emoticon-dialog[open]{display:block !important;}
 .emoticon-dialog::backdrop{background:rgba(0,0,0,.85)}
 .emoticon-dialog img{width:100%;max-width:330px;aspect-ratio:1;object-fit:contain}
 .emoticon-dialog-close{position:absolute;right:10px;top:4px;border:0;background:none;color:#fff;font-size:30px;cursor:pointer}
