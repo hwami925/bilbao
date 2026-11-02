@@ -13,6 +13,27 @@
     <script src="./script.js" defer></script>
 
 
+
+<style>
+/* EMOTICON: 메인 페이지 전용 */
+.emoticon-section{background:#171717;color:#eee}
+.emoticon-title-row{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.emoticon-title-row h2{margin:0}
+.emoticon-buy-link{display:inline-block;padding:13px 20px;border:1px solid #aaa;color:#fff;text-decoration:none;font-weight:700;transition:.2s}
+.emoticon-buy-link:hover{background:#eee;color:#171717}
+.emoticon-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:15px;margin-top:28px}
+.emoticon-card{border:1px solid #454545;background:#222;color:#eee;border-radius:8px;padding:10px 6px;cursor:pointer;font:inherit;min-width:0;transition:transform .2s,border-color .2s}
+.emoticon-card:hover{transform:translateY(-3px);border-color:#ccc}
+.emoticon-card img{display:block;width:100%;aspect-ratio:1;object-fit:contain}
+.emoticon-card span{display:block;margin-top:9px;text-align:center;font-size:12px}
+.emoticon-note{color:#aaa;font-size:13px;margin-top:20px}
+.emoticon-dialog{background:#222;color:#fff;border:1px solid #888;border-radius:10px;padding:30px 20px 20px;max-width:min(90vw,440px);width:90%;text-align:center;box-sizing:border-box}
+.emoticon-dialog::backdrop{background:rgba(0,0,0,.85)}
+.emoticon-dialog img{width:100%;max-width:330px;aspect-ratio:1;object-fit:contain}
+.emoticon-dialog-close{position:absolute;right:10px;top:4px;border:0;background:none;color:#fff;font-size:30px;cursor:pointer}
+@media(max-width:900px){.emoticon-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}}
+@media(max-width:540px){.emoticon-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}}
+</style>
 </head>
 
 <body>
@@ -401,6 +422,51 @@
 
 </section>
 
+
+<!-- EMOTICON — OGQ 이모티콘 24종 -->
+<section id="emoticon" class="content-section emoticon-section">
+  <div class="section-inner">
+    <p class="section-number">05 / EMOTICON COLLECTION</p>
+    <div class="emoticon-title-row">
+      <h2>EMOTICON</h2>
+      <a class="emoticon-buy-link" href="https://naver.me/GZD1Wc4o" target="_blank" rel="noopener noreferrer">OGQ 마켓에서 구매하기 ↗</a>
+    </div>
+    <p class="section-description">빌바오의 감정을 담은 이모티콘 24종.</p>
+    <div class="emoticon-grid">
+        <button type="button" class="emoticon-card" aria-label="하이 크게 보기"><img src="./images/stickers/01.png" alt="하이 이모티콘" loading="lazy"><span>01 / 하이</span></button>
+        <button type="button" class="emoticon-card" aria-label="주글게 크게 보기"><img src="./images/stickers/02.png" alt="주글게 이모티콘" loading="lazy"><span>02 / 주글게</span></button>
+        <button type="button" class="emoticon-card" aria-label="e-w 크게 보기"><img src="./images/stickers/03.png" alt="e-w 이모티콘" loading="lazy"><span>03 / e-w</span></button>
+        <button type="button" class="emoticon-card" aria-label="ㅋㅋㅋ 크게 보기"><img src="./images/stickers/04.png" alt="ㅋㅋㅋ 이모티콘" loading="lazy"><span>04 / ㅋㅋㅋ</span></button>
+        <button type="button" class="emoticon-card" aria-label="으엥 크게 보기"><img src="./images/stickers/05.png" alt="으엥 이모티콘" loading="lazy"><span>05 / 으엥</span></button>
+        <button type="button" class="emoticon-card" aria-label="런 크게 보기"><img src="./images/stickers/06.png" alt="런 이모티콘" loading="lazy"><span>06 / 런</span></button>
+        <button type="button" class="emoticon-card" aria-label="야르 크게 보기"><img src="./images/stickers/07.png" alt="야르 이모티콘" loading="lazy"><span>07 / 야르</span></button>
+        <button type="button" class="emoticon-card" aria-label="줴줴이야 크게 보기"><img src="./images/stickers/08.png" alt="줴줴이야 이모티콘" loading="lazy"><span>08 / 줴줴이야</span></button>
+        <button type="button" class="emoticon-card" aria-label="잘자 크게 보기"><img src="./images/stickers/09.png" alt="잘자 이모티콘" loading="lazy"><span>09 / 잘자</span></button>
+        <button type="button" class="emoticon-card" aria-label="흥이나 크게 보기"><img src="./images/stickers/10.png" alt="흥이나 이모티콘" loading="lazy"><span>10 / 흥이나</span></button>
+        <button type="button" class="emoticon-card" aria-label="무지개반사 크게 보기"><img src="./images/stickers/11.png" alt="무지개반사 이모티콘" loading="lazy"><span>11 / 무지개반사</span></button>
+        <button type="button" class="emoticon-card" aria-label="내눈을 바라봐 크게 보기"><img src="./images/stickers/12.png" alt="내눈을 바라봐 이모티콘" loading="lazy"><span>12 / 내눈을 바라봐</span></button>
+        <button type="button" class="emoticon-card" aria-label="야호 크게 보기"><img src="./images/stickers/13.png" alt="야호 이모티콘" loading="lazy"><span>13 / 야호</span></button>
+        <button type="button" class="emoticon-card" aria-label="개피곤 크게 보기"><img src="./images/stickers/14.png" alt="개피곤 이모티콘" loading="lazy"><span>14 / 개피곤</span></button>
+        <button type="button" class="emoticon-card" aria-label="아유 그러시겠죠 크게 보기"><img src="./images/stickers/15.png" alt="아유 그러시겠죠 이모티콘" loading="lazy"><span>15 / 아유 그러시겠죠</span></button>
+        <button type="button" class="emoticon-card" aria-label="내마음 크게 보기"><img src="./images/stickers/16.png" alt="내마음 이모티콘" loading="lazy"><span>16 / 내마음</span></button>
+        <button type="button" class="emoticon-card" aria-label="거지 크게 보기"><img src="./images/stickers/17.png" alt="거지 이모티콘" loading="lazy"><span>17 / 거지</span></button>
+        <button type="button" class="emoticon-card" aria-label="선물 크게 보기"><img src="./images/stickers/18.png" alt="선물 이모티콘" loading="lazy"><span>18 / 선물</span></button>
+        <button type="button" class="emoticon-card" aria-label="아자스 크게 보기"><img src="./images/stickers/19.png" alt="아자스 이모티콘" loading="lazy"><span>19 / 아자스</span></button>
+        <button type="button" class="emoticon-card" aria-label="눈치 크게 보기"><img src="./images/stickers/20.png" alt="눈치 이모티콘" loading="lazy"><span>20 / 눈치</span></button>
+        <button type="button" class="emoticon-card" aria-label="HELP 크게 보기"><img src="./images/stickers/21.png" alt="HELP 이모티콘" loading="lazy"><span>21 / HELP</span></button>
+        <button type="button" class="emoticon-card" aria-label="가쥬아 크게 보기"><img src="./images/stickers/22.png" alt="가쥬아 이모티콘" loading="lazy"><span>22 / 가쥬아</span></button>
+        <button type="button" class="emoticon-card" aria-label="쓰담쓰담 크게 보기"><img src="./images/stickers/23.png" alt="쓰담쓰담 이모티콘" loading="lazy"><span>23 / 쓰담쓰담</span></button>
+        <button type="button" class="emoticon-card" aria-label="오 크게 보기"><img src="./images/stickers/24.png" alt="오 이모티콘" loading="lazy"><span>24 / 오</span></button>
+    </div>
+    <p class="emoticon-note">이모티콘을 누르면 크게 볼 수 있습니다. 구매는 OGQ 마켓에서 진행됩니다.</p>
+  </div>
+</section>
+<dialog id="emoticon-dialog" class="emoticon-dialog" aria-label="이모티콘 크게 보기">
+  <button type="button" class="emoticon-dialog-close" aria-label="닫기">×</button>
+  <img id="emoticon-dialog-image" alt="선택한 이모티콘">
+  <p id="emoticon-dialog-label"></p>
+</dialog>
+
         <!-- ========================================
              ABOUT — 작품 소개
         ======================================== -->
@@ -409,7 +475,7 @@
   <div class="section-inner about-preview-layout">
 
     <div class="about-preview-copy">
-      <p class="section-number">05 / ABOUT</p>
+      <p class="section-number">06 / ABOUT</p>
       <h2>ABOUT</h2>
       <p class="section-description">BILBAO — ORIGINAL STORY</p>
       <p>
@@ -443,5 +509,25 @@
 
     </footer>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const dialog=document.getElementById('emoticon-dialog');
+  const big=document.getElementById('emoticon-dialog-image');
+  const label=document.getElementById('emoticon-dialog-label');
+  document.querySelectorAll('.emoticon-card').forEach(card=>{
+    card.addEventListener('click',()=>{
+      const img=card.querySelector('img');
+      big.src=img.src;
+      big.alt=img.alt;
+      label.textContent=card.querySelector('span').textContent;
+      if(typeof dialog.showModal==='function')dialog.showModal();
+      else window.open(img.src,'_blank','noopener');
+    });
+  });
+  dialog.querySelector('.emoticon-dialog-close').addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
+});
+</script>
 </body>
 </html>
